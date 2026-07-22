@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crt_laravel_app
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_NAME: "CRT Solution - Livewire"
+      APP_ENV: local
+      APP_KEY: "base64:6bW+H4vU8qZ8tL4x1kR0jV5YwZ8qL4x1kR0jV5YwZ8="
+      APP_DEBUG: "true"
+      APP_URL: "http://localhost:8000"
+      DB_CONNECTION: sqlite
+      DB_DATABASE: "/var/www/html/database/database.sqlite"
