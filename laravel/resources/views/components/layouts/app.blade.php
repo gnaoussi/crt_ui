@@ -37,7 +37,7 @@
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
     @livewireStyles
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-100/90 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
     <!-- Navigation Header branded with CRT Solution Logo -->
     <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
@@ -203,7 +203,7 @@
     </header>
 
     <!-- Sub Header Breadcrumb Navigation Bar -->
-    <div class="bg-white border-b border-slate-200/80 px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">
+    <div class="bg-slate-100/80 border-b border-slate-200/80 px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">ibold">
         <nav class="flex items-center space-x-2 text-slate-600">
             <a href="/dashboard" class="flex items-center gap-1 hover:text-crt-navy cursor-pointer">
                 <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
