@@ -13,7 +13,7 @@
     @endif
 
     <!-- Card 1: Informations de l'Entreprise -->
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5" x-data="{ mode: @entangle('entrepriseMode') }">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
             <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
                 <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,8 +25,10 @@
             <!-- Switched to Mode Saisie & Mode Consultation Switch Buttons -->
             <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
                 <button 
+                    @click="mode = 'saisie'"
                     wire:click="setMode('saisie')"
-                    class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all {{ $entrepriseMode === 'saisie' ? 'bg-white text-crt-navy shadow-sm' : 'text-slate-500 hover:text-crt-navy' }}"
+                    :class="mode === 'saisie' ? 'bg-white text-crt-navy shadow-sm' : 'text-slate-500 hover:text-crt-navy'"
+                    class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer"
                 >
                     <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -34,8 +36,10 @@
                     Mode Édition (Saisie)
                 </button>
                 <button 
+                    @click="mode = 'consultation'"
                     wire:click="setMode('consultation')"
-                    class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all {{ $entrepriseMode === 'consultation' ? 'bg-white text-crt-cyan-dark shadow-sm' : 'text-slate-500 hover:text-crt-navy' }}"
+                    :class="mode === 'consultation' ? 'bg-white text-crt-cyan-dark shadow-sm' : 'text-slate-500 hover:text-crt-navy'"
+                    class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer"
                 >
                     <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -46,7 +50,7 @@
             </div>
         </div>
 
-        @if ($entrepriseMode === 'consultation')
+        <div x-show="mode === 'consultation'">
             <!-- Consultation Mode: Clean Read-Only view -->
             <div class="space-y-4 text-xs">
                 <div>
@@ -62,8 +66,10 @@
                     <p class="font-medium text-slate-700 leading-relaxed max-w-4xl">{{ $companyDescription }}</p>
                 </div>
             </div>
-        @else
-            <!-- Saisie / Edition Mode: Form to edit directly -->
+        </div>
+
+        <!-- Saisie / Edition Mode: Form to edit directly -->
+        <div x-show="mode === 'saisie'">
             <form wire:submit.prevent="saveCompanyInfo" class="space-y-4 text-xs" novalidate>
 
                 @if ($errors->any())
@@ -132,7 +138,7 @@
                     </button>
                 </div>
             </form>
-        @endif
+        </div>
     </div>
 
     <!-- Card 2: Sites de l'entreprise -->
