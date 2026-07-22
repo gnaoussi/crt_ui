@@ -5,7 +5,7 @@
         <div>
             <h2 class="text-lg font-extrabold text-crt-navy flex items-center gap-2">
                 <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
                 Tableau de bord CRT Solution
             </h2>
@@ -19,28 +19,37 @@
         </button>
     </div>
 
-    <!-- 4 KPI Metrics Cards -->
+    <!-- 4 KPI Metrics Cards with Premium Vector SVG Icons -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1: Heures de la Semaine -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Heures de la Semaine</span>
                 <h3 class="text-2xl font-black text-crt-navy font-mono mt-0.5">45.5h / 37.5h</h3>
                 <span class="text-[11px] font-bold text-emerald-600">121% de l'objectif hebdo</span>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy font-bold text-lg">
-                ⏱️
+            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy">
+                <svg class="w-6 h-6 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
             </div>
         </div>
+
+        <!-- KPI 2: Projets Imputés -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Projets Imputés</span>
                 <h3 class="text-2xl font-black text-crt-navy font-mono mt-0.5">{{ $totalProjects }} Projets</h3>
                 <span class="text-[11px] font-bold text-crt-cyan-dark">Semaine active 17</span>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy font-bold text-lg">
-                📁
+            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy">
+                <svg class="w-6 h-6 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
             </div>
         </div>
+
+        <!-- KPI 3: Semaines Inactives -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Semaines Inactives</span>
@@ -49,18 +58,24 @@
                     Régulariser →
                 </a>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold text-lg">
-                ⚠️
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
+                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
             </div>
         </div>
+
+        <!-- KPI 4: En attente revue -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">En attente revue</span>
                 <h3 class="text-2xl font-black text-crt-navy font-mono mt-0.5">1 Feuille</h3>
                 <span class="text-[11px] font-bold text-slate-500">Validation manager</span>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-bold text-lg">
-                ⏳
+            <div class="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
+                <svg class="w-6 h-6 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
             </div>
         </div>
     </div>
@@ -138,8 +153,9 @@
                                         {{ $pct }}%
                                     </span>
                                 @else
-                                    <span class="px-2 py-0.5 text-[11px] font-extrabold rounded-md bg-slate-100 text-slate-700 border border-slate-200 font-mono">
-                                        ♾️ Régie
+                                    <span class="px-2 py-0.5 text-[11px] font-extrabold rounded-md bg-slate-100 text-slate-700 border border-slate-200 font-mono flex items-center gap-1">
+                                        <svg class="w-3 h-3 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                                        Régie
                                     </span>
                                 @endif
                             </div>
@@ -238,9 +254,12 @@
                     </div>
                     <a 
                         href="/timesheets"
-                        class="bg-white hover:bg-crt-cyan-light text-crt-navy border border-slate-300 font-extrabold text-xs px-3 py-1.5 rounded-lg transition"
+                        class="bg-white hover:bg-crt-cyan-light text-crt-navy border border-slate-300 font-extrabold text-xs px-3 py-1.5 rounded-lg transition flex items-center gap-1.5"
                     >
-                        🖊️ Remplir
+                        <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        Remplir
                     </a>
                 </div>
                 <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
@@ -250,9 +269,12 @@
                     </div>
                     <a 
                         href="/timesheets"
-                        class="bg-white hover:bg-crt-cyan-light text-crt-navy border border-slate-300 font-extrabold text-xs px-3 py-1.5 rounded-lg transition"
+                        class="bg-white hover:bg-crt-cyan-light text-crt-navy border border-slate-300 font-extrabold text-xs px-3 py-1.5 rounded-lg transition flex items-center gap-1.5"
                     >
-                        🖊️ Remplir
+                        <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        Remplir
                     </a>
                 </div>
             </div>
@@ -290,8 +312,11 @@
                                 <span class="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded font-mono font-bold">Semaine 17</span> 20/07 - 26/07
                             </td>
                             <td class="p-3 text-right">
-                                <button class="text-crt-cyan-dark hover:underline font-bold text-[11px]">
-                                    🔔 Relancer
+                                <button class="text-crt-cyan-dark hover:underline font-bold text-[11px] flex items-center gap-1 justify-end ml-auto">
+                                    <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                    Relancer
                                 </button>
                             </td>
                         </tr>
@@ -304,8 +329,11 @@
                                 <span class="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded font-mono font-bold">Semaine 17</span> 20/07 - 26/07
                             </td>
                             <td class="p-3 text-right">
-                                <button class="text-crt-cyan-dark hover:underline font-bold text-[11px]">
-                                    🔔 Relancer
+                                <button class="text-crt-cyan-dark hover:underline font-bold text-[11px] flex items-center gap-1 justify-end ml-auto">
+                                    <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                    Relancer
                                 </button>
                             </td>
                         </tr>
@@ -330,8 +358,11 @@
                         <span class="font-bold text-crt-navy font-mono">7</span> Total feuilles manquantes
                     </div>
                 </div>
-                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-800 font-medium">
-                    ℹ️ Métriques compilées depuis le début de l'année financière CRT Solution.
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-800 font-medium flex items-start gap-2">
+                    <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Métriques compilées depuis le début de l'année financière CRT Solution.</span>
                 </div>
             </div>
             <button class="w-full text-left text-xs font-extrabold text-crt-navy hover:text-crt-cyan-dark flex items-center justify-between">
