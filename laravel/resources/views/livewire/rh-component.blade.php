@@ -40,8 +40,13 @@
         </div>
 
         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
-            <div class="flex justify-between items-center pb-4 border-b">
-                <h3 class="text-sm font-extrabold text-crt-navy"><span class="flex items-center gap-1.5"><svg class="w-4.5 h-4.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg> Liste des employés</span></h3>
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                    <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Liste des employés
+                </h3>
                 <button wire:click="openNewEmployeeModal" class="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition shadow-lg flex items-center gap-1.5">
                     <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4" />
