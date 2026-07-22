@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Employee;
 use App\Models\CompanySite;
 use App\Models\HoursHistory;
@@ -11,6 +12,10 @@ use App\Models\SiteHistory;
 
 class RhComponent extends Component
 {
+    use WithPagination;
+
+    protected $paginationTheme = 'tailwind';
+
     // Navigation & Selected Employee State
     public $selectedEmployeeId = null;
     public $employeeActiveTab = 'information';
@@ -20,6 +25,11 @@ class RhComponent extends Component
     public $empFilterManager = '';
     public $empFilterProbation = 'all';
     public $empFilterStatus = 'all';
+
+    public function updatingEmpFilterQuery() { $this->resetPage(); }
+    public function updatingEmpFilterManager() { $this->resetPage(); }
+    public function updatingEmpFilterProbation() { $this->resetPage(); }
+    public function updatingEmpFilterStatus() { $this->resetPage(); }
 
     // Modal Visibility States
     public $isNewEmployeeModalOpen = false;
@@ -271,7 +281,7 @@ class RhComponent extends Component
             $query->where('account_status', $status);
         }
 
-        $employees = $query->get();
+        $employees = $query->paginate(10);
         $selectedEmployee = $this->selectedEmployeeId ? Employee::with(['hoursHistories', 'managerHistories', 'siteHistories'])->find($this->selectedEmployeeId) : null;
         $sites = CompanySite::all();
 
