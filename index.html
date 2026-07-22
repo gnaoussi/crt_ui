@@ -1334,6 +1334,10 @@
                 dashboardPage * projectsPerPage
             );
 
+            if (currentView === 'login') {
+                return <LoginComponent onLoginSuccess={() => setCurrentView('app')} onSkipToApp={() => setCurrentView('app')} />;
+            }
+
             return (
                 <div className="min-h-screen flex flex-col bg-slate-50">
                     
