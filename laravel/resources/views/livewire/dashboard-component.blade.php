@@ -15,50 +15,53 @@
             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            Rafraîchir
         </button>
     </div>
 
-    <!-- 4 KPI Metrics Cards with Premium Vector SVG Icons -->
+    <!-- 4 KPI Metrics Cards with Distinct Vector SVG Icons -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- KPI 1: Heures de la Semaine -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between hover:border-emerald-300 transition">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Heures de la Semaine</span>
                 <h3 class="text-2xl font-black text-crt-navy font-mono mt-0.5">45.5h / 37.5h</h3>
-                <span class="text-[11px] font-bold text-emerald-600">121% de l'objectif hebdo</span>
+                <span class="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
+                    <svg class="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7 7 7M12 3v18" /></svg>
+                    121% de l'objectif hebdo
+                </span>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy">
-                <svg class="w-6 h-6 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-2xs">
+                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
         </div>
 
         <!-- KPI 2: Projets Imputés -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between hover:border-crt-cyan/50 transition">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Projets Imputés</span>
                 <h3 class="text-2xl font-black text-crt-navy font-mono mt-0.5">{{ $totalProjects }} Projets</h3>
                 <span class="text-[11px] font-bold text-crt-cyan-dark">Semaine active 17</span>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy">
-                <svg class="w-6 h-6 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-cyan-dark shadow-2xs">
+                <svg class="w-6 h-6 text-crt-cyan-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
             </div>
         </div>
 
         <!-- KPI 3: Semaines Inactives -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between hover:border-amber-300 transition">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Semaines Inactives</span>
                 <h3 class="text-2xl font-black text-amber-600 font-mono mt-0.5">13 Semaines</h3>
-                <a href="#" class="text-[11px] font-bold text-amber-700 hover:underline block text-left mt-0.5">
-                    Régulariser →
+                <a href="#" class="text-[11px] font-bold text-amber-700 hover:underline block text-left mt-0.5 flex items-center gap-0.5">
+                    Régulariser
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" /></svg>
                 </a>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-2xs">
                 <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
@@ -66,19 +69,19 @@
         </div>
 
         <!-- KPI 4: En attente revue -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between hover:border-sky-300 transition">
             <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500">En attente revue</span>
                 <h3 class="text-2xl font-black text-crt-navy font-mono mt-0.5">1 Feuille</h3>
                 <span class="text-[11px] font-bold text-slate-500">Validation manager</span>
             </div>
-            <div class="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
-                <svg class="w-6 h-6 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <div class="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shadow-2xs">
+                <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
         </div>
-    </div>
+    </div>  </div>
 
     <!-- Project Hour Consumption Section -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
