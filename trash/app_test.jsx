@@ -1,0 +1,3139 @@
+
+        const { useState, useEffect, useRef } = React;
+
+        // Simulated database of 100 clients configured by Admin
+        const ADMIN_DATABASE_CLIENTS = [
+            "Acme Corporation", "Globex Industries", "Initech Solutions", "Umbrella Corp", "Wayne Enterprises",
+            "Stark Industries", "Hooli Tech", "Vehement Capital", "Soylent Green Co.", "Cyberdyne Systems",
+            "Tyrell Nexus", "Oscorp Technologies", "Wonka Chocolate", "Dunder Mifflin", "Aperture Science",
+            "Virtucon Group", "Reynholm Industries", "Gekko & Co", "Sterling Cooper", "Sledgehammer Games",
+            "Banque Populaire Atlantique", "Crédit Agricole CIB", "L'Oréal Division Luxe", "Renault Software Factory",
+            "Air France KLM", "SNCF Connect", "TotalEnergies IT", "Michelin Digital", "Decathlon Corp", "Orange Telecom",
+            "Carrefour Global", "Danone Innovation", "Sanofi R&D", "Saint-Gobain Digital", "Capgemini Engineering",
+            "Atos Origin", "Sopra Steria", "Alten France", "Altran Group", "Wavestone Consulting",
+            "Octo Technology", "Devoteam Creative", "Zenika Paris", "Xebia Labs", "Ekino Studio",
+            "Sfeir Agency", "Linkvalue Hub", "Valtech France", "Publicis Sapient", "Betc Digital"
+        ].map((name, index) => ({ id: `c_admin_${index + 1}`, name: name }));
+
+        for (let i = 51; i <= 100; i++) {
+            ADMIN_DATABASE_CLIENTS.push({ id: `c_admin_${i}`, name: `Client Pivot #${i} SA` });
+        }
+
+        // Simulated database of 50 tasks configured by Admin
+        const ADMIN_DATABASE_TASKS = [
+            "Gestion de Projet & Sprint Planning", "Développement Architecture Backend (API)",
+            "Intégration Maquettes Figma Frontend", "Rédaction Spécifications Techniques",
+            "Correction Anomalies & Support N3", "Audit de Sécurité & Pentesting",
+            "Optimisation Performances Base de Données", "Mise en place Pipeline CI/CD DevOps",
+            "Atelier Conception UX/UI", "Rédaction de Tests Unitaires & E2E",
+            "Réunion de cadrage Client", "Refactoring Code Legacy",
+            "Veille Technologique & POC", "Migration Infrastructures Cloud AWS",
+            "Analyses SEO & Reporting Trafic", "Rédaction Articles Blog & Contenus",
+            "Configuration CRM & Marketing Automation", "Formation interne & Mentorat",
+            "Revue de code (Peer Review)", "Traduction et Internationalisation (i18n)",
+            "Déploiement en Production & Recette", "Suivi Budget & Planification",
+            "Design Database Schema NoSQL", "Configuration Reverse Proxy Nginx",
+            "Dockerisation des Microservices", "Audit Accessibilité RGAA",
+            "Rédaction Documentation API Swagger", "Mise en conformité RGPD",
+            "Analyse Business & KPI", "Benchmark Solutions Saas"
+        ].map((name, index) => ({ id: `t_admin_${index + 1}`, name: name }));
+
+        for (let i = 31; i <= 50; i++) {
+            ADMIN_DATABASE_TASKS.push({ id: `t_admin_${i}`, name: `Activité Spécifique #${i}` });
+        }
+
+        // Expanded list of 12 Projects for Dashboard Budget Consumption tracking
+        const DASHBOARD_PROJECTS_DATABASE = [
+            { id: "p1", code: "ALE", name: "ALE (Alethia)", consumedHours: 43, maxQuota: 360, isQuota: true },
+            { id: "p2", code: "BSL", name: "BSL (CISSS du Bas-St-Laurent)", consumedHours: 17.45, maxQuota: 600, isQuota: true },
+            { id: "p3", code: "RNT", name: "Renault Software Factory - Core API", consumedHours: 320, maxQuota: 350, isQuota: true },
+            { id: "p4", code: "LOR", name: "L'Oréal Division Luxe - Design System", consumedHours: 85, maxQuota: 120, isQuota: true },
+            { id: "p5", code: "STRK", name: "Stark Industries - SecOps Pentest", consumedHours: 45, maxQuota: null, isQuota: false },
+            { id: "p6", code: "ACM", name: "Acme Corp - Refactoring Legacy", consumedHours: 142, maxQuota: 200, isQuota: true },
+            { id: "p7", code: "SUPP", name: "Support N3 & Tierce Maintenance", consumedHours: 168.5, maxQuota: null, isQuota: false },
+            { id: "p8", code: "AF", name: "Air France KLM - Mobile App UI", consumedHours: 510, maxQuota: 500, isQuota: true },
+            { id: "p9", code: "GLB", name: "Globex Corp - Cloud AWS Migration", consumedHours: 95, maxQuota: 400, isQuota: true },
+            { id: "p10", code: "INT", name: "R&D Interne & Veille Techno", consumedHours: 64, maxQuota: null, isQuota: false },
+            { id: "p11", code: "SNCF", name: "SNCF Connect - API Gateway", consumedHours: 210, maxQuota: 300, isQuota: true },
+            { id: "p12", code: "ORNG", name: "Orange Telecom - CRM Integration", consumedHours: 130, maxQuota: 150, isQuota: true }
+        ];
+
+        // Initial Sites Database
+        
+        // Initial Employees Database (proposition_employe)
+        const INITIAL_EMPLOYEES = [
+            {
+                id: "emp1",
+                matricule: "mat-2",
+                nom: "Richmond",
+                prenom: "Mitch",
+                dob: "07-21",
+                email: "mitch.richmond@gmail.com",
+                role: "ADMINISTRATEUR",
+                gestionnaire: "Admin Plateforme GCS",
+                probationStatus: "1 heure restante",
+                accountStatus: "Activé",
+                visibilityReport: "Oui",
+                isManager: false,
+                weeklyHours: 40,
+                hireDate: "2026-07-20",
+                site: "Centre Ville-Marie",
+                hoursHistory: [
+                    { hours: 40, startDate: "2026-07-20 12:37:28", endDate: "---" }
+                ],
+                managerHistory: [
+                    { manager: "Admin Plateforme GCS", startDate: "2026-07-20 12:37:28", endDate: "---" }
+                ],
+                siteHistory: [
+                    { siteName: "Centre Ville-Marie", address: "1001 rue Sherbrooke Est H2L 1L3, Apt. 3e étage", startDate: "2026-07-21 12:00:00", endDate: "2026-07-30 12:00:00", status: "Actif" }
+                ]
+            },
+            {
+                id: "emp2",
+                matricule: "EMP2026-084",
+                nom: "DENOU",
+                prenom: "Fabrice",
+                dob: "14-03",
+                email: "fabrice.denou@crt-solution.ca",
+                role: "ADMINISTRATEUR",
+                gestionnaire: "Admin Plateforme GCS",
+                probationStatus: "1 heure restante",
+                accountStatus: "Activé",
+                visibilityReport: "Oui",
+                isManager: true,
+                weeklyHours: 37.5,
+                hireDate: "2026-06-15",
+                site: "Centre administratif",
+                hoursHistory: [
+                    { hours: 37.5, startDate: "2026-06-15 09:00:00", endDate: "---" }
+                ],
+                managerHistory: [
+                    { manager: "Admin Plateforme GCS", startDate: "2026-06-15 09:00:00", endDate: "---" }
+                ],
+                siteHistory: [
+                    { siteName: "Centre administratif", address: "4388 rue Saint-Denis H2J 2L1", startDate: "2026-06-15 09:00:00", endDate: "---", status: "Actif" }
+                ]
+            },
+            {
+                id: "emp3",
+                matricule: "EMP2025-001",
+                nom: "Admin Plateforme",
+                prenom: "GCS",
+                dob: "01-01",
+                email: "admin.gcs@crt-solution.ca",
+                role: "ADMINISTRATEUR",
+                gestionnaire: "---",
+                probationStatus: "1 heure restante",
+                accountStatus: "Activé",
+                visibilityReport: "Oui",
+                isManager: true,
+                weeklyHours: 40,
+                hireDate: "2025-01-01",
+                site: "Siège social CRT Solution",
+                hoursHistory: [
+                    { hours: 40, startDate: "2025-01-01 08:00:00", endDate: "---" }
+                ],
+                managerHistory: [
+                    { manager: "---", startDate: "2025-01-01 08:00:00", endDate: "---" }
+                ],
+                siteHistory: [
+                    { siteName: "Siège social CRT Solution", address: "1610 rue Sainte-Catherine Ouest", startDate: "2025-01-01 08:00:00", endDate: "---", status: "Actif" }
+                ]
+            }
+        ];
+
+        const INITIAL_COMPANY_SITES = [
+            {
+                id: "s1",
+                name: "Centre Ville-Marie",
+                description: "Centre de services directs aux clients offrant des conseils et accompagnements informatiques.",
+                address: "1001 rue Sherbrooke Est, Apt. 3e étage",
+                city: "Montréal",
+                postalCode: "H2L 1L3",
+                phone: "514.598.7722",
+                phonePro: "514.598.7722 (301)",
+                extension: "301"
+            },
+            {
+                id: "s2",
+                name: "Centre administratif",
+                description: "Bureau de gestion des ressources humaines, comptabilité et direction générale CRT.",
+                address: "4388 rue Saint-Denis, Apt. 2e étage",
+                city: "Montréal",
+                postalCode: "H2J 2L1",
+                phone: "514.844.7373",
+                phonePro: "514.844.7373 (701)",
+                extension: "701"
+            },
+            {
+                id: "s3",
+                name: "Siège social CRT Solution",
+                description: "Bureau principal de la Table de concertation des organismes informatiques.",
+                address: "1610 rue Sainte-Catherine Ouest, Apt. Bureau 401",
+                city: "Montréal",
+                postalCode: "H3H 2S2",
+                phone: "514.272.2532",
+                phonePro: "514.272.2532 (101)",
+                extension: "101"
+            }
+        ];
+
+        const DAYS_CONFIG = [
+            { key: 'mon', label: 'Lundi' },
+            { key: 'tue', label: 'Mardi' },
+            { key: 'wed', label: 'Mercredi' },
+            { key: 'thu', label: 'Jeudi' },
+            { key: 'fri', label: 'Vendredi' }
+        ];
+
+        function SearchableCombobox({ items, placeholder, label, onSelect, selectedValue, disabled }) {
+            const [search, setSearch] = useState("");
+            const [isOpen, setIsOpen] = useState(false);
+            const containerRef = useRef(null);
+
+            const filteredItems = items.filter(item =>
+                item.name.toLowerCase().includes(search.toLowerCase())
+            );
+
+            useEffect(() => {
+                function handleClickOutside(event) {
+                    if (containerRef.current && !containerRef.current.contains(event.target)) {
+                        setIsOpen(false);
+                    }
+                }
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, []);
+
+            const selectedItem = items.find(i => i.id === selectedValue);
+
+            return (
+                <div ref={containerRef} className="relative flex-1 min-w-[200px]">
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 select-none">
+                        {label}
+                    </label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder={disabled ? "Sélectionnez d'abord le client..." : placeholder}
+                            value={isOpen ? search : (selectedItem ? selectedItem.name : search)}
+                            disabled={disabled}
+                            onChange={(e) => {
+                                setSearch(e.target.value);
+                                setIsOpen(true);
+                            }}
+                            onFocus={() => {
+                                setSearch("");
+                                setIsOpen(true);
+                            }}
+                            className="w-full text-xs font-semibold border border-slate-300 focus:border-crt-cyan rounded-xl px-3 py-2.5 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
+                        />
+                        <span className="absolute right-3 top-3.5 text-slate-500 pointer-events-none">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </span>
+                    </div>
+
+                    {isOpen && !disabled && (
+                        <div className="absolute z-30 left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-56 overflow-y-auto custom-scrollbar">
+                            {filteredItems.length === 0 ? (
+                                <div className="p-3 text-xs text-slate-500 italic">Aucun résultat trouvé</div>
+                            ) : (
+                                filteredItems.map(item => (
+                                    <button
+                                        key={item.id}
+                                        type="button"
+                                        onClick={() => {
+                                            onSelect(item.id);
+                                            setSearch(item.name);
+                                            setIsOpen(false);
+                                        }}
+                                        className={`w-full text-left px-3.5 py-2.5 text-xs hover:bg-crt-cyan-light hover:text-crt-navy transition font-semibold border-b border-slate-50 last:border-0 ${
+                                            selectedValue === item.id ? 'bg-crt-cyan-light text-crt-navy font-bold' : 'text-slate-700'
+                                        }`}
+                                    >
+                                        {item.name}
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function TimesheetApp() {
+            // Simulated active timesheet entries for the current week
+            const [clients, setClients] = useState([
+                {
+                    id: "c_admin_1",
+                    name: "Acme Corporation",
+                    tasks: [
+                        {
+                            id: "t_admin_2",
+                            name: "Développement Architecture Backend (API)",
+                            days: {
+                                mon: { hours: 4, description: "Création des routes d'authentification" },
+                                tue: { hours: 6, description: "Optimisation requêtes SQL sur les index" },
+                                wed: { hours: 0, description: "" },
+                                thu: { hours: 2, description: "Documentation API Swagger" },
+                                fri: { hours: 0, description: "" }
+                            }
+                        },
+                        {
+                            id: "t_admin_1",
+                            name: "Gestion de Projet & Sprint Planning",
+                            days: {
+                                mon: { hours: 2, description: "Sprint Planning & Grooming Backlog" },
+                                tue: { hours: 0, description: "" },
+                                wed: { hours: 1.5, description: "Standup & Cadrage Technique" },
+                                thu: { hours: 0, description: "" },
+                                fri: { hours: 0, description: "" }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: "c_admin_23",
+                    name: "L'Oréal Division Luxe",
+                    tasks: [
+                        {
+                            id: "t_admin_3",
+                            name: "Intégration Maquettes Figma Frontend",
+                            days: {
+                                mon: { hours: 2, description: "Intégration composant Header & Menu" },
+                                tue: { hours: 0, description: "" },
+                                wed: { hours: 5, description: "Développement du Design System UI" },
+                                thu: { hours: 0, description: "" },
+                                fri: { hours: 4, description: "Pixel Perfect Review Landing Page" }
+                            }
+                        },
+                        {
+                            id: "t_admin_26",
+                            name: "Audit Accessibilité RGAA",
+                            days: {
+                                mon: { hours: 0, description: "" },
+                                tue: { hours: 2, description: "Contrôle contraste & navigation clavier" },
+                                wed: { hours: 0, description: "" },
+                                thu: { hours: 0, description: "" },
+                                fri: { hours: 0, description: "" }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: "c_admin_24",
+                    name: "Renault Software Factory",
+                    tasks: [
+                        {
+                            id: "t_admin_8",
+                            name: "Mise en place Pipeline CI/CD DevOps",
+                            days: {
+                                mon: { hours: 0, description: "" },
+                                tue: { hours: 0, description: "" },
+                                wed: { hours: 2, description: "Configuration GitHub Actions & Docker" },
+                                thu: { hours: 5, description: "Automatisation déploiement Staging" },
+                                fri: { hours: 0, description: "" }
+                            }
+                        },
+                        {
+                            id: "t_admin_5",
+                            name: "Correction Anomalies & Support N3",
+                            days: {
+                                mon: { hours: 0, description: "" },
+                                tue: { hours: 0, description: "" },
+                                wed: { hours: 0, description: "" },
+                                thu: { hours: 0, description: "" },
+                                fri: { hours: 3, description: "Fix bug synchronisation des données" }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: "c_admin_6",
+                    name: "Stark Industries",
+                    tasks: [
+                        {
+                            id: "t_admin_6",
+                            name: "Audit de Sécurité & Pentesting",
+                            days: {
+                                mon: { hours: 0, description: "" },
+                                tue: { hours: 4, description: "Analyse vulnérabilités sur les API" },
+                                wed: { hours: 0, description: "" },
+                                thu: { hours: 3, description: "Rédaction rapport d'audit sécurité" },
+                                fri: { hours: 0, description: "" }
+                            }
+                        }
+                    ]
+                }
+            ]);
+
+            const [selectedClientId, setSelectedClientId] = useState("");
+            const [selectedTaskId, setSelectedTaskId] = useState("");
+
+            const [openNavDropdown, setOpenNavDropdown] = useState(null); 
+            const [activeMenuItem, setActiveMenuItem] = useState({ section: 'Dashboard', item: 'Tableau de bord' });
+            const navRef = useRef(null);
+
+            // Dashboard Filter & Pagination States
+            const [dashboardProjectSearch, setDashboardProjectSearch] = useState("");
+            const [dashboardProjectTypeFilter, setDashboardProjectTypeFilter] = useState("all"); 
+            const [dashboardPage, setDashboardPage] = useState(1);
+            const projectsPerPage = 10;
+
+            // Company & Sites Management States
+            const [companyInfo, setCompanyInfo] = useState({
+                name: "CRT Solution Canada",
+                probationPeriod: "1 heure(s)",
+                description: "La table de concertation des organismes au service des personnes réfugiées et immigrantes (CRT) est un regroupement de plus de 150 organismes œuvrant auprès des personnes réfugiées, immigrantes et sans statut au Québec."
+            });
+            const [entrepriseMode, setEntrepriseMode] = useState("consultation"); // 'saisie' (Édition) vs 'consultation' (Lecture seule)
+            const [editedCompanyInfo, setEditedCompanyInfo] = useState(companyInfo);
+
+            const [sites, setSites] = useState(INITIAL_COMPANY_SITES);
+            const [siteSearchQuery, setSiteSearchQuery] = useState("");
+            const [siteModalMode, setSiteModalMode] = useState(null); 
+            
+            // HR / Employees Module States
+            const [employees, setEmployees] = useState(INITIAL_EMPLOYEES);
+            const [selectedEmployee, setSelectedEmployee] = useState(null); 
+            const [employeeActiveTab, setEmployeeActiveTab] = useState("information"); 
+            const [isNewEmployeeModalOpen, setIsNewEmployeeModalOpen] = useState(false);
+            
+            // 4 NEW PROPOSAL MODAL STATES
+            const [isEditEmployeeModalOpen, setIsEditEmployeeModalOpen] = useState(false);
+            const [editEmpForm, setEditEmpForm] = useState({
+                nom: "", prenom: "", dob: "", email: "", matricule: "", hireDate: "", isManager: "Non", accessGroup: "ADMINISTRATEUR", visibilityReport: "Oui"
+            });
+
+            const [isEditManagerModalOpen, setIsEditManagerModalOpen] = useState(false);
+            const [editManagerForm, setEditManagerForm] = useState({
+                newManager: "Admin Plateforme GCS", startDate: "2026-07-22 12:31:00"
+            });
+
+            const [isEditHoursModalOpen, setIsEditHoursModalOpen] = useState(false);
+            const [editHoursForm, setEditHoursForm] = useState({
+                newHours: 40, startDate: "2026-07-22 12:30:00"
+            });
+
+            const [isEditSiteModalOpen, setIsEditSiteModalOpen] = useState(false);
+            const [editSiteForm, setEditSiteForm] = useState({
+                newSiteName: "Centre Ville-Marie", startDate: "2026-07-22 12:32:00", endDate: ""
+            });
+
+            const [empFilterQuery, setEmpFilterQuery] = useState("");
+            const [empFilterManager, setEmpFilterManager] = useState("");
+            const [empFilterProbation, setEmpFilterProbation] = useState("all");
+            const [empFilterStatus, setEmpFilterStatus] = useState("all");
+
+            const [newEmpForm, setNewEmpForm] = useState({
+                nom: "", prenom: "", dob: "", email: "",
+                matricule: `EMP2026-${Math.floor(100 + Math.random() * 900)}`,
+                hireDate: "2026-07-22", weeklyHours: 37.5,
+                gestionnaire: "Admin Plateforme GCS", site: "Centre Ville-Marie",
+                startDate: "2026-07-22", endDate: "", isManager: "Non", accessGroup: "ADMINISTRATEUR"
+            });
+
+            const [currentSiteForm, setCurrentSiteForm] = useState({
+                id: "",
+                name: "",
+                description: "",
+                address: "",
+                city: "Montréal",
+                postalCode: "",
+                phone: "",
+                phonePro: "",
+                extension: ""
+            });
+
+            const [currentMode, setCurrentMode] = useState("saisie");
+            const [timesheetStatus, setTimesheetStatus] = useState("pending");
+            const [searchQuery, setSearchQuery] = useState("");
+            const [consultationViewType, setConsultationViewType] = useState("grid");
+            const [focusedCell, setFocusedCell] = useState(null); 
+
+            const [notification, setNotification] = useState(null);
+            const [deleteTarget, setDeleteTarget] = useState(null);
+            const [rejectionModalOpen, setRejectionModalOpen] = useState(false);
+            const [rejectionReason, setRejectionReason] = useState("");
+            const [rejectionHistory, setRejectionHistory] = useState("");
+
+            const showNotification = (message, type = "success") => {
+                setNotification({ message, type });
+                setTimeout(() => setNotification(null), 4000);
+            };
+
+            useEffect(() => {
+                function handleClickOutside(event) {
+                    if (navRef.current && !navRef.current.contains(event.target)) {
+                        setOpenNavDropdown(null);
+                    }
+                }
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, []);
+
+            
+            // Employee Handlers
+            const handleCreateEmployee = (e) => {
+                e.preventDefault();
+                if (!newEmpForm.nom || !newEmpForm.prenom || !newEmpForm.email) {
+                    showNotification("Veuillez remplir le nom, prénom et email !", "warning");
+                    return;
+                }
+
+                const created = {
+                    id: `emp_${Date.now()}`,
+                    matricule: newEmpForm.matricule || `EMP2026-${Math.floor(100 + Math.random() * 900)}`,
+                    nom: newEmpForm.nom,
+                    prenom: newEmpForm.prenom,
+                    dob: newEmpForm.dob || "07-21",
+                    email: newEmpForm.email,
+                    role: newEmpForm.accessGroup,
+                    gestionnaire: newEmpForm.gestionnaire,
+                    probationStatus: "1 heure restante",
+                    accountStatus: "Activé",
+                    visibilityReport: "Oui",
+                    isManager: newEmpForm.isManager === "Oui",
+                    weeklyHours: parseFloat(newEmpForm.weeklyHours) || 37.5,
+                    hireDate: newEmpForm.hireDate,
+                    site: newEmpForm.site,
+                    hoursHistory: [
+                        { hours: parseFloat(newEmpForm.weeklyHours) || 37.5, startDate: `${newEmpForm.startDate} 09:00:00`, endDate: "---" }
+                    ],
+                    managerHistory: [
+                        { manager: newEmpForm.gestionnaire, startDate: `${newEmpForm.startDate} 09:00:00`, endDate: "---" }
+                    ],
+                    siteHistory: [
+                        { siteName: newEmpForm.site, address: "1001 rue Sherbrooke Est H2L 1L3", startDate: `${newEmpForm.startDate} 09:00:00`, endDate: "---", status: "Actif" }
+                    ]
+                };
+
+                setEmployees([...employees, created]);
+                setIsNewEmployeeModalOpen(false);
+                showNotification(`L'employé "${created.prenom} ${created.nom}" a été créé avec succès !`);
+                
+                setNewEmpForm({
+                    nom: "", prenom: "", dob: "", email: "",
+                    matricule: `EMP2026-${Math.floor(100 + Math.random() * 900)}`,
+                    hireDate: "2026-07-22", weeklyHours: 37.5,
+                    gestionnaire: "Admin Plateforme GCS", site: "Centre Ville-Marie",
+                    startDate: "2026-07-22", endDate: "", isManager: "Non", accessGroup: "ADMINISTRATEUR"
+                });
+            };
+
+            const handleOpenEditEmployeeModal = () => {
+                if (!selectedEmployee) return;
+                setEditEmpForm({
+                    nom: selectedEmployee.nom,
+                    prenom: selectedEmployee.prenom,
+                    dob: selectedEmployee.dob || "07-21",
+                    email: selectedEmployee.email,
+                    matricule: selectedEmployee.matricule,
+                    hireDate: selectedEmployee.hireDate,
+                    isManager: selectedEmployee.isManager ? "Oui" : "Non",
+                    accessGroup: selectedEmployee.role,
+                    visibilityReport: selectedEmployee.visibilityReport || "Oui"
+                });
+                setIsEditEmployeeModalOpen(true);
+            };
+
+            const handleSaveEmployeeUpdate = (e) => {
+                e.preventDefault();
+                if (!selectedEmployee) return;
+
+                const updated = {
+                    ...selectedEmployee,
+                    nom: editEmpForm.nom,
+                    prenom: editEmpForm.prenom,
+                    dob: editEmpForm.dob,
+                    email: editEmpForm.email,
+                    matricule: editEmpForm.matricule,
+                    hireDate: editEmpForm.hireDate,
+                    isManager: editEmpForm.isManager === "Oui",
+                    role: editEmpForm.accessGroup,
+                    visibilityReport: editEmpForm.visibilityReport
+                };
+
+                setSelectedEmployee(updated);
+                setEmployees(employees.map(emp => emp.id === updated.id ? updated : emp));
+                setIsEditEmployeeModalOpen(false);
+                showNotification("Informations de l'employé mises à jour !");
+            };
+
+            const handleSaveManagerChange = (e) => {
+                e.preventDefault();
+                if (!selectedEmployee) return;
+
+                const updatedManagerHistory = [
+                    { manager: editManagerForm.newManager, startDate: editManagerForm.startDate, endDate: "---" },
+                    ...selectedEmployee.managerHistory.map(m => ({ ...m, endDate: editManagerForm.startDate }))
+                ];
+
+                const updated = {
+                    ...selectedEmployee,
+                    gestionnaire: editManagerForm.newManager,
+                    managerHistory: updatedManagerHistory
+                };
+
+                setSelectedEmployee(updated);
+                setEmployees(employees.map(emp => emp.id === updated.id ? updated : emp));
+                setIsEditManagerModalOpen(false);
+                showNotification(`Nouveau gestionnaire "${editManagerForm.newManager}" enregistré !`);
+            };
+
+            const handleSaveHoursChange = (e) => {
+                e.preventDefault();
+                if (!selectedEmployee) return;
+
+                const parsedHours = parseFloat(editHoursForm.newHours) || 37.5;
+                const updatedHoursHistory = [
+                    { hours: parsedHours, startDate: editHoursForm.startDate, endDate: "---" },
+                    ...selectedEmployee.hoursHistory.map(h => ({ ...h, endDate: editHoursForm.startDate }))
+                ];
+
+                const updated = {
+                    ...selectedEmployee,
+                    weeklyHours: parsedHours,
+                    hoursHistory: updatedHoursHistory
+                };
+
+                setSelectedEmployee(updated);
+                setEmployees(employees.map(emp => emp.id === updated.id ? updated : emp));
+                setIsEditHoursModalOpen(false);
+                showNotification(`Nouveau contrat de ${parsedHours}h/semaine enregistré !`);
+            };
+
+            const handleSaveSiteAffectation = (e) => {
+                e.preventDefault();
+                if (!selectedEmployee) return;
+
+                const siteObj = sites.find(s => s.name === editSiteForm.newSiteName);
+                const addressStr = siteObj ? `${siteObj.address} ${siteObj.city}` : "Montréal, QC";
+
+                const updatedSiteHistory = [
+                    { 
+                        siteName: editSiteForm.newSiteName, 
+                        address: addressStr, 
+                        startDate: editSiteForm.startDate, 
+                        endDate: editSiteForm.endDate || "---", 
+                        status: "Actif" 
+                    },
+                    ...selectedEmployee.siteHistory.map(s => ({ ...s, status: "Inactif", endDate: editSiteForm.startDate }))
+                ];
+
+                const updated = {
+                    ...selectedEmployee,
+                    site: editSiteForm.newSiteName,
+                    siteHistory: updatedSiteHistory
+                };
+
+                setSelectedEmployee(updated);
+                setEmployees(employees.map(emp => emp.id === updated.id ? updated : emp));
+                setIsEditSiteModalOpen(false);
+                showNotification(`Nouvelle affectation au site "${editSiteForm.newSiteName}" enregistrée !`);
+            };
+
+            const toggleAccountStatus = (empId) => {
+                setEmployees(employees.map(emp => {
+                    if (emp.id === empId) {
+                        const newStatus = emp.accountStatus === 'Activé' ? 'Désactivé' : 'Activé';
+                        showNotification(`Statut du compte de ${emp.prenom} ${emp.nom} changé vers "${newStatus}" !`, "info");
+                        return { ...emp, accountStatus: newStatus };
+                    }
+                    return emp;
+                }));
+            };
+
+            const filteredEmployees = employees.filter(emp => {
+                const searchLower = empFilterQuery.toLowerCase();
+                const matchesQuery = emp.nom.toLowerCase().includes(searchLower) ||
+                                     emp.prenom.toLowerCase().includes(searchLower) ||
+                                     emp.matricule.toLowerCase().includes(searchLower);
+                
+                const matchesManager = !empFilterManager || emp.gestionnaire.toLowerCase().includes(empFilterManager.toLowerCase());
+                const matchesStatus = empFilterStatus === 'all' || 
+                                     (empFilterStatus === 'active' && emp.accountStatus === 'Activé') ||
+                                     (empFilterStatus === 'disabled' && emp.accountStatus === 'Désactivé');
+
+                return matchesQuery && matchesManager && matchesStatus;
+            });
+
+            const selectMenuItem = (section, item) => {
+                setActiveMenuItem({ section, item });
+                setOpenNavDropdown(null);
+                if (section === 'RH' && item === 'Employés') {
+                    setSelectedEmployee(null);
+                }
+            };
+
+            const handleCopyLastWeek = () => {
+                const previousStructure = [
+                    {
+                        id: "c_admin_2",
+                        name: "Globex Industries",
+                        tasks: [
+                            {
+                                id: "t_admin_1",
+                                name: "Gestion de Projet & Sprint Planning",
+                                days: {
+                                    mon: { hours: 0, description: "" },
+                                    tue: { hours: 0, description: "" },
+                                    wed: { hours: 0, description: "" },
+                                    thu: { hours: 0, description: "" },
+                                    fri: { hours: 0, description: "" }
+                                }
+                            }
+                        ]
+                    }
+                ];
+                setClients([...clients, ...previousStructure]);
+                showNotification("Structure de la semaine précédente dupliquée (sans les heures) !", "info");
+            };
+
+            const handleHoursChange = (clientId, taskId, dayKey, val) => {
+                const parsedVal = parseFloat(val);
+                const hours = isNaN(parsedVal) ? 0 : Math.max(0, Math.min(24, parsedVal));
+                
+                setClients(prevClients => 
+                    prevClients.map(client => {
+                        if (client.id !== clientId) return client;
+                        return {
+                            ...client,
+                            tasks: client.tasks.map(task => {
+                                if (task.id !== taskId) return task;
+                                return {
+                                    ...task,
+                                    days: {
+                                        ...task.days,
+                                        [dayKey]: {
+                                            ...task.days[dayKey],
+                                            hours: hours
+                                        }
+                                    }
+                                };
+                            })
+                        };
+                    })
+                );
+            };
+
+            const handleDescriptionChange = (clientId, taskId, dayKey, text) => {
+                const truncatedText = text.slice(0, 50);
+                setClients(prevClients => 
+                    prevClients.map(client => {
+                        if (client.id !== clientId) return client;
+                        return {
+                            ...client,
+                            tasks: client.tasks.map(task => {
+                                if (task.id !== taskId) return task;
+                                return {
+                                    ...task,
+                                    days: {
+                                        ...task.days,
+                                        [dayKey]: {
+                                            ...task.days[dayKey],
+                                            description: truncatedText
+                                        }
+                                    }
+                                };
+                            })
+                        };
+                    })
+                );
+            };
+
+            const handleAddActiveRow = (e) => {
+                e.preventDefault();
+                if (!selectedClientId || !selectedTaskId) {
+                    showNotification("Veuillez sélectionner un client et une tâche.", "warning");
+                    return;
+                }
+
+                const clientFromDb = ADMIN_DATABASE_CLIENTS.find(c => c.id === selectedClientId);
+                const taskFromDb = ADMIN_DATABASE_TASKS.find(t => t.id === selectedTaskId);
+
+                if (!clientFromDb || !taskFromDb) return;
+
+                const clientIndex = clients.findIndex(c => c.id === selectedClientId);
+
+                const newTask = {
+                    id: taskFromDb.id,
+                    name: taskFromDb.name,
+                    days: {
+                        mon: { hours: 0, description: "" },
+                        tue: { hours: 0, description: "" },
+                        wed: { hours: 0, description: "" },
+                        thu: { hours: 0, description: "" },
+                        fri: { hours: 0, description: "" }
+                    }
+                };
+
+                if (clientIndex > -1) {
+                    const taskExists = clients[clientIndex].tasks.some(t => t.id === selectedTaskId);
+                    if (taskExists) {
+                        showNotification("Cette ligne existe déjà dans votre feuille !", "warning");
+                        return;
+                    }
+                    const updatedClients = [...clients];
+                    updatedClients[clientIndex].tasks.push(newTask);
+                    setClients(updatedClients);
+                } else {
+                    const newClientEntry = {
+                        id: clientFromDb.id,
+                        name: clientFromDb.name,
+                        tasks: [newTask]
+                    };
+                    setClients([...clients, newClientEntry]);
+                }
+
+                setSelectedClientId("");
+                setSelectedTaskId("");
+                showNotification(`Ligne "${clientFromDb.name} - ${taskFromDb.name}" ajoutée !`);
+            };
+
+            const triggerDeleteClient = (clientId, name) => {
+                setDeleteTarget({ type: 'client', clientId, name });
+            };
+
+            const triggerDeleteTask = (clientId, taskId, name) => {
+                setDeleteTarget({ type: 'task', clientId, taskId, name });
+            };
+
+            const confirmDelete = () => {
+                if (!deleteTarget) return;
+
+                if (deleteTarget.type === 'client') {
+                    setClients(clients.filter(c => c.id !== deleteTarget.clientId));
+                    showNotification(`Le client "${deleteTarget.name}" a été retiré.`);
+                } else if (deleteTarget.type === 'task') {
+                    setClients(prevClients => 
+                        prevClients.map(client => {
+                            if (client.id !== deleteTarget.clientId) return client;
+                            return {
+                                ...client,
+                                tasks: client.tasks.filter(t => t.id !== deleteTarget.taskId)
+                            };
+                        })
+                    );
+                    showNotification(`La tâche "${deleteTarget.name}" a été retirée.`);
+                } else if (deleteTarget.type === 'site') {
+                    setSites(sites.filter(s => s.id !== deleteTarget.siteId));
+                    showNotification(`Le site "${deleteTarget.name}" a été supprimé.`);
+                }
+                setDeleteTarget(null);
+            };
+
+            // Site management handlers
+            const handleOpenCreateSiteModal = () => {
+                setCurrentSiteForm({
+                    id: `s_${Date.now()}`,
+                    name: "",
+                    description: "",
+                    address: "",
+                    city: "Montréal",
+                    postalCode: "",
+                    phone: "",
+                    phonePro: "",
+                    extension: ""
+                });
+                setSiteModalMode('create');
+            };
+
+            const handleOpenEditSiteModal = (site) => {
+                setCurrentSiteForm({ ...site });
+                setSiteModalMode('edit');
+            };
+
+            const handleOpenViewSiteModal = (site) => {
+                setCurrentSiteForm({ ...site });
+                setSiteModalMode('view');
+            };
+
+            const handleSaveSite = (e) => {
+                e.preventDefault();
+                if (!currentSiteForm.name.trim()) {
+                    showNotification("Le nom du site est requis !", "warning");
+                    return;
+                }
+
+                if (siteModalMode === 'create') {
+                    setSites([...sites, currentSiteForm]);
+                    showNotification(`Le site "${currentSiteForm.name}" a été créé avec succès !`);
+                } else if (siteModalMode === 'edit') {
+                    setSites(sites.map(s => s.id === currentSiteForm.id ? currentSiteForm : s));
+                    showNotification(`Le site "${currentSiteForm.name}" a été mis à jour !`);
+                }
+                setSiteModalMode(null);
+            };
+
+            const handleSaveCompanyInfo = () => {
+                setCompanyInfo(editedCompanyInfo);
+                showNotification("Informations de l'entreprise mises à jour !");
+            };
+
+            const getTaskTotal = (task) => {
+                return Object.values(task.days).reduce((sum, d) => sum + (d.hours || 0), 0);
+            };
+
+            const getDayTotal = (dayKey) => {
+                let total = 0;
+                clients.forEach(client => {
+                    client.tasks.forEach(task => {
+                        total += task.days[dayKey]?.hours || 0;
+                    });
+                });
+                return total;
+            };
+
+            const getGrandTotal = () => {
+                let total = 0;
+                clients.forEach(client => {
+                    client.tasks.forEach(task => {
+                        total += getTaskTotal(task);
+                    });
+                });
+                return total;
+            };
+
+            const getClientTotalHours = (clientId) => {
+                let total = 0;
+                const client = clients.find(c => c.id === clientId);
+                if (client) {
+                    client.tasks.forEach(task => {
+                        total += getTaskTotal(task);
+                    });
+                }
+                return total;
+            };
+
+            const getDescriptionCompleteness = () => {
+                let activeCells = 0;
+                let documentedCells = 0;
+                clients.forEach(client => {
+                    client.tasks.forEach(task => {
+                        Object.values(task.days).forEach(day => {
+                            if (day.hours > 0) {
+                                activeCells++;
+                                if (day.description && day.description.trim().length > 0) {
+                                    documentedCells++;
+                                }
+                            }
+                        });
+                    });
+                });
+                return activeCells === 0 ? 100 : Math.round((documentedCells / activeCells) * 100);
+            };
+
+            const handleStatusChange = (status) => {
+                setTimesheetStatus(status);
+                if (status === 'approved') {
+                    showNotification("La feuille de temps a été validée avec succès !", "success");
+                } else if (status === 'pending') {
+                    showNotification("Feuille de temps envoyée pour validation.", "info");
+                }
+            };
+
+            const submitRejection = () => {
+                if (!rejectionReason.trim()) return;
+                setTimesheetStatus('rejected');
+                setRejectionHistory(rejectionReason);
+                setRejectionModalOpen(false);
+                showNotification("Feuille de temps renvoyée pour correction.", "warning");
+            };
+
+            // Filtered sites for Entreprise view
+            const filteredSites = sites.filter(s => 
+                s.name.toLowerCase().includes(siteSearchQuery.toLowerCase()) ||
+                s.description.toLowerCase().includes(siteSearchQuery.toLowerCase()) ||
+                s.address.toLowerCase().includes(siteSearchQuery.toLowerCase()) ||
+                s.phone.includes(siteSearchQuery)
+            );
+
+            // Filtered projects for Dashboard
+            const filteredDashboardProjects = DASHBOARD_PROJECTS_DATABASE.filter(proj => {
+                const matchesSearch = proj.name.toLowerCase().includes(dashboardProjectSearch.toLowerCase()) || 
+                                      proj.code.toLowerCase().includes(dashboardProjectSearch.toLowerCase());
+                if (dashboardProjectTypeFilter === 'quota') return matchesSearch && proj.isQuota;
+                if (dashboardProjectTypeFilter === 'regie') return matchesSearch && !proj.isQuota;
+                return matchesSearch;
+            });
+
+            const totalDashboardPages = Math.ceil(filteredDashboardProjects.length / projectsPerPage) || 1;
+            const currentDashboardProjects = filteredDashboardProjects.slice(
+                (dashboardPage - 1) * projectsPerPage,
+                dashboardPage * projectsPerPage
+            );
+
+            return (
+                <div className="min-h-screen flex flex-col bg-slate-50">
+                    
+                    {/* Toast Notification */}
+                    {notification && (
+                        <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-xl transition-all duration-300 transform translate-y-0 ${
+                            notification.type === 'warning' ? 'bg-amber-600 text-white' : 
+                            notification.type === 'info' ? 'bg-crt-navy text-white' : 'bg-emerald-600 text-white'
+                        }`}>
+                            <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-sm font-medium">{notification.message}</span>
+                        </div>
+                    )}
+
+                    
+                    {/* 1. MODALE: Mise à jour des informations de l'employé */}
+                    {isEditEmployeeModalOpen && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
+                                    <h3 className="text-base font-extrabold text-crt-navy">Mise à jour des informations de l'employé</h3>
+                                    <button onClick={() => setIsEditEmployeeModalOpen(false)} className="text-slate-400 hover:text-slate-700 p-1.5">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSaveEmployeeUpdate} className="space-y-5 text-xs">
+                                    <div className="space-y-3">
+                                        <h4 className="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">📇 Informations personnelles</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Nom *</label>
+                                                <input type="text" required value={editEmpForm.nom} onChange={(e) => setEditEmpForm({...editEmpForm, nom: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Prénom *</label>
+                                                <input type="text" required value={editEmpForm.prenom} onChange={(e) => setEditEmpForm({...editEmpForm, prenom: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">📅 Date de naissance *</label>
+                                                <input type="text" value={editEmpForm.dob} onChange={(e) => setEditEmpForm({...editEmpForm, dob: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">E-mail *</label>
+                                                <input type="email" required value={editEmpForm.email} onChange={(e) => setEditEmpForm({...editEmpForm, email: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 pt-3 border-t border-slate-100">
+                                        <h4 className="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">💼 Informations professionnelles</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Matricule ID Unique</label>
+                                                <input type="text" value={editEmpForm.matricule} onChange={(e) => setEditEmpForm({...editEmpForm, matricule: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">📅 Date d'embauche *</label>
+                                                <input type="date" value={editEmpForm.hireDate} onChange={(e) => setEditEmpForm({...editEmpForm, hireDate: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 pt-3 border-t border-slate-100">
+                                        <h4 className="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">👤 Rôles et permissions</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Définir comme gestionnaire ?</label>
+                                                <select value={editEmpForm.isManager} onChange={(e) => setEditEmpForm({...editEmpForm, isManager: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                                    <option value="Non">Non</option>
+                                                    <option value="Oui">Oui</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Groupe d'accès *</label>
+                                                <select value={editEmpForm.accessGroup} onChange={(e) => setEditEmpForm({...editEmpForm, accessGroup: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-bold text-crt-navy">
+                                                    <option value="ADMINISTRATEUR">ADMINISTRATEUR</option>
+                                                    <option value="MANAGER">MANAGER</option>
+                                                    <option value="EMPLOYE">EMPLOYÉ</option>
+                                                </select>
+                                            </div>
+                                            <div className="sm:col-span-2">
+                                                <label className="block font-bold text-slate-700 mb-1">Définir comme visible dans les rapports ?</label>
+                                                <select value={editEmpForm.visibilityReport} onChange={(e) => setEditEmpForm({...editEmpForm, visibilityReport: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                                    <option value="Oui">Oui</option>
+                                                    <option value="Non">Non</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                                        <button type="button" onClick={() => setIsEditEmployeeModalOpen(false)} className="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">✖ Fermer</button>
+                                        <button type="submit" className="px-5 py-2.5 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">💾 Modifier</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 2. MODALE: Modifier le gestionnaire */}
+                    {isEditManagerModalOpen && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
+                                    <h3 className="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                                        👥 Modifier le gestionnaire
+                                    </h3>
+                                    <button onClick={() => setIsEditManagerModalOpen(false)} className="text-slate-400 hover:text-slate-700 p-1">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSaveManagerChange} className="space-y-4 text-xs">
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Nouveau gestionnaire *</label>
+                                        <select value={editManagerForm.newManager} onChange={(e) => setEditManagerForm({...editManagerForm, newManager: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                            <option value="Admin Plateforme GCS">Admin Plateforme GCS</option>
+                                            <option value="Fabrice DENOU">Fabrice DENOU</option>
+                                            <option value="Mitch Richmond">Mitch Richmond</option>
+                                            <option value="---">Aucun (---)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Date de debut du nouveau gestionnaire *</label>
+                                        <input type="text" value={editManagerForm.startDate} onChange={(e) => setEditManagerForm({...editManagerForm, startDate: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono" />
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+                                        <button type="button" onClick={() => setIsEditManagerModalOpen(false)} className="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">✖ Fermer</button>
+                                        <button type="submit" className="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">💾 Sauvegarder</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 3. MODALE: Modifier l'heure */}
+                    {isEditHoursModalOpen && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
+                                    <h3 className="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                                        👥 Modifier l'heure
+                                    </h3>
+                                    <button onClick={() => setIsEditHoursModalOpen(false)} className="text-slate-400 hover:text-slate-700 p-1">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSaveHoursChange} className="space-y-4 text-xs">
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Nouvelle Heure *</label>
+                                        <input type="number" step="0.5" required value={editHoursForm.newHours} onChange={(e) => setEditHoursForm({...editHoursForm, newHours: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                    </div>
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Date de debut de la nouvelle heure *</label>
+                                        <input type="text" value={editHoursForm.startDate} onChange={(e) => setEditHoursForm({...editHoursForm, startDate: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono" />
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+                                        <button type="button" onClick={() => setIsEditHoursModalOpen(false)} className="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">✖ Fermer</button>
+                                        <button type="submit" className="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">💾 Créer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 4. MODALE: Affectation un site */}
+                    {isEditSiteModalOpen && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
+                                    <h3 className="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                                        🏠 Affectation un site
+                                    </h3>
+                                    <button onClick={() => setIsEditSiteModalOpen(false)} className="text-slate-400 hover:text-slate-700 p-1">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSaveSiteAffectation} className="space-y-4 text-xs">
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Nouveau site *</label>
+                                        <select value={editSiteForm.newSiteName} onChange={(e) => setEditSiteForm({...editSiteForm, newSiteName: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                            {sites.map(site => (
+                                                <option key={site.id} value={site.name}>{site.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Date de début *</label>
+                                        <input type="text" value={editSiteForm.startDate} onChange={(e) => setEditSiteForm({...editSiteForm, startDate: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono" />
+                                    </div>
+                                    <div>
+                                        <label className="block font-bold text-slate-700 mb-1">Date de fin</label>
+                                        <input type="text" placeholder="Optionnel (ex: 2026-12-31)" value={editSiteForm.endDate} onChange={(e) => setEditSiteForm({...editSiteForm, endDate: e.target.value})} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+                                        <button type="button" onClick={() => setIsEditSiteModalOpen(false)} className="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">✖ Fermer</button>
+                                        <button type="submit" className="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">💾 Sauvegarder</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 5. MODALE: Nouvel employé */}
+                    {isNewEmployeeModalOpen && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
+                                    <h3 className="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                                        👥 Nouvel employé
+                                    </h3>
+                                    <button onClick={() => setIsNewEmployeeModalOpen(false)} className="text-slate-400 hover:text-slate-700 p-1.5">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleCreateEmployee} className="space-y-6">
+                                    <div className="space-y-3">
+                                        <h4 className="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">📇 Informations personnelles</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Nom *</label>
+                                                <input type="text" required value={newEmpForm.nom} onChange={(e) => setNewEmpForm({ ...newEmpForm, nom: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Prénom *</label>
+                                                <input type="text" required value={newEmpForm.prenom} onChange={(e) => setNewEmpForm({ ...newEmpForm, prenom: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">📅 Date de naissance *</label>
+                                                <input type="text" placeholder="ex: 07-21" value={newEmpForm.dob} onChange={(e) => setNewEmpForm({ ...newEmpForm, dob: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">E-mail *</label>
+                                                <input type="email" required placeholder="employe@exemple.com" value={newEmpForm.email} onChange={(e) => setNewEmpForm({ ...newEmpForm, email: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 pt-3 border-t border-slate-100 text-xs">
+                                        <h4 className="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">💼 Informations professionnelles</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Matricule ID Unique</label>
+                                                <input type="text" value={newEmpForm.matricule} onChange={(e) => setNewEmpForm({ ...newEmpForm, matricule: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">📅 Date d'embauche *</label>
+                                                <input type="date" required value={newEmpForm.hireDate} onChange={(e) => setNewEmpForm({ ...newEmpForm, hireDate: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Heures de travail par semaine *</label>
+                                                <input type="number" step="0.5" placeholder="Exemple: 35 ou 40" value={newEmpForm.weeklyHours} onChange={(e) => setNewEmpForm({ ...newEmpForm, weeklyHours: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                            </div>
+                                            <div>
+                                                <label className="block font-bold text-slate-700 mb-1">Gestionnaire</label>
+                                                <select value={newEmpForm.gestionnaire} onChange={(e) => setNewEmpForm({ ...newEmpForm, gestionnaire: e.target.value })} className="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                                    <option value="Admin Plateforme GCS">Admin Plateforme GCS</option>
+                                                    <option value="Fabrice DENOU">Fabrice DENOU</option>
+                                                    <option value="Mitch Richmond">Mitch Richmond</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 text-xs">
+                                        <button type="button" onClick={() => setIsNewEmployeeModalOpen(false)} className="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">✖ Fermer</button>
+                                        <button type="submit" className="px-5 py-2.5 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">💾 Créer</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Delete Confirmation Modal */}
+                    {deleteTarget && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+                                <h3 className="text-lg font-bold text-crt-navy mb-2">Confirmer la suppression</h3>
+                                <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+                                    Êtes-vous sûr de vouloir retirer cet élément ({deleteTarget.name}) ? 
+                                    Cette action est irréversible.
+                                </p>
+                                <div className="flex justify-end gap-3">
+                                    <button 
+                                        onClick={() => setDeleteTarget(null)}
+                                        className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition"
+                                    >
+                                        Annuler
+                                    </button>
+                                    <button 
+                                        onClick={confirmDelete}
+                                        className="px-4 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition shadow-lg"
+                                    >
+                                        Oui, supprimer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Site Creation / Modification / Consultation Modal */}
+                    {siteModalMode && (
+                        <div className="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+                                <div className="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
+                                    <h3 className="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                                        <span className="text-crt-cyan">📍</span> 
+                                        {siteModalMode === 'create' ? 'Nouveau site' : 
+                                         siteModalMode === 'edit' ? 'Modifier le site' : 'Fiche détaillée du site'}
+                                    </h3>
+                                    <button 
+                                        onClick={() => setSiteModalMode(null)}
+                                        className="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleSaveSite} className="space-y-5">
+                                    <div className="space-y-3">
+                                        <h4 className="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                            🏢 Informations du Site
+                                        </h4>
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 mb-1">Nom du Site *</label>
+                                            <input 
+                                                type="text" 
+                                                required
+                                                disabled={siteModalMode === 'view'}
+                                                placeholder="Nom du Site"
+                                                value={currentSiteForm.name}
+                                                onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, name: e.target.value })}
+                                                className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-slate-700 mb-1">Description</label>
+                                            <textarea 
+                                                rows="3"
+                                                disabled={siteModalMode === 'view'}
+                                                placeholder="Site description"
+                                                value={currentSiteForm.description}
+                                                onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, description: e.target.value })}
+                                                className="w-full text-xs font-medium border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition resize-none disabled:opacity-75"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 pt-3 border-t border-slate-100">
+                                        <h4 className="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                            📍 Adresse
+                                        </h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div className="sm:col-span-2">
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Rue *</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="Adresse de la rue"
+                                                    value={currentSiteForm.address}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, address: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Appartement / Bureau</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="Appartement / Bureau"
+                                                    value={currentSiteForm.extension || ''}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, extension: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Ville *</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="Ville"
+                                                    value={currentSiteForm.city}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, city: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Code postal *</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="Code postal"
+                                                    value={currentSiteForm.postalCode}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, postalCode: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75 font-mono"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3 pt-3 border-t border-slate-100">
+                                        <h4 className="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                            📞 Contacts
+                                        </h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Téléphone *</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="XXX.XXX.XXXX"
+                                                    value={currentSiteForm.phone}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, phone: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75 font-mono"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Téléphone Pro</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="XXX.XXX.XXXX"
+                                                    value={currentSiteForm.phonePro || ''}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, phonePro: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75 font-mono"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-slate-700 mb-1">Extension</label>
+                                                <input 
+                                                    type="text" 
+                                                    disabled={siteModalMode === 'view'}
+                                                    placeholder="123"
+                                                    value={currentSiteForm.extension || ''}
+                                                    onChange={(e) => setCurrentSiteForm({ ...currentSiteForm, extension: e.target.value })}
+                                                    className="w-full text-xs font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 transition disabled:opacity-75 font-mono"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                                        <button 
+                                            type="button"
+                                            onClick={() => setSiteModalMode(null)}
+                                            className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition flex items-center gap-1.5"
+                                        >
+                                            ✖ Fermer
+                                        </button>
+                                        {siteModalMode !== 'view' && (
+                                            <button 
+                                                type="submit"
+                                                className="px-5 py-2.5 text-xs font-extrabold text-crt-navy bg-crt-cyan hover:bg-crt-cyan-dark rounded-xl transition shadow-lg shadow-crt-cyan/20 flex items-center gap-1.5"
+                                            >
+                                                💾 {siteModalMode === 'create' ? 'Créer le site' : 'Enregistrer'}
+                                            </button>
+                                        )}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Navigation Header branded with CRT Solution Logo */}
+                    <header className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
+                        {/* Top Header Row */}
+                        <div className="px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100">
+                            <div className="flex items-center space-x-4">
+                                <div className="p-1 bg-white rounded-lg flex items-center justify-center">
+                                    <img src="./logo.png" alt="CRT Solution Logo" className="h-10 w-auto object-contain" />
+                                </div>
+                                <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
+                                <div>
+                                    <h1 className="text-base font-extrabold text-crt-navy tracking-tight flex items-center gap-2">
+                                        Feuille de Temps
+                                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-crt-cyan-light border border-crt-cyan/20 text-crt-navy">Interactive v3.0</span>
+                                    </h1>
+                                    <p className="text-xs text-slate-500 font-medium">Jean-Marc Dupont — Concepteur Développeur</p>
+                                </div>
+                            </div>
+
+                            {/* Top Metadata info */}
+                            <div className="flex items-center gap-3 w-full sm:w-auto">
+                                <span className="text-xs font-bold text-crt-navy bg-crt-cyan-light border border-crt-cyan/30 px-3.5 py-1.5 rounded-xl block text-center w-full sm:w-auto shadow-xs">
+                                    Semaine du 20 Juillet 2026
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Horizontal Navbar Row */}
+                        <div className="bg-slate-900 text-white relative z-50">
+                            <nav ref={navRef} className="px-6 py-1 text-xs font-semibold flex items-center space-x-1.5 flex-wrap">
+                                
+                                {/* 1. Tableau de bord */}
+                                <button 
+                                    onClick={() => selectMenuItem('Dashboard', 'Tableau de bord')}
+                                    className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all ${
+                                        activeMenuItem.section === 'Dashboard' ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                                    }`}
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                    </svg>
+                                    Tableau de bord
+                                </button>
+
+                                {/* 2. Entreprise */}
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setOpenNavDropdown(openNavDropdown === 'entreprise' ? null : 'entreprise')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
+                                            openNavDropdown === 'entreprise' || activeMenuItem.section === 'Entreprise' ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                                        }`}
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" />
+                                        </svg>
+                                        Entreprise
+                                        <svg className={`w-3 h-3 transition-transform ${openNavDropdown === 'entreprise' ? 'rotate-180 text-crt-navy' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {openNavDropdown === 'entreprise' && (
+                                        <div className="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                                            <div className="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">ENTREPRISE</div>
+                                            <button 
+                                                onClick={() => selectMenuItem('Entreprise', 'Présentation entreprise')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                                Présentation entreprise
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 3. Budget */}
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setOpenNavDropdown(openNavDropdown === 'budget' ? null : 'budget')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
+                                            openNavDropdown === 'budget' || activeMenuItem.section === 'Budget' ? 'bg-slate-800 text-crt-cyan font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                                        }`}
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Budget
+                                        <svg className={`w-3 h-3 transition-transform ${openNavDropdown === 'budget' ? 'rotate-180 text-crt-cyan' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {openNavDropdown === 'budget' && (
+                                        <div className="absolute left-0 top-full mt-1 w-56 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                                            <div className="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">BUDGET</div>
+                                            <button 
+                                                onClick={() => selectMenuItem('Budget', 'Années Financières')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                Années Financières
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 4. RH */}
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setOpenNavDropdown(openNavDropdown === 'rh' ? null : 'rh')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
+                                            openNavDropdown === 'rh' || activeMenuItem.section === 'RH' ? 'bg-slate-800 text-crt-cyan font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                                        }`}
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        RH
+                                        <svg className={`w-3 h-3 transition-transform ${openNavDropdown === 'rh' ? 'rotate-180 text-crt-cyan' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {openNavDropdown === 'rh' && (
+                                        <div className="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                                            <div className="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">RESSOURCES HUMAINES</div>
+                                            <button 
+                                                onClick={() => selectMenuItem('RH', 'Employés')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                                Employés
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 5. Feuilles de Temps */}
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setOpenNavDropdown(openNavDropdown === 'feuilles' ? null : 'feuilles')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
+                                            openNavDropdown === 'feuilles' || activeMenuItem.section === 'Feuilles de Temps' ? 'bg-slate-800 text-crt-cyan font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                                        }`}
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                        </svg>
+                                        Feuilles de Temps
+                                        <svg className={`w-3 h-3 transition-transform ${openNavDropdown === 'feuilles' ? 'rotate-180 text-crt-cyan' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {openNavDropdown === 'feuilles' && (
+                                        <div className="absolute left-0 top-full mt-1 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                                            <div className="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">FEUILLES DE TEMPS</div>
+                                            <button 
+                                                onClick={() => selectMenuItem('Feuilles de Temps', 'Projets & Suivi Hebdomadaire')}
+                                                className={`w-full text-left px-3.5 py-2.5 text-xs font-semibold transition flex items-center gap-2.5 ${
+                                                    activeMenuItem.item === 'Projets & Suivi Hebdomadaire' ? 'bg-crt-cyan-light text-crt-navy font-bold' : 'hover:bg-slate-50 text-slate-700'
+                                                }`}
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                                </svg>
+                                                Projets & Suivi Hebdomadaire
+                                            </button>
+                                            <button 
+                                                onClick={() => selectMenuItem('Feuilles de Temps', 'Configurations')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5 border-t border-slate-50"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                                </svg>
+                                                Configurations
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* 6. Rapport */}
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setOpenNavDropdown(openNavDropdown === 'rapports' ? null : 'rapports')}
+                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all ${
+                                            openNavDropdown === 'rapports' || activeMenuItem.section === 'Rapport' ? 'bg-slate-800 text-crt-cyan font-bold' : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+                                        }`}
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Rapport
+                                        <svg className={`w-3 h-3 transition-transform ${openNavDropdown === 'rapports' ? 'rotate-180 text-crt-cyan' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    {openNavDropdown === 'rapports' && (
+                                        <div className="absolute left-0 top-full mt-1 w-60 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                                            <div className="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">RAPPORTS & AUDIT</div>
+                                            <button 
+                                                onClick={() => selectMenuItem('Rapport', 'Feuilles absentes')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Feuilles absentes
+                                            </button>
+                                            <button 
+                                                onClick={() => selectMenuItem('Rapport', 'Rapport Projets')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5 border-t border-slate-50"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                                </svg>
+                                                Rapport Projets
+                                            </button>
+                                            <button 
+                                                onClick={() => selectMenuItem('Rapport', 'Autres rapports')}
+                                                className="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5 border-t border-slate-50"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                                                </svg>
+                                                Autres rapports
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+
+                    {/* Breadcrumb Bar */}
+                    <div className="bg-white border-b border-slate-200/80 px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">
+                        <nav className="flex items-center space-x-2 text-slate-600">
+                            <span className="flex items-center gap-1 hover:text-crt-navy cursor-pointer" onClick={() => selectMenuItem('Dashboard', 'Tableau de bord')}>
+                                <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                </svg>
+                                Accueil
+                            </span>
+                            <span className="text-slate-300">/</span>
+                            <span className="text-slate-600 hover:text-crt-navy cursor-pointer">{activeMenuItem.section}</span>
+                            <span className="text-slate-300">/</span>
+                            <span className="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
+                                {activeMenuItem.item}
+                            </span>
+                        </nav>
+
+                        {/* Mode Toggle visible in Feuilles de Temps & Entreprise */}
+                        {activeMenuItem.section === 'Feuilles de Temps' && (
+                            <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                                    <button 
+                                        onClick={() => setCurrentMode('saisie')}
+                                        className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                            currentMode === 'saisie' 
+                                                ? 'bg-white text-crt-navy shadow-sm' 
+                                                : 'text-slate-500 hover:text-crt-navy'
+                                        }`}
+                                    >
+                                        <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        Mode Saisie (Grille)
+                                    </button>
+                                    <button 
+                                        onClick={() => setCurrentMode('consultation')}
+                                        className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                            currentMode === 'consultation' 
+                                                ? 'bg-white text-crt-cyan-dark shadow-sm' 
+                                                : 'text-slate-500 hover:text-crt-navy'
+                                        }`}
+                                    >
+                                        <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Mode Consultation (Manager)
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeMenuItem.section === 'Entreprise' && (
+                            <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                                    <button 
+                                        onClick={() => setEntrepriseMode('saisie')}
+                                        className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                            entrepriseMode === 'saisie' 
+                                                ? 'bg-white text-crt-navy shadow-sm' 
+                                                : 'text-slate-500 hover:text-crt-navy'
+                                        }`}
+                                    >
+                                        <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        Mode Édition (Saisie)
+                                    </button>
+                                    <button 
+                                        onClick={() => setEntrepriseMode('consultation')}
+                                        className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                            entrepriseMode === 'consultation' 
+                                                ? 'bg-white text-crt-cyan-dark shadow-sm' 
+                                                : 'text-slate-500 hover:text-crt-navy'
+                                        }`}
+                                    >
+                                        <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        Mode Consultation
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    
+                    {/* MAIN WORKSPACE CONTENT */}
+                    {activeMenuItem.section === 'RH' && activeMenuItem.item === 'Employés' ? (
+                        selectedEmployee === null ? (
+                            /* VIEW 1: EMPLOYEES LIST VIEW */
+                            <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+                                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                    <div className="flex items-center gap-2 pb-3 border-b text-xs font-extrabold text-crt-navy">🔍 Filtres de recherche</div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-semibold">
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Employé</label>
+                                            <input type="text" placeholder="Matricule, Nom, Prénom..." value={empFilterQuery} onChange={(e) => setEmpFilterQuery(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Gestionnaire</label>
+                                            <input type="text" placeholder="Gestionnaire..." value={empFilterManager} onChange={(e) => setEmpFilterManager(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Probation</label>
+                                            <select value={empFilterProbation} onChange={(e) => setEmpFilterProbation(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50">
+                                                <option value="all">-- Tous --</option>
+                                                <option value="in_progress">1 heure restante</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Statut</label>
+                                            <select value={empFilterStatus} onChange={(e) => setEmpFilterStatus(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50">
+                                                <option value="all">Tous</option>
+                                                <option value="active">Activé</option>
+                                                <option value="disabled">Désactivé</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                                    <div className="flex justify-between items-center pb-4 border-b">
+                                        <h3 className="text-sm font-extrabold text-crt-navy">👥 Liste des employés ({filteredEmployees.length})</h3>
+                                        <button onClick={() => setIsNewEmployeeModalOpen(true)} className="bg-crt-navy text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg">➕ Nouvel employé</button>
+                                    </div>
+
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left border-collapse min-w-[1000px] text-xs">
+                                            <thead>
+                                                <tr className="bg-slate-100 text-slate-700 uppercase font-extrabold">
+                                                    <th className="p-3.5">Matricule</th>
+                                                    <th className="p-3.5">Nom</th>
+                                                    <th className="p-3.5">Prénom</th>
+                                                    <th className="p-3.5">Rôle</th>
+                                                    <th className="p-3.5">Gestionnaire</th>
+                                                    <th className="p-3.5">Probation</th>
+                                                    <th className="p-3.5 text-center">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-100 font-semibold">
+                                                {filteredEmployees.map(emp => (
+                                                    <tr key={emp.id} className="hover:bg-crt-cyan-light/30">
+                                                        <td className="p-3.5 font-mono text-crt-navy font-bold">{emp.matricule}</td>
+                                                        <td className="p-3.5 font-extrabold text-crt-navy">{emp.nom}</td>
+                                                        <td className="p-3.5">{emp.prenom}</td>
+                                                        <td className="p-3.5"><span className="bg-slate-100 border px-2 py-0.5 rounded text-[11px] font-bold">{emp.role}</span></td>
+                                                        <td className="p-3.5 text-slate-600">{emp.gestionnaire}</td>
+                                                        <td className="p-3.5"><span className="bg-crt-navy text-white text-[11px] font-bold px-3 py-1 rounded-full">{emp.probationStatus}</span></td>
+                                                        <td className="p-3.5">
+                                                            <div className="flex items-center justify-center space-x-1.5">
+                                                                <button onClick={() => setSelectedEmployee(emp)} title="Voir la fiche détaillée" className="p-1.5 text-crt-cyan bg-crt-cyan-light rounded-lg">👁️</button>
+                                                                <button onClick={() => toggleAccountStatus(emp.id)} title="Activer/Désactiver" className="p-1.5 text-slate-600 bg-slate-100 rounded-lg">🔓</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </main>
+                        ) : (
+                            /* VIEW 2: EMPLOYEE DETAIL VIEW */
+                            <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+                                <div>
+                                    <button onClick={() => setSelectedEmployee(null)} className="text-xs font-bold text-slate-600 bg-white border px-3.5 py-2 rounded-xl">⬅ Retour à la liste des employés</button>
+                                </div>
+
+                                <div className="bg-gradient-to-r from-crt-cyan to-crt-navy rounded-2xl p-8 text-center text-white shadow-lg">
+                                    <div className="w-20 h-20 rounded-full bg-white text-crt-navy flex items-center justify-center text-2xl font-black mx-auto mb-3">👤</div>
+                                    <h2 className="text-xl font-black">{selectedEmployee.nom} {selectedEmployee.prenom}</h2>
+                                    <p className="text-xs text-crt-cyan-light font-mono mt-1">Matricule : {selectedEmployee.matricule} — {selectedEmployee.role}</p>
+                                </div>
+
+                                <div className="flex justify-between items-center bg-white p-2 rounded-2xl border shadow-sm">
+                                    <div className="flex space-x-2 text-xs font-extrabold">
+                                        <button onClick={() => setEmployeeActiveTab("information")} className={`px-4 py-2.5 rounded-xl ${employeeActiveTab === 'information' ? 'bg-crt-navy text-white' : 'text-slate-600'}`}>👤 Informations de l'employé</button>
+                                        <button onClick={() => setEmployeeActiveTab("historiques")} className={`px-4 py-2.5 rounded-xl ${employeeActiveTab === 'historiques' ? 'bg-crt-navy text-white' : 'text-slate-600'}`}>📜 Historiques</button>
+                                    </div>
+                                </div>
+
+                                {/* TAB 1: INFORMATIONS DE L'EMPLOYÉ */}
+                                {employeeActiveTab === 'information' ? (
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+                                        <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                                            <h3 className="text-sm font-extrabold text-crt-navy">👤 Informations de l'employé</h3>
+                                            <button onClick={handleOpenEditEmployeeModal} className="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm flex items-center gap-1.5">
+                                                🖊️ Modifier
+                                            </button>
+                                        </div>
+
+                                        <div className="space-y-6 text-xs font-semibold">
+                                            <div className="space-y-3">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">IDENTITÉ</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">Matricule</span><span className="text-crt-navy font-bold font-mono">{selectedEmployee.matricule}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Nom</span><span className="text-crt-navy font-extrabold">{selectedEmployee.nom}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Prénom</span><span className="text-crt-navy font-extrabold">{selectedEmployee.prenom}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">📅 Date de naissance</span><span className="text-slate-700">{selectedEmployee.dob}</span></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">CONTACTS</h4>
+                                                <div><span className="block text-slate-500 text-[11px]">✉️ E-mail</span><span className="text-crt-cyan-dark font-bold font-mono">{selectedEmployee.email}</span></div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">STATUT PROFESSIONNEL</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">👥 Groupes</span><span className="bg-slate-100 border px-2 py-0.5 rounded text-[11px] font-bold">{selectedEmployee.role}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Statut du compte</span><span className="text-emerald-600 font-extrabold">{selectedEmployee.accountStatus}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Visibilité/Rapport</span><span className="text-slate-700 font-bold">{selectedEmployee.visibilityReport}</span></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">ORGANISATION</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">Gestionnaire</span><span className="text-crt-navy font-bold">{selectedEmployee.gestionnaire}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Rôle</span><span className="text-slate-700 font-medium">Gestionnaire ({selectedEmployee.isManager ? 'Oui' : 'Non'})</span></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">AUTRES & EMBAUCHE</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">Heures/semaine</span><span className="text-crt-navy font-extrabold font-mono">{selectedEmployee.weeklyHours} h</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">📅 Date d'embauche</span><span className="text-slate-700 font-mono">{selectedEmployee.hireDate}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Statut de probation</span><span className="text-amber-700 font-bold bg-amber-50 border border-amber-200 px-2 py-0.5 rounded text-[11px]">En cours ({selectedEmployee.probationStatus})</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    /* TAB 2: HISTORIQUES */
+                                    <div className="space-y-6">
+                                        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                                <h3 className="text-sm font-extrabold text-crt-navy">👤 Historique des heures par semaine</h3>
+                                                <button onClick={() => { setEditHoursForm({ newHours: selectedEmployee.weeklyHours, startDate: "2026-07-22 12:30:00" }); setIsEditHoursModalOpen(true); }} className="bg-crt-navy text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl">🖊️ Modifier l'heure</button>
+                                            </div>
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead><tr className="bg-slate-100 text-slate-700 font-extrabold uppercase"><th className="p-3">NOMBRE D'HEURE</th><th className="p-3">DATE DE DÉBUT</th><th className="p-3">DATE DE FIN</th></tr></thead>
+                                                <tbody className="divide-y divide-slate-100 font-mono">
+                                                    {selectedEmployee.hoursHistory.map((h, i) => (
+                                                        <tr key={i}><td className="p-3 font-extrabold text-crt-navy">{h.hours}</td><td className="p-3 text-slate-600">{h.startDate}</td><td className="p-3 text-slate-400">{h.endDate}</td></tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                                <h3 className="text-sm font-extrabold text-crt-navy">👥 Historique des gestionnaires</h3>
+                                                <button onClick={() => { setEditManagerForm({ newManager: selectedEmployee.gestionnaire || "Admin Plateforme GCS", startDate: "2026-07-22 12:31:00" }); setIsEditManagerModalOpen(true); }} className="bg-crt-navy text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl">🖊️ Modifier le gestionnaire</button>
+                                            </div>
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead><tr className="bg-slate-100 text-slate-700 font-extrabold uppercase"><th className="p-3">GESTIONNAIRE</th><th className="p-3">DATE DE DÉBUT</th><th className="p-3">DATE DE FIN</th></tr></thead>
+                                                <tbody className="divide-y divide-slate-100 font-medium">
+                                                    {selectedEmployee.managerHistory.map((m, i) => (
+                                                        <tr key={i}><td className="p-3 font-extrabold text-crt-navy">{m.manager}</td><td className="p-3 text-slate-600 font-mono">{m.startDate}</td><td className="p-3 text-slate-400 font-mono">{m.endDate}</td></tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                                <h3 className="text-sm font-extrabold text-crt-navy">🏠 Historique des affectations aux sites</h3>
+                                                <button onClick={() => { setEditSiteForm({ newSiteName: selectedEmployee.site || "Centre Ville-Marie", startDate: "2026-07-22 12:32:00", endDate: "" }); setIsEditSiteModalOpen(true); }} className="bg-crt-navy text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl">🔗 Affecter à un site</button>
+                                            </div>
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead><tr className="bg-slate-100 text-slate-700 font-extrabold uppercase"><th className="p-3">NOM DU SITE</th><th className="p-3">ADRESSE</th><th className="p-3">DATE DE DÉBUT</th><th className="p-3">DATE DE FIN</th><th className="p-3">STATUT</th></tr></thead>
+                                                <tbody className="divide-y divide-slate-100 font-medium">
+                                                    {selectedEmployee.siteHistory.map((s, i) => (
+                                                        <tr key={i}><td className="p-3 font-extrabold text-crt-navy">{s.siteName}</td><td className="p-3 text-slate-600">{s.address}</td><td className="p-3 text-slate-600 font-mono">{s.startDate}</td><td className="p-3 text-slate-600 font-mono">{s.endDate}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-[11px] font-bold ${s.status === 'Actif' ? 'bg-emerald-100 text-emerald-800 border' : 'bg-slate-100'}`}>{s.status}</span></td></tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                            </main>
+                        )
+                    ) : {activeMenuItem.section === 'Entreprise' ? (
+                        /* ENTREPRISE > PRÉSENTATION & SITES VIEW */
+                        <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+                            
+                            {/* Card 1: Informations de l'Entreprise */}
+                            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
+                                    <h3 className="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                                        <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" />
+                                        </svg>
+                                        Informations de l'Entreprise
+                                    </h3>
+
+                                    {/* Switched to Mode Saisie & Mode Consultation Switch Buttons */}
+                                    <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                                        <button 
+                                            onClick={() => setEntrepriseMode('saisie')}
+                                            className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                                entrepriseMode === 'saisie' 
+                                                    ? 'bg-white text-crt-navy shadow-sm' 
+                                                    : 'text-slate-500 hover:text-crt-navy'
+                                            }`}
+                                        >
+                                            <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                            </svg>
+                                            Mode Édition (Saisie)
+                                        </button>
+                                        <button 
+                                            onClick={() => setEntrepriseMode('consultation')}
+                                            className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                                entrepriseMode === 'consultation' 
+                                                    ? 'bg-white text-crt-cyan-dark shadow-sm' 
+                                                    : 'text-slate-500 hover:text-crt-navy'
+                                            }`}
+                                        >
+                                            <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            Mode Consultation
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {entrepriseMode === 'consultation' ? (
+                                    /* Consultation Mode: Clean Read-Only view */
+                                    <div className="space-y-4 text-xs">
+                                        <div>
+                                            <span className="block font-bold text-slate-500 uppercase tracking-wider mb-1">Nom de l'entreprise</span>
+                                            <h4 className="text-sm font-extrabold text-crt-navy">{companyInfo.name}</h4>
+                                        </div>
+                                        <div>
+                                            <span className="block font-bold text-slate-500 uppercase tracking-wider mb-1">Délai de probation</span>
+                                            <p className="font-semibold text-slate-700 font-mono">{companyInfo.probationPeriod}</p>
+                                        </div>
+                                        <div>
+                                            <span className="block font-bold text-slate-500 uppercase tracking-wider mb-1">Description</span>
+                                            <p className="font-medium text-slate-700 leading-relaxed max-w-4xl">{companyInfo.description}</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    /* Saisie / Edition Mode: Form to edit directly */
+                                    <div className="space-y-4 text-xs">
+                                        <div>
+                                            <label className="block font-bold text-slate-700 mb-1">Nom de l'entreprise</label>
+                                            <input 
+                                                type="text"
+                                                value={editedCompanyInfo.name}
+                                                onChange={(e) => setEditedCompanyInfo({ ...editedCompanyInfo, name: e.target.value })}
+                                                className="w-full text-xs font-semibold border border-slate-300 rounded-xl p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block font-bold text-slate-700 mb-1">Délai de probation</label>
+                                            <input 
+                                                type="text"
+                                                value={editedCompanyInfo.probationPeriod}
+                                                onChange={(e) => setEditedCompanyInfo({ ...editedCompanyInfo, probationPeriod: e.target.value })}
+                                                className="w-full text-xs font-semibold border border-slate-300 rounded-xl p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block font-bold text-slate-700 mb-1">Description</label>
+                                            <textarea 
+                                                rows="3"
+                                                value={editedCompanyInfo.description}
+                                                onChange={(e) => setEditedCompanyInfo({ ...editedCompanyInfo, description: e.target.value })}
+                                                className="w-full text-xs font-medium border border-slate-300 rounded-xl p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan resize-none"
+                                            />
+                                        </div>
+                                        <div className="flex justify-end pt-2">
+                                            <button 
+                                                onClick={handleSaveCompanyInfo}
+                                                className="bg-crt-cyan hover:bg-crt-cyan-dark text-crt-navy font-extrabold text-xs px-5 py-2 rounded-xl shadow-lg shadow-crt-cyan/20 flex items-center gap-1.5"
+                                            >
+                                                💾 Enregistrer les modifications
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Card 2: Sites de l'entreprise */}
+                            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
+                                    <h3 className="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                                        <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Sites de l'entreprise ({sites.length})
+                                    </h3>
+                                    {entrepriseMode === 'saisie' && (
+                                        <button 
+                                            onClick={handleOpenCreateSiteModal}
+                                            className="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-crt-navy/10"
+                                        >
+                                            <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Nouveau site
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Search Bar */}
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                        <input 
+                                            type="text"
+                                            placeholder="Rechercher dans tous les champs (nom, description, adresse, téléphone)..."
+                                            value={siteSearchQuery}
+                                            onChange={(e) => setSiteSearchQuery(e.target.value)}
+                                            className="w-full text-xs font-medium border border-slate-200 rounded-xl px-3.5 py-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition"
+                                        />
+                                    </div>
+                                    <button className="bg-white border border-slate-300 hover:bg-crt-cyan-light text-crt-navy font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                                        🔍 Rechercher
+                                    </button>
+                                </div>
+
+                                {/* Sites Table */}
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse min-w-[900px]">
+                                        <thead>
+                                            <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-xs uppercase tracking-wider font-extrabold">
+                                                <th className="p-3.5 w-[280px]">Nom du site</th>
+                                                <th className="p-3.5">Adresse</th>
+                                                <th className="p-3.5 w-[220px]">Téléphone</th>
+                                                <th className="p-3.5 text-center w-[120px]">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-100 text-xs">
+                                            {filteredSites.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan={4} className="text-center py-12 text-slate-400 italic">
+                                                        Aucun site trouvé.
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                filteredSites.map(site => (
+                                                    <tr key={site.id} className="hover:bg-crt-cyan-light/30 transition">
+                                                        <td className="p-3.5">
+                                                            <h4 className="font-extrabold text-crt-navy text-xs">{site.name}</h4>
+                                                            <p className="text-slate-500 text-[11px] truncate max-w-[260px] font-medium">{site.description}</p>
+                                                        </td>
+                                                        <td className="p-3.5 font-medium text-slate-700 leading-relaxed">
+                                                            <div>{site.address}</div>
+                                                            <div className="text-slate-500 font-mono text-[11px]">{site.postalCode} {site.city}</div>
+                                                        </td>
+                                                        <td className="p-3.5 font-mono text-slate-700">
+                                                            <div className="flex items-center gap-1">
+                                                                <span className="text-slate-400">📞</span> {site.phone}
+                                                            </div>
+                                                            {site.phonePro && (
+                                                                <div className="flex items-center gap-1 text-[11px] text-slate-500">
+                                                                    <span className="text-slate-400">📠</span> {site.phonePro}
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                        <td className="p-3.5">
+                                                            <div className="flex items-center justify-center space-x-1.5">
+                                                                {/* 👁️ Consultation View Icon Button */}
+                                                                <button 
+                                                                    onClick={() => handleOpenViewSiteModal(site)}
+                                                                    title="Consulter le site"
+                                                                    className="p-1.5 text-crt-cyan border border-crt-cyan/30 bg-crt-cyan-light hover:bg-crt-cyan hover:text-white rounded-lg transition"
+                                                                >
+                                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                    </svg>
+                                                                </button>
+
+                                                                {/* 🖊️ Edition & 🗑️ Delete buttons available in Mode Édition or for Admins */}
+                                                                {entrepriseMode === 'saisie' && (
+                                                                    <>
+                                                                        <button 
+                                                                            onClick={() => handleOpenEditSiteModal(site)}
+                                                                            title="Modifier le site"
+                                                                            className="p-1.5 text-crt-navy border border-crt-navy/30 bg-slate-100 hover:bg-crt-navy hover:text-white rounded-lg transition"
+                                                                        >
+                                                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                            </svg>
+                                                                        </button>
+                                                                        <button 
+                                                                            onClick={() => setDeleteTarget({ type: 'site', siteId: site.id, name: site.name })}
+                                                                            title="Supprimer le site"
+                                                                            className="p-1.5 text-rose-600 border border-rose-200 bg-rose-50 hover:bg-rose-600 hover:text-white rounded-lg transition"
+                                                                        >
+                                                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </main>
+                    ) : activeMenuItem.section === 'Dashboard' ? (
+                        /* DASHBOARD VIEW */
+                        <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+                            
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                                <div>
+                                    <h2 className="text-lg font-extrabold text-crt-navy flex items-center gap-2">
+                                        <svg className="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                        </svg>
+                                        Tableau de bord CRT Solution
+                                    </h2>
+                                    <p className="text-xs text-slate-500 font-medium mt-0.5">Période d'activité : <strong className="text-slate-700 font-mono">Du 13/07/2026 au 26/07/2026</strong></p>
+                                </div>
+                                <button 
+                                    onClick={() => showNotification("Données du tableau de bord rafraîchies !", "info")}
+                                    className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-xs"
+                                >
+                                    <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Rafraîchir
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                    <div>
+                                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Heures de la Semaine</span>
+                                        <h3 className="text-2xl font-black text-crt-navy font-mono mt-0.5">{getGrandTotal()}h / 37.5h</h3>
+                                        <span className="text-[11px] font-bold text-emerald-600">121% de l'objectif hebdo</span>
+                                    </div>
+                                    <div className="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy font-bold">
+                                        ⏱️
+                                    </div>
+                                </div>
+                                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                    <div>
+                                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Projets Imputés</span>
+                                        <h3 className="text-2xl font-black text-crt-navy font-mono mt-0.5">{clients.length} Projets</h3>
+                                        <span className="text-[11px] font-bold text-crt-cyan-dark">Semaine active 17</span>
+                                    </div>
+                                    <div className="w-12 h-12 rounded-2xl bg-crt-cyan-light border border-crt-cyan/30 flex items-center justify-center text-crt-navy font-bold">
+                                        📁
+                                    </div>
+                                </div>
+                                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                    <div>
+                                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Semaines Inactives</span>
+                                        <h3 className="text-2xl font-black text-amber-600 font-mono mt-0.5">13 Semaines</h3>
+                                        <button 
+                                            onClick={() => showNotification("Régularisation des semaines inactives lancée.", "info")}
+                                            className="text-[11px] font-bold text-amber-700 hover:underline block text-left mt-0.5"
+                                        >
+                                            Régulariser →
+                                        </button>
+                                    </div>
+                                    <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold">
+                                        ⚠️
+                                    </div>
+                                </div>
+                                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                    <div>
+                                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">En attente revue</span>
+                                        <h3 className="text-2xl font-black text-crt-navy font-mono mt-0.5">1 Feuille</h3>
+                                        <span className="text-[11px] font-bold text-slate-500">Validation manager</span>
+                                    </div>
+                                    <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-bold">
+                                        ⏳
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 pb-4 border-b border-slate-100">
+                                        <div>
+                                            <h3 className="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                                                <svg className="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                </svg>
+                                                Taux de consommation du total des heures de projets (10 Projets)
+                                            </h3>
+                                            <p className="text-xs text-slate-500 mt-0.5">Suivi en direct des budgets au Forfait et des projets en Régie (Sans quota).</p>
+                                        </div>
+
+                                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+                                            <div className="relative">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="🔍 Rechercher un projet..." 
+                                                    value={dashboardProjectSearch}
+                                                    onChange={(e) => { setDashboardProjectSearch(e.target.value); setDashboardPage(1); }}
+                                                    className="w-full sm:w-60 text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition font-medium"
+                                                />
+                                            </div>
+
+                                            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+                                                <button 
+                                                    onClick={() => { setDashboardProjectTypeFilter('all'); setDashboardPage(1); }}
+                                                    className={`px-3 py-1.5 rounded-lg transition ${dashboardProjectTypeFilter === 'all' ? 'bg-white text-crt-navy font-bold shadow-xs' : 'text-slate-600'}`}
+                                                >
+                                                    Tous ({DASHBOARD_PROJECTS_DATABASE.length})
+                                                </button>
+                                                <button 
+                                                    onClick={() => { setDashboardProjectTypeFilter('quota'); setDashboardPage(1); }}
+                                                    className={`px-3 py-1.5 rounded-lg transition ${dashboardProjectTypeFilter === 'quota' ? 'bg-white text-crt-navy font-bold shadow-xs' : 'text-slate-600'}`}
+                                                >
+                                                    Forfait (Quota)
+                                                </button>
+                                                <button 
+                                                    onClick={() => { setDashboardProjectTypeFilter('regie'); setDashboardPage(1); }}
+                                                    className={`px-3 py-1.5 rounded-lg transition ${dashboardProjectTypeFilter === 'regie' ? 'bg-white text-crt-navy font-bold shadow-xs' : 'text-slate-600'}`}
+                                                >
+                                                    Régie (Illimité)
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                        {currentDashboardProjects.map(proj => {
+                                            const pct = proj.isQuota ? Math.round((proj.consumedHours / proj.maxQuota) * 100) : null;
+                                            const isOverQuota = pct && pct > 100;
+                                            const isWarning = pct && pct >= 85 && pct <= 100;
+
+                                            return (
+                                                <div key={proj.id} className="p-4 rounded-xl border border-slate-100 hover:border-crt-cyan/40 hover:bg-crt-cyan-light/20 transition space-y-2 shadow-2xs">
+                                                    <div className="flex justify-between items-center text-xs">
+                                                        <div className="flex items-center gap-2 min-w-0">
+                                                            <span className="bg-crt-navy text-white font-extrabold text-[10px] px-2 py-0.5 rounded font-mono">
+                                                                {proj.code}
+                                                            </span>
+                                                            <span className="font-extrabold text-crt-navy truncate">
+                                                                {proj.name}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold text-slate-700 font-mono">
+                                                                {proj.consumedHours}h {proj.isQuota ? `/ ${proj.maxQuota}h` : ''}
+                                                            </span>
+                                                            {proj.isQuota ? (
+                                                                <span className={`px-2 py-0.5 text-[11px] font-extrabold rounded-md font-mono ${
+                                                                    isOverQuota ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                                                                    isWarning ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                                                                    'bg-crt-cyan-light text-crt-navy border border-crt-cyan/20'
+                                                                }`}>
+                                                                    {pct}%
+                                                                </span>
+                                                            ) : (
+                                                                <span className="px-2 py-0.5 text-[11px] font-extrabold rounded-md bg-slate-100 text-slate-700 border border-slate-200 font-mono">
+                                                                    ♾️ Régie
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {proj.isQuota ? (
+                                                        <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                            <div 
+                                                                style={{ width: `${Math.min(pct, 100)}%` }} 
+                                                                className={`h-full rounded-full transition-all duration-500 ${
+                                                                    isOverQuota ? 'bg-rose-600' :
+                                                                    isWarning ? 'bg-amber-500' : 'bg-crt-cyan'
+                                                                }`}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                            <div className="h-full bg-crt-cyan-dark/40 rounded-full w-full animate-pulse" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs pt-4 border-t border-slate-100">
+                                    <span className="text-slate-500 font-medium">
+                                        Montrant <strong className="text-slate-700">{(dashboardPage - 1) * projectsPerPage + 1}</strong> à <strong className="text-slate-700">{Math.min(dashboardPage * projectsPerPage, filteredDashboardProjects.length)}</strong> de <strong className="text-slate-700">{filteredDashboardProjects.length}</strong> résultats
+                                    </span>
+                                    <div className="flex items-center space-x-1">
+                                        <button 
+                                            disabled={dashboardPage === 1}
+                                            onClick={() => setDashboardPage(dashboardPage - 1)}
+                                            className="px-3 py-1.5 text-xs border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 font-semibold"
+                                        >
+                                            Précédent
+                                        </button>
+                                        {Array.from({ length: totalDashboardPages }).map((_, i) => (
+                                            <button 
+                                                key={i + 1}
+                                                onClick={() => setDashboardPage(i + 1)}
+                                                className={`px-3 py-1.5 text-xs rounded-lg font-bold ${
+                                                    dashboardPage === i + 1 ? 'bg-crt-navy text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                                }`}
+                                            >
+                                                {i + 1}
+                                            </button>
+                                        ))}
+                                        <button 
+                                            disabled={dashboardPage === totalDashboardPages}
+                                            onClick={() => setDashboardPage(dashboardPage + 1)}
+                                            className="px-3 py-1.5 text-xs border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 font-semibold"
+                                        >
+                                            Suivant
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                
+                                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                                            <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Feuille de temps en cours
+                                        </h3>
+                                        <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md border border-amber-200">
+                                            Brouillon
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-base font-black text-crt-navy">Semaine 17</h4>
+                                        <p className="text-xs text-slate-500 font-mono">Du 20/07/2026 au 26/07/2026</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => selectMenuItem('Feuilles de Temps', 'Projets & Suivi Hebdomadaire')}
+                                        className="w-full bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2"
+                                    >
+                                        <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        Remplir ma feuille
+                                    </button>
+                                </div>
+
+                                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+                                    <h3 className="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                                        <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                        Mes feuilles manquantes
+                                    </h3>
+                                    <div className="space-y-2.5">
+                                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                            <div>
+                                                <span className="text-xs font-extrabold text-crt-navy bg-amber-100 text-amber-900 px-2 py-0.5 rounded mr-2 font-mono">Semaine 17</span>
+                                                <span className="text-xs text-slate-600 font-mono">20/07/2026 - 26/07/2026</span>
+                                            </div>
+                                            <button 
+                                                onClick={() => selectMenuItem('Feuilles de Temps', 'Projets & Suivi Hebdomadaire')}
+                                                className="bg-white hover:bg-crt-cyan-light text-crt-navy border border-slate-300 font-extrabold text-xs px-3 py-1.5 rounded-lg transition"
+                                            >
+                                                🖊️ Remplir
+                                            </button>
+                                        </div>
+                                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                            <div>
+                                                <span className="text-xs font-extrabold text-crt-navy bg-amber-100 text-amber-900 px-2 py-0.5 rounded mr-2 font-mono">Semaine 16</span>
+                                                <span className="text-xs text-slate-600 font-mono">13/07/2026 - 19/07/2026</span>
+                                            </div>
+                                            <button 
+                                                onClick={() => selectMenuItem('Feuilles de Temps', 'Projets & Suivi Hebdomadaire')}
+                                                className="bg-white hover:bg-crt-cyan-light text-crt-navy border border-slate-300 font-extrabold text-xs px-3 py-1.5 rounded-lg transition"
+                                            >
+                                                🖊️ Remplir
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col items-center justify-center text-center space-y-3 py-10">
+                                <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xl">
+                                    📥
+                                </div>
+                                <h3 className="text-sm font-extrabold text-crt-navy">Aucune feuille en attente</h3>
+                                <p className="text-xs text-slate-500 max-w-sm">Toutes les feuilles de temps soumises ont été validées par l'équipe d'administration.</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                
+                                <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+                                    <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                        <h3 className="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                                            <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            Feuilles de temps absentes : Semaine 17 (20/07/2026 – 26/07/2026)
+                                        </h3>
+                                    </div>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-xs">
+                                            <thead>
+                                                <tr className="bg-slate-100 text-slate-700 uppercase font-extrabold">
+                                                    <th className="p-3">Employé</th>
+                                                    <th className="p-3">Semaine / Période</th>
+                                                    <th className="p-3 text-right">Relance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-100 font-semibold">
+                                                <tr>
+                                                    <td className="p-3 font-extrabold text-crt-navy flex items-center gap-2">
+                                                        <span className="w-6 h-6 rounded-full bg-crt-cyan-light text-crt-navy border border-crt-cyan/30 flex items-center justify-center text-[10px]">FD</span>
+                                                        Fabrice DENOU
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <span className="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded font-mono font-bold">Semaine 17</span> 20/07 - 26/07
+                                                    </td>
+                                                    <td className="p-3 text-right">
+                                                        <button 
+                                                            onClick={() => showNotification("Rappel email envoyé à Fabrice DENOU !", "info")}
+                                                            className="text-crt-cyan-dark hover:underline font-bold text-[11px]"
+                                                        >
+                                                            🔔 Relancer
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="p-3 font-extrabold text-crt-navy flex items-center gap-2">
+                                                        <span className="w-6 h-6 rounded-full bg-crt-cyan-light text-crt-navy border border-crt-cyan/30 flex items-center justify-center text-[10px]">MR</span>
+                                                        Mitch Richmond
+                                                    </td>
+                                                    <td className="p-3">
+                                                        <span className="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded font-mono font-bold">Semaine 17</span> 20/07 - 26/07
+                                                    </td>
+                                                    <td className="p-3 text-right">
+                                                        <button 
+                                                            onClick={() => showNotification("Rappel email envoyé à Mitch Richmond !", "info")}
+                                                            className="text-crt-cyan-dark hover:underline font-bold text-[11px]"
+                                                        >
+                                                            🔔 Relancer
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4 flex flex-col justify-between">
+                                    <div className="space-y-3">
+                                        <h3 className="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                                            <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                            </svg>
+                                            Statistiques annuelles globales
+                                        </h3>
+                                        <div className="space-y-2 text-xs font-semibold">
+                                            <div className="flex items-center gap-2 text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                                                <span className="font-bold text-crt-navy font-mono">2</span> Employés avec feuilles manquantes
+                                            </div>
+                                            <div className="flex items-center gap-2 text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                                                <span className="font-bold text-crt-navy font-mono">7</span> Total feuilles manquantes
+                                            </div>
+                                        </div>
+                                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-800 font-medium">
+                                            ℹ️ Métriques compilées depuis le début de l'année financière CRT Solution.
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={() => showNotification("Affichage du récapitulatif annuel...", "info")}
+                                        className="w-full text-left text-xs font-extrabold text-crt-navy hover:text-crt-cyan-dark flex items-center justify-between"
+                                    >
+                                        Voir le récapitulatif annuel ➔
+                                    </button>
+                                </div>
+                            </div>
+                        </main>
+                    ) : (
+                        /* FEUILLES DE TEMPS VIEW */
+                        <main className="flex-1 flex flex-col xl:flex-row p-6 gap-6">
+                            
+                            {/* LEFT AREA: Saisie Mode */}
+                            {currentMode === 'saisie' ? (
+                                <div className="flex-1 flex flex-col gap-6">
+                                    
+                                    {/* Advanced Row Adder Form */}
+                                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                                        <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-4 pb-4 border-b border-slate-100">
+                                            <div>
+                                                <h3 className="text-sm font-extrabold text-crt-navy">Ajouter des tâches à ma feuille</h3>
+                                                <p className="text-xs text-slate-600 font-medium">Recherchez parmi les 100 clients et 50 tâches disponibles configurés par l'administration CRT Solution.</p>
+                                            </div>
+                                            <button 
+                                                type="button"
+                                                onClick={handleCopyLastWeek}
+                                                className="text-xs font-bold text-crt-navy hover:text-crt-cyan-dark bg-crt-cyan-light hover:bg-crt-cyan/20 px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 self-stretch md:self-auto justify-center border border-crt-cyan/30"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-cyan-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                                                </svg>
+                                                Copier la semaine dernière
+                                            </button>
+                                        </div>
+
+                                        <form onSubmit={handleAddActiveRow} className="flex flex-col md:flex-row items-end gap-4">
+                                            {/* Client Autocomplete */}
+                                            <SearchableCombobox 
+                                                items={ADMIN_DATABASE_CLIENTS}
+                                                placeholder="Tapez (ex: Stark, Orange, L'Oréal...)"
+                                                label="1. Rechercher un Client (100+ dispos)"
+                                                selectedValue={selectedClientId}
+                                                onSelect={(id) => setSelectedClientId(id)}
+                                            />
+
+                                            {/* Task Autocomplete */}
+                                            <SearchableCombobox 
+                                                items={ADMIN_DATABASE_TASKS}
+                                                placeholder="Tapez (ex: Dev, Audit, Figma...)"
+                                                label="2. Associer une Tâche (50 dispos)"
+                                                selectedValue={selectedTaskId}
+                                                onSelect={(id) => setSelectedTaskId(id)}
+                                                disabled={!selectedClientId}
+                                            />
+
+                                            <button 
+                                                type="submit" 
+                                                disabled={!selectedClientId || !selectedTaskId}
+                                                className="bg-crt-cyan hover:bg-crt-cyan-dark text-crt-navy font-extrabold px-6 py-2.5 rounded-xl text-xs transition disabled:opacity-40 disabled:pointer-events-none shadow-lg shadow-crt-cyan/20 h-[38px] flex items-center justify-center gap-1.5 w-full md:w-auto"
+                                            >
+                                                <svg className="w-4 h-4 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                                Ajouter à ma feuille
+                                            </button>
+                                        </form>
+                                        
+                                        <div className="flex flex-wrap items-center gap-2 mt-3.5 text-xs">
+                                            <span className="text-slate-600 font-bold">Suggestions fréquentes :</span>
+                                            <button 
+                                                type="button"
+                                                onClick={() => { setSelectedClientId("c_admin_24"); setSelectedTaskId("t_admin_2"); }}
+                                                className="bg-slate-100 hover:bg-crt-cyan-light hover:text-crt-navy text-slate-700 px-2.5 py-1 rounded-lg transition font-semibold border border-slate-200/60"
+                                            >
+                                                Renault Software + Dev API
+                                            </button>
+                                            <button 
+                                                type="button"
+                                                onClick={() => { setSelectedClientId("c_admin_23"); setSelectedTaskId("t_admin_3"); }}
+                                                className="bg-slate-100 hover:bg-crt-cyan-light hover:text-crt-navy text-slate-700 px-2.5 py-1 rounded-lg transition font-semibold border border-slate-200/60"
+                                            >
+                                                L'Oréal + Figma Integration
+                                            </button>
+                                            <button 
+                                                type="button"
+                                                onClick={() => { setSelectedClientId("c_admin_6"); setSelectedTaskId("t_admin_1"); }}
+                                                className="bg-slate-100 hover:bg-crt-cyan-light hover:text-crt-navy text-slate-700 px-2.5 py-1 rounded-lg transition font-semibold border border-slate-200/60"
+                                            >
+                                                Stark Industries + Gestion de Projet
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Active Grid Saisie Table */}
+                                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-left border-collapse table-fixed min-w-[1100px]">
+                                                <thead>
+                                                    <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-xs uppercase tracking-wider font-extrabold">
+                                                        <th className="p-4 w-[240px]">Clients / Tâches Actives</th>
+                                                        {DAYS_CONFIG.map(day => (
+                                                            <th key={day.key} className="p-4 text-center w-[180px]">
+                                                                <div className="font-extrabold text-crt-navy">{day.label}</div>
+                                                            </th>
+                                                        ))}
+                                                        <th className="p-4 text-center w-[100px]">Total</th>
+                                                        <th className="p-4 text-center w-[60px]">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {clients.length === 0 ? (
+                                                        <tr>
+                                                            <td colSpan={8} className="text-center py-16 text-slate-500 text-sm font-medium">
+                                                                <svg className="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                                </svg>
+                                                                Votre grille de la semaine est vide. Ajoutez un client ci-dessus pour commencer.
+                                                            </td>
+                                                        </tr>
+                                                    ) : (
+                                                        clients.map(client => (
+                                                            <React.Fragment key={client.id}>
+                                                                <tr className="bg-slate-100/70 border-y border-slate-200">
+                                                                    <td className="p-3 font-extrabold text-crt-navy text-sm">
+                                                                        <span className="flex items-center gap-2">
+                                                                            <span className="w-3 h-3 rounded-md bg-crt-cyan shadow-sm shadow-crt-cyan/30"></span>
+                                                                            {client.name}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td colSpan={6} className="p-3"></td>
+                                                                    <td className="p-3 text-center">
+                                                                        <button 
+                                                                            onClick={() => triggerDeleteClient(client.id, client.name)}
+                                                                            title="Retirer toutes les tâches de ce client"
+                                                                            className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg transition"
+                                                                        >
+                                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+
+                                                                {client.tasks.map(task => {
+                                                                    const taskTotal = getTaskTotal(task);
+                                                                    return (
+                                                                        <tr key={task.id} className="border-b border-slate-100 hover:bg-crt-cyan-light/40 transition">
+                                                                            <td className="p-3 pl-8 text-xs font-semibold text-slate-700 whitespace-normal break-words leading-relaxed">
+                                                                                {task.name}
+                                                                            </td>
+
+                                                                            {DAYS_CONFIG.map(day => {
+                                                                                const dayData = task.days[day.key] || { hours: 0, description: "" };
+                                                                                const isFocused = focusedCell && 
+                                                                                    focusedCell.clientId === client.id && 
+                                                                                    focusedCell.taskId === task.id && 
+                                                                                    focusedCell.dayKey === day.key;
+                                                                                
+                                                                                const charCount = dayData.description ? dayData.description.length : 0;
+
+                                                                                return (
+                                                                                    <td 
+                                                                                        key={day.key} 
+                                                                                        className={`p-2 transition-all relative border-r border-slate-100 ${
+                                                                                            isFocused ? 'bg-crt-cyan-light/80 ring-1 ring-crt-cyan ring-inset' : ''
+                                                                                        }`}
+                                                                                    >
+                                                                                        <div className="flex flex-col gap-1.5">
+                                                                                            <div className="flex items-center bg-white border border-slate-300 focus-within:border-crt-cyan rounded-lg px-2 py-1 shadow-xs transition">
+                                                                                                <span className="text-xs font-bold text-crt-cyan-dark mr-1.5 select-none font-mono">H</span>
+                                                                                                <input 
+                                                                                                    type="number" 
+                                                                                                    step="0.5" 
+                                                                                                    min="0" 
+                                                                                                    max="24"
+                                                                                                    placeholder="0.0"
+                                                                                                    value={dayData.hours || ''}
+                                                                                                    onFocus={() => setFocusedCell({ clientId: client.id, taskId: task.id, dayKey: day.key })}
+                                                                                                    onBlur={() => setTimeout(() => setFocusedCell(null), 200)}
+                                                                                                    onChange={(e) => handleHoursChange(client.id, task.id, day.key, e.target.value)}
+                                                                                                    className="w-full bg-transparent text-crt-navy text-xs font-bold text-right outline-none focus:ring-0 p-0 font-mono"
+                                                                                                />
+                                                                                            </div>
+
+                                                                                            <div className="relative">
+                                                                                                <input 
+                                                                                                    type="text"
+                                                                                                    maxLength={50}
+                                                                                                    placeholder="Réalisation..."
+                                                                                                    value={dayData.description || ''}
+                                                                                                    onFocus={() => setFocusedCell({ clientId: client.id, taskId: task.id, dayKey: day.key })}
+                                                                                                    onBlur={() => setTimeout(() => setFocusedCell(null), 200)}
+                                                                                                    onChange={(e) => handleDescriptionChange(client.id, task.id, day.key, e.target.value)}
+                                                                                                    className="w-full bg-slate-100 focus:bg-white text-xs px-2.5 py-1 rounded-md text-slate-700 placeholder-slate-500 border border-transparent focus:border-slate-300 outline-none transition font-medium"
+                                                                                                />
+                                                                                                
+                                                                                                {isFocused && (
+                                                                                                    <span className={`absolute right-1 -top-4 text-[10px] font-bold px-1.5 py-0.5 rounded z-10 shadow-xs ${
+                                                                                                        charCount >= 45 ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-slate-200 text-slate-700'
+                                                                                                    }`}>
+                                                                                                        {charCount}/50
+                                                                                                    </span>
+                                                                                                )}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                );
+                                                                            })}
+
+                                                                            <td className="p-3 text-center font-extrabold text-sm text-crt-navy bg-slate-50/60 font-mono">
+                                                                                {taskTotal > 0 ? `${taskTotal}h` : '-'}
+                                                                            </td>
+
+                                                                            <td className="p-3 text-center">
+                                                                                <button 
+                                                                                    onClick={() => triggerDeleteTask(client.id, task.id, task.name)}
+                                                                                    title="Retirer cette tâche"
+                                                                                    className="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg transition"
+                                                                                >
+                                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </React.Fragment>
+                                                        ))
+                                                    )}
+
+                                                    {clients.length > 0 && (
+                                                        <tr className="bg-crt-navy text-white font-semibold text-sm">
+                                                            <td className="p-4 pl-6 text-left uppercase tracking-wider text-xs font-extrabold text-crt-cyan">
+                                                                Total Heures / Jour
+                                                            </td>
+                                                            {DAYS_CONFIG.map(day => (
+                                                                <td key={day.key} className="p-4 text-center text-sm font-extrabold text-slate-100 font-mono">
+                                                                    {getDayTotal(day.key)}h
+                                                                </td>
+                                                            ))}
+                                                            <td className="p-4 text-center text-base font-black text-crt-cyan bg-crt-navy-dark font-mono border-l border-crt-navy-light">
+                                                                {getGrandTotal()}h
+                                                            </td>
+                                                            <td></td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                /* LEFT AREA: Consultation Mode */
+                                <div className="flex-1 flex flex-col gap-6">
+                                    
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 shadow-sm">
+                                        <div className="space-y-1.5">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Statut de validation</span>
+                                                <span className={`text-xs font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${
+                                                    timesheetStatus === 'approved' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                                                    timesheetStatus === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                                                    timesheetStatus === 'pending' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-slate-100 text-slate-700'
+                                                }`}>
+                                                    {timesheetStatus === 'approved' ? 'Approuvée' :
+                                                     timesheetStatus === 'rejected' ? 'Renvoyée pour correction' :
+                                                     timesheetStatus === 'pending' ? 'En attente de revue' : 'Brouillon'}
+                                                </span>
+                                            </div>
+                                            <h2 className="text-base font-extrabold text-crt-navy">Rapport hebdomadaire d'activités CRT Solution</h2>
+                                            <p className="text-xs text-slate-600 font-medium">Vue de consultation et contrôle pour la direction ou le client final.</p>
+                                        </div>
+
+                                        <div className="flex flex-wrap gap-2.5 w-full lg:w-auto">
+                                            <button 
+                                                onClick={() => setRejectionModalOpen(true)}
+                                                disabled={timesheetStatus === 'rejected'}
+                                                className="flex-1 lg:flex-initial bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-rose-600 disabled:opacity-50 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-sm"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Demander correction
+                                            </button>
+                                            <button 
+                                                onClick={() => handleStatusChange('approved')}
+                                                disabled={timesheetStatus === 'approved'}
+                                                className="flex-1 lg:flex-initial bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/10"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Approuver la feuille
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
+                                        <div className="relative w-full sm:w-72">
+                                            <span className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                            </span>
+                                            <input 
+                                                type="text"
+                                                placeholder="Filtrer par mot-clé, tâche, client..."
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="w-full text-xs font-medium border border-slate-200 rounded-xl pl-9 pr-4 py-2 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition"
+                                            />
+                                        </div>
+
+                                        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 w-full sm:w-auto">
+                                            <button 
+                                                onClick={() => setConsultationViewType('grid')}
+                                                className={`flex-1 sm:flex-initial flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                                    consultationViewType === 'grid' 
+                                                        ? 'bg-white text-crt-navy shadow-sm' 
+                                                        : 'text-slate-500 hover:text-crt-navy'
+                                                }`}
+                                            >
+                                                <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                                </svg>
+                                                Grille Récapitulative
+                                            </button>
+                                            <button 
+                                                onClick={() => setConsultationViewType('timeline')}
+                                                className={`flex-1 sm:flex-initial flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                                                    consultationViewType === 'timeline' 
+                                                        ? 'bg-white text-crt-navy shadow-sm' 
+                                                        : 'text-slate-500 hover:text-crt-navy'
+                                                }`}
+                                            >
+                                                <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
+                                                </svg>
+                                                Journal d'activités (Timeline)
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {consultationViewType === 'grid' ? (
+                                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full text-left border-collapse table-fixed min-w-[1100px]">
+                                                    <thead>
+                                                        <tr className="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-xs uppercase tracking-wider font-extrabold">
+                                                            <th className="p-4 w-[240px]">Clients / Tâches</th>
+                                                            {DAYS_CONFIG.map(day => (
+                                                                <th key={day.key} className="p-4 text-center w-[180px]">
+                                                                    <div className="font-extrabold text-crt-navy">{day.label}</div>
+                                                                </th>
+                                                            ))}
+                                                            <th className="p-4 text-center w-[100px]">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {clients.map(client => (
+                                                            <React.Fragment key={client.id}>
+                                                                <tr className="bg-slate-100/70 border-y border-slate-200">
+                                                                    <td className="p-3 font-extrabold text-crt-navy text-sm">
+                                                                        <span className="flex items-center gap-2">
+                                                                            <span className="w-3 h-3 rounded-md bg-crt-cyan shadow-sm shadow-crt-cyan/30"></span>
+                                                                            {client.name}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td colSpan={6} className="p-3"></td>
+                                                                </tr>
+
+                                                                {client.tasks.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()) || client.name.toLowerCase().includes(searchQuery.toLowerCase())).map(task => {
+                                                                    const taskTotal = getTaskTotal(task);
+                                                                    return (
+                                                                        <tr key={task.id} className="border-b border-slate-100 hover:bg-crt-cyan-light/40 transition">
+                                                                            <td className="p-3 pl-8 text-xs font-semibold text-slate-700 whitespace-normal break-words leading-relaxed">
+                                                                                {task.name}
+                                                                            </td>
+
+                                                                            {DAYS_CONFIG.map(day => {
+                                                                                const dayData = task.days[day.key] || { hours: 0, description: "" };
+                                                                                const isMatch = searchQuery && dayData.description.toLowerCase().includes(searchQuery.toLowerCase());
+                                                                                return (
+                                                                                    <td key={day.key} className={`p-3 border-r border-slate-100 transition-colors ${
+                                                                                        isMatch ? 'bg-amber-50/50' : ''
+                                                                                    }`}>
+                                                                                        {dayData.hours > 0 ? (
+                                                                                            <div className="flex flex-col gap-1.5">
+                                                                                                <span className="text-xs font-bold text-crt-navy bg-crt-cyan-light border border-crt-cyan/30 px-2 py-0.5 rounded-md w-fit shadow-xs font-mono">
+                                                                                                    {dayData.hours} h
+                                                                                                </span>
+                                                                                                <p className="text-xs text-slate-600 leading-relaxed italic pr-2 break-words font-medium">
+                                                                                                    "{dayData.description || 'Sans description'}"
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            <span className="text-slate-300 font-light block text-center">-</span>
+                                                                                        )}
+                                                                                    </td>
+                                                                                );
+                                                                            })}
+
+                                                                            <td className="p-3 text-center font-extrabold text-sm text-crt-navy bg-slate-50/60 font-mono">
+                                                                                {taskTotal > 0 ? `${taskTotal}h` : '-'}
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </React.Fragment>
+                                                        ))}
+
+                                                        <tr className="bg-crt-navy text-white font-semibold text-sm">
+                                                            <td className="p-4 pl-6 text-left uppercase tracking-wider text-xs font-extrabold text-crt-cyan">
+                                                                Total Heures Validées
+                                                            </td>
+                                                            {DAYS_CONFIG.map(day => (
+                                                                <td key={day.key} className="p-4 text-center text-sm font-extrabold text-slate-100 font-mono">
+                                                                    {getDayTotal(day.key)}h
+                                                                </td>
+                                                            ))}
+                                                            <td className="p-4 text-center text-base font-black text-crt-cyan bg-crt-navy-dark font-mono border-l border-crt-navy-light">
+                                                                {getGrandTotal()}h
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-6">
+                                            {DAYS_CONFIG.map(day => {
+                                                const dayTotal = getDayTotal(day.key);
+                                                
+                                                const activitiesForDay = [];
+                                                clients.forEach(client => {
+                                                    client.tasks.forEach(task => {
+                                                        const dayData = task.days[day.key];
+                                                        if (dayData && dayData.hours > 0) {
+                                                            if (!searchQuery || 
+                                                                task.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                                                client.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                                                dayData.description.toLowerCase().includes(searchQuery.toLowerCase())) {
+                                                                activitiesForDay.push({
+                                                                    clientName: client.name,
+                                                                    taskName: task.name,
+                                                                    hours: dayData.hours,
+                                                                    description: dayData.description
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+                                                });
+
+                                                return (
+                                                    <div key={day.key} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                                                        <div className="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="w-2.5 h-2.5 rounded-full bg-crt-cyan"></span>
+                                                                <h3 className="text-sm font-extrabold text-crt-navy uppercase tracking-wider">{day.label}</h3>
+                                                            </div>
+                                                            <span className="text-xs font-bold bg-crt-cyan-light border border-crt-cyan/30 text-crt-navy px-2.5 py-1 rounded-lg">
+                                                                Total journée : <strong className="text-crt-cyan-dark font-mono">{dayTotal}h</strong>
+                                                            </span>
+                                                        </div>
+
+                                                        {activitiesForDay.length === 0 ? (
+                                                            <p className="text-xs text-slate-500 italic py-2">Aucune activité enregistrée pour ce jour.</p>
+                                                        ) : (
+                                                            <div className="space-y-4">
+                                                                {activitiesForDay.map((activity, idx) => (
+                                                                    <div key={idx} className="flex items-start gap-4 p-3 rounded-xl hover:bg-crt-cyan-light/30 transition-colors border border-transparent hover:border-crt-cyan/20">
+                                                                        <div className="bg-crt-cyan-light border border-crt-cyan/30 text-crt-navy font-extrabold text-xs px-2.5 py-1.5 rounded-xl min-w-[50px] text-center shadow-sm font-mono">
+                                                                            {activity.hours}h
+                                                                        </div>
+                                                                        <div className="flex-1 min-w-0">
+                                                                            <div className="flex flex-wrap items-center gap-x-2 text-xs">
+                                                                                <span className="font-extrabold text-crt-navy">{activity.clientName}</span>
+                                                                                <span className="text-slate-400">/</span>
+                                                                                <span className="text-slate-600 font-semibold">{activity.taskName}</span>
+                                                                            </div>
+                                                                            <p className="text-xs text-slate-700 italic mt-1 font-serif pr-4">
+                                                                                "{activity.description || "Aucune description fournie."}"
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* RIGHT AREA: Analytics Dashboard */}
+                            <div className="w-full xl:w-80 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col h-fit space-y-5">
+                                <div>
+                                    <h2 className="text-xs font-extrabold text-crt-navy flex items-center gap-2 uppercase tracking-wider">
+                                        <svg className="w-4 h-4 text-crt-cyan font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                                        </svg>
+                                        Indicateurs CRT Solution
+                                    </h2>
+                                </div>
+
+                                <div className="bg-crt-cyan-light border border-crt-cyan/30 rounded-2xl p-4 text-center">
+                                    <span className="text-xs text-crt-navy font-bold uppercase tracking-wider">Cumul de la semaine</span>
+                                    <h3 className="text-3xl font-black text-crt-navy mt-1 font-mono">{getGrandTotal()}h</h3>
+                                    <p className="text-xs text-slate-600 mt-1 font-medium">Calculé en direct</p>
+                                </div>
+
+                                <div className="space-y-1">
+                                    <div className="flex justify-between text-xs font-semibold">
+                                        <span className="text-slate-600">Taux de descriptions (qualité)</span>
+                                        <span className={`font-bold font-mono ${getDescriptionCompleteness() === 100 ? 'text-emerald-600' : 'text-crt-cyan-dark'}`}>
+                                            {getDescriptionCompleteness()}%
+                                        </span>
+                                    </div>
+                                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <div 
+                                            style={{ width: `${getDescriptionCompleteness()}%` }} 
+                                            className="h-full bg-crt-cyan rounded-full transition-all duration-500"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-slate-500 mt-1">Pourcentage d'heures travaillées ayant un descriptif.</p>
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                <div className="space-y-3">
+                                    <h4 className="text-xs font-extrabold text-crt-navy uppercase tracking-wider">Répartition de la charge</h4>
+                                    {clients.length === 0 ? (
+                                        <p className="text-xs italic text-slate-400">Aucune donnée à analyser</p>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            {clients.map(client => {
+                                                const clientHrs = getClientTotalHours(client.id);
+                                                const grandTotal = getGrandTotal();
+                                                const pct = grandTotal > 0 ? Math.round((clientHrs / grandTotal) * 100) : 0;
+                                                
+                                                return (
+                                                    <div key={client.id} className="space-y-1">
+                                                        <div className="flex justify-between text-xs font-semibold">
+                                                            <span className="text-slate-700 truncate max-w-[150px]">{client.name}</span>
+                                                            <span className="text-slate-600 font-mono">{clientHrs}h ({pct}%)</span>
+                                                        </div>
+                                                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                            <div 
+                                                                style={{ width: `${pct}%` }} 
+                                                                className="h-full bg-crt-cyan rounded-full transition-all duration-500"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <hr className="border-slate-100" />
+
+                                <button 
+                                    onClick={() => showNotification("Génération du rapport PDF & Excel prêt pour envoi !", "info")}
+                                    className="w-full bg-crt-navy hover:bg-crt-navy-dark text-white font-semibold text-xs py-2.5 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2"
+                                >
+                                    <svg className="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Exporter pour la direction
+                                </button>
+                            </div>
+                        </main>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<TimesheetApp />);
+    
