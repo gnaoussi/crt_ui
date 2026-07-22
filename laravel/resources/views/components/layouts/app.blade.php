@@ -32,6 +32,9 @@
             }
         }
     </script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link rel="shortcut icon" type="image/png" href="/favicon.png">
     <!-- Alpine JS CDN for Dropdowns -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @livewireStyles
@@ -43,8 +46,8 @@
         <!-- Top Header Row -->
         <div class="px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100">
             <div class="flex items-center space-x-4">
-                <div class="p-1 bg-white rounded-lg flex items-center justify-center border border-slate-200 shadow-2xs">
-                    <span class="text-xl font-black text-crt-navy px-2.5 py-0.5 tracking-tighter">CRT<span class="text-crt-cyan">.</span></span>
+                <div class="p-1 bg-white rounded-lg flex items-center justify-center">
+                    <img src="/logo.png" alt="CRT Solution Logo" class="h-10 w-auto object-contain" />
                 </div>
                 <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
                 <div>
