@@ -64,14 +64,31 @@
             </div>
         @else
             <!-- Saisie / Edition Mode: Form to edit directly -->
-            <div class="space-y-4 text-xs">
+            <form wire:submit.prevent="saveCompanyInfo" class="space-y-4 text-xs">
+
+                @if ($errors->any())
+                    <div class="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 font-bold text-xs rounded-xl flex items-center gap-2 animate-fade-in shadow-2xs">
+                        <svg class="w-5 h-5 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div>
+                            <span>Veuillez corriger les erreurs suivantes :</span>
+                            <ul class="list-disc list-inside mt-1 font-semibold text-rose-700">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">
                         Nom de l'entreprise <span class="text-rose-500">*</span>
                     </label>
                     <input 
                         type="text"
-                        wire:model.live="editedCompanyInfo.name"
+                        wire:model.live.blur="editedCompanyInfo.name"
                         class="w-full text-xs font-semibold border @error('editedCompanyInfo.name') border-rose-500 bg-rose-50/50 focus:ring-rose-500/20 focus:border-rose-500 @else border-slate-300 bg-white focus:ring-crt-cyan/20 focus:border-crt-cyan @enderror rounded-xl p-2.5 transition focus:outline-none focus:ring-2"
                     />
                     @error('editedCompanyInfo.name')
@@ -101,8 +118,8 @@
                 </div>
                 <div class="flex justify-end pt-2">
                     <button 
-                        wire:click="saveCompanyInfo"
-                        class="bg-crt-cyan hover:bg-crt-cyan-dark text-crt-navy font-extrabold text-xs px-5 py-2 rounded-xl shadow-lg shadow-crt-cyan/20 flex items-center gap-1.5"
+                        type="submit"
+                        class="bg-crt-cyan hover:bg-crt-cyan-dark text-crt-navy font-extrabold text-xs px-5 py-2 rounded-xl shadow-lg shadow-crt-cyan/20 flex items-center gap-1.5 cursor-pointer"
                     >
                         <svg class="w-4 h-4 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
@@ -110,7 +127,7 @@
                         Enregistrer les modifications
                     </button>
                 </div>
-            </div>
+            </form>
         @endif
     </div>
 

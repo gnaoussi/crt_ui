@@ -35,14 +35,25 @@ class EntrepriseComponent extends Component
         'phone_pro' => '',
     ];
 
-    protected $rules = [
-        'editedCompanyInfo.name' => 'required|string|min:2',
-    ];
+    public function rules()
+    {
+        return [
+            'editedCompanyInfo.name' => 'required|string|min:2',
+        ];
+    }
 
-    protected $messages = [
-        'editedCompanyInfo.name.required' => 'Le nom de l\'entreprise est obligatoire.',
-        'editedCompanyInfo.name.min' => 'Le nom de l\'entreprise doit comporter au moins 2 caractères.',
-    ];
+    public function messages()
+    {
+        return [
+            'editedCompanyInfo.name.required' => 'Le nom de l\'entreprise est obligatoire.',
+            'editedCompanyInfo.name.min' => 'Le nom de l\'entreprise doit comporter au moins 2 caractères.',
+        ];
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
 
     public function mount()
     {
@@ -52,6 +63,9 @@ class EntrepriseComponent extends Component
     public function setMode($mode)
     {
         $this->entrepriseMode = $mode;
+        if ($mode === 'saisie') {
+            $this->editedCompanyInfo = $this->companyInfo;
+        }
     }
 
     public function saveCompanyInfo()
