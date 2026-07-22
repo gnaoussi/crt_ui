@@ -22,6 +22,7 @@
                             cyan: '#00A8B5',
                             'cyan-dark': '#008C97',
                             'cyan-light': '#E8F7F8',
+                            'cyan-glow': 'rgba(0, 168, 181, 0.15)',
                         }
                     },
                     fontFamily: {

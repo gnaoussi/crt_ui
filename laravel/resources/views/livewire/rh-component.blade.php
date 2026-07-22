@@ -15,22 +15,22 @@
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-semibold">
                 <div>
                     <label class="block text-slate-700 mb-1">Employé</label>
-                    <input type="text" wire:model.live="empFilterQuery" placeholder="Matricule, Nom, Prénom..." class="w-full text-xs border rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition" />
+                    <input type="text" wire:model.live="empFilterQuery" placeholder="Matricule, Nom, Prénom..." class="w-full text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition" />
                 </div>
                 <div>
                     <label class="block text-slate-700 mb-1">Gestionnaire</label>
-                    <input type="text" wire:model.live="empFilterManager" placeholder="Gestionnaire..." class="w-full text-xs border rounded-xl p-2.5 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition" />
+                    <input type="text" wire:model.live="empFilterManager" placeholder="Gestionnaire..." class="w-full text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition" />
                 </div>
                 <div>
                     <label class="block text-slate-700 mb-1">Probation</label>
-                    <select wire:model.live="empFilterProbation" class="w-full text-xs border rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                    <select wire:model.live="empFilterProbation" class="w-full text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white">
                         <option value="all">-- Tous --</option>
                         <option value="in_progress">1 heure restante</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-slate-700 mb-1">Statut</label>
-                    <select wire:model.live="empFilterStatus" class="w-full text-xs border rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                    <select wire:model.live="empFilterStatus" class="w-full text-xs border rounded-xl p-2 bg-slate-50 focus:bg-white">
                         <option value="all">Tous</option>
                         <option value="active">Activé</option>
                         <option value="disabled">Désactivé</option>
@@ -103,13 +103,25 @@
                 </table>
             </div>
 
-            <!-- PAGINATION 10 PAR PAGE -->
-            <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-600">
-                <div>
-                    Affichage de <span class="font-extrabold text-crt-navy">{{ $employees->firstItem() ?? 0 }}</span> à <span class="font-extrabold text-crt-navy">{{ $employees->lastItem() ?? 0 }}</span> sur <span class="font-extrabold text-crt-navy">{{ $employees->total() }}</span> employés (10 par page)
+            <!-- PAGINATION COMPACTE 10 PAR PAGE -->
+            <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-semibold text-slate-600">
+                <div class="text-[11px]">
+                    Affichage <strong class="text-crt-navy font-bold">{{ $employees->firstItem() ?? 0 }}</strong> - <strong class="text-crt-navy font-bold">{{ $employees->lastItem() ?? 0 }}</strong> sur <strong class="text-crt-navy font-bold">{{ $employees->total() }}</strong> employés (10 / page)
                 </div>
-                <div>
-                    {{ $employees->links() }}
+                <div class="flex items-center space-x-1 font-mono text-xs">
+                    @if ($employees->onFirstPage())
+                        <span class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed">‹ Précédent</span>
+                    @else
+                        <button wire:click="previousPage" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-crt-navy font-bold shadow-2xs transition">‹ Précédent</button>
+                    @endif
+
+                    <span class="px-3 py-1 rounded-lg bg-crt-navy text-white font-bold">{{ $employees->currentPage() }} / {{ $employees->lastPage() }}</span>
+
+                    @if ($employees->hasMorePages())
+                        <button wire:click="nextPage" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-crt-navy font-bold shadow-2xs transition">Suivant ›</button>
+                    @else
+                        <span class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed">Suivant ›</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -279,19 +291,19 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Nom *</label>
-                                <input type="text" required wire:model="newEmpForm.nom" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="text" required wire:model="newEmpForm.nom" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Prénom *</label>
-                                <input type="text" required wire:model="newEmpForm.prenom" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="text" required wire:model="newEmpForm.prenom" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date de naissance</span> *</label>
-                                <input type="text" placeholder="ex: 07-21" wire:model="newEmpForm.dob" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="text" placeholder="ex: 07-21" wire:model="newEmpForm.dob" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">E-mail *</label>
-                                <input type="email" required placeholder="employe@exemple.com" wire:model="newEmpForm.email" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="email" required placeholder="employe@exemple.com" wire:model="newEmpForm.email" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                         </div>
                     </div>
@@ -301,19 +313,19 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Matricule ID Unique</label>
-                                <input type="text" wire:model="newEmpForm.matricule" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <input type="text" wire:model="newEmpForm.matricule" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date d'embauche</span> *</label>
-                                <input type="date" required wire:model="newEmpForm.hireDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <input type="date" required wire:model="newEmpForm.hireDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Heures de travail par semaine *</label>
-                                <input type="number" step="0.5" placeholder="Ex: 37.5 ou 40" wire:model="newEmpForm.weeklyHours" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <input type="number" step="0.5" placeholder="Ex: 37.5 ou 40" wire:model="newEmpForm.weeklyHours" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Gestionnaire</label>
-                                <select wire:model="newEmpForm.gestionnaire" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                <select wire:model="newEmpForm.gestionnaire" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
                                     <option value="Admin Plateforme GCS">Admin Plateforme GCS</option>
                                     <option value="Fabrice DENOU">Fabrice DENOU</option>
                                     <option value="Mitch Richmond">Mitch Richmond</option>
@@ -327,7 +339,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Site d'affectation *</label>
-                                <select wire:model="newEmpForm.site" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                <select wire:model="newEmpForm.site" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
                                     @foreach ($sites as $s)
                                         <option value="{{ $s->name }}">{{ $s->name }}</option>
                                     @endforeach
@@ -367,19 +379,19 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Nom *</label>
-                                <input type="text" required wire:model="editEmpForm.nom" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="text" required wire:model="editEmpForm.nom" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Prénom *</label>
-                                <input type="text" required wire:model="editEmpForm.prenom" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="text" required wire:model="editEmpForm.prenom" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date de naissance</span> *</label>
-                                <input type="text" wire:model="editEmpForm.dob" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="text" wire:model="editEmpForm.dob" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">E-mail *</label>
-                                <input type="email" required wire:model="editEmpForm.email" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                <input type="email" required wire:model="editEmpForm.email" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
                             </div>
                         </div>
                     </div>
@@ -389,11 +401,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Matricule ID Unique</label>
-                                <input type="text" wire:model="editEmpForm.matricule" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <input type="text" wire:model="editEmpForm.matricule" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date d'embauche</span> *</label>
-                                <input type="date" wire:model="editEmpForm.hireDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <input type="date" wire:model="editEmpForm.hireDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                         </div>
                     </div>
@@ -403,14 +415,14 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Définir comme gestionnaire ?</label>
-                                <select wire:model="editEmpForm.isManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                <select wire:model="editEmpForm.isManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
                                     <option value="Non">Non</option>
                                     <option value="Oui">Oui</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Groupe d'accès *</label>
-                                <select wire:model="editEmpForm.accessGroup" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-bold text-crt-navy">
+                                <select wire:model="editEmpForm.accessGroup" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-bold text-crt-navy">
                                     <option value="ADMINISTRATEUR">ADMINISTRATEUR</option>
                                     <option value="MANAGER">MANAGER</option>
                                     <option value="EMPLOYE">EMPLOYÉ</option>
@@ -447,7 +459,7 @@
                 <form wire:submit.prevent="handleSaveManagerChange" class="space-y-4 text-xs">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Nouveau gestionnaire *</label>
-                        <select wire:model="editManagerForm.newManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                        <select wire:model="editManagerForm.newManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
                             <option value="Admin Plateforme GCS">Admin Plateforme GCS</option>
                             <option value="Fabrice DENOU">Fabrice DENOU</option>
                             <option value="Mitch Richmond">Mitch Richmond</option>
@@ -487,7 +499,7 @@
                 <form wire:submit.prevent="handleSaveHoursChange" class="space-y-4 text-xs">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Nouvelle Heure *</label>
-                        <input type="number" step="0.5" required wire:model="editHoursForm.newHours" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                        <input type="number" step="0.5" required wire:model="editHoursForm.newHours" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Date de debut de la nouvelle heure *</label>
@@ -523,7 +535,7 @@
                 <form wire:submit.prevent="handleSaveSiteAffectation" class="space-y-4 text-xs">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Nouveau site *</label>
-                        <select wire:model="editSiteForm.newSiteName" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                        <select wire:model="editSiteForm.newSiteName" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
                             @foreach ($sites as $site)
                                 <option value="{{ $site->name }}">{{ $site->name }}</option>
                             @endforeach
@@ -535,7 +547,7 @@
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Date de fin</label>
-                        <input type="text" placeholder="Optionnel (ex: 2026-12-31)" wire:model="editSiteForm.endDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                        <input type="text" placeholder="Optionnel (ex: 2026-12-31)" wire:model="editSiteForm.endDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
