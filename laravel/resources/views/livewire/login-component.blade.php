@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-slate-900 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden -mt-2">
+<div class="min-h-screen bg-slate-900 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans relative overflow-hidden">
     <!-- Subtle CRT Navy Gradient & Glow -->
     <div class="absolute inset-0 bg-gradient-to-br from-crt-navy via-slate-900 to-crt-navy-dark opacity-95 pointer-events-none"></div>
 
