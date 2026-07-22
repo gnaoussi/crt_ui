@@ -773,6 +773,9 @@
             const selectMenuItem = (section, item) => {
                 setActiveMenuItem({ section, item });
                 setOpenNavDropdown(null);
+                if (section === 'RH' && item === 'Employés') {
+                    setSelectedEmployee(null);
+                }
                 if (section === "RH" && item === "Employés") {
                     setSelectedEmployee(null);
                 }
