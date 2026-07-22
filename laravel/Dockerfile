@@ -26,4 +26,4 @@ RUN mkdir -p database && touch database/database.sqlite && chmod -R 777 database
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "composer install --no-interaction --no-security-blocking && php artisan migrate:fresh --seed --force && php -S 0.0.0.0:8000 server.php"]
+CMD ["sh", "-c", "composer install --no-interaction --no-security-blocking && php artisan migrate:fresh --seed --force && php artisan serve --host=0.0.0.0 --port=8000"]
