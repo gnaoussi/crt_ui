@@ -8,12 +8,16 @@ use App\Models\CompanySite;
 class EntrepriseComponent extends Component
 {
     public $entrepriseMode = 'consultation';
-    public $companyInfo = [
-        'name' => 'CRT Solution Canada',
-        'probationPeriod' => '1 heure(s)',
-        'description' => 'La table de concertation des organismes au service des personnes réfugiées et immigrantes (CRT) est un regroupement de plus de 150 organismes œuvrant auprès des personnes réfugiées, immigrantes et sans statut au Québec.'
-    ];
-    public $editedCompanyInfo = [];
+
+    // Flat properties for Company Info
+    public $companyName = 'CRT Solution Canada';
+    public $probationPeriod = '1 heure(s)';
+    public $companyDescription = 'La table de concertation des organismes au service des personnes réfugiées et immigrantes (CRT) est un regroupement de plus de 150 organismes œuvrant auprès des personnes réfugiées, immigrantes et sans statut au Québec.';
+
+    // Form inputs for edition mode
+    public $editCompanyName = '';
+    public $editProbationPeriod = '';
+    public $editCompanyDescription = '';
 
     public $siteSearchQuery = '';
 
@@ -35,44 +39,47 @@ class EntrepriseComponent extends Component
         'phone_pro' => '',
     ];
 
-    public function rules()
-    {
-        return [
-            'editedCompanyInfo.name' => 'required|string|min:2',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'editedCompanyInfo.name.required' => 'Le nom de l\'entreprise est obligatoire.',
-            'editedCompanyInfo.name.min' => 'Le nom de l\'entreprise doit comporter au moins 2 caractères.',
-        ];
-    }
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function mount()
     {
-        $this->editedCompanyInfo = $this->companyInfo;
+        $this->editCompanyName = $this->companyName;
+        $this->editProbationPeriod = $this->probationPeriod;
+        $this->editCompanyDescription = $this->companyDescription;
     }
 
     public function setMode($mode)
     {
         $this->entrepriseMode = $mode;
         if ($mode === 'saisie') {
-            $this->editedCompanyInfo = $this->companyInfo;
+            $this->editCompanyName = $this->companyName;
+            $this->editProbationPeriod = $this->probationPeriod;
+            $this->editCompanyDescription = $this->companyDescription;
+            $this->resetErrorBag();
         }
+    }
+
+    public function updatedEditCompanyName()
+    {
+        $this->validateOnly('editCompanyName', [
+            'editCompanyName' => 'required|string|min:2',
+        ], [
+            'editCompanyName.required' => 'Le nom de l\'entreprise est obligatoire.',
+            'editCompanyName.min' => 'Le nom de l\'entreprise doit comporter au moins 2 caractères.',
+        ]);
     }
 
     public function saveCompanyInfo()
     {
-        $this->validate();
+        $this->validate([
+            'editCompanyName' => 'required|string|min:2',
+        ], [
+            'editCompanyName.required' => 'Le nom de l\'entreprise est obligatoire.',
+            'editCompanyName.min' => 'Le nom de l\'entreprise doit comporter au moins 2 caractères.',
+        ]);
 
-        $this->companyInfo = $this->editedCompanyInfo;
+        $this->companyName = trim($this->editCompanyName);
+        $this->probationPeriod = trim($this->editProbationPeriod);
+        $this->companyDescription = trim($this->editCompanyDescription);
+
         $this->entrepriseMode = 'consultation';
         session()->flash('message', 'Informations de l\'entreprise enregistrées avec succès !');
     }

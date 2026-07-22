@@ -51,20 +51,20 @@
             <div class="space-y-4 text-xs">
                 <div>
                     <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Nom de l'entreprise</span>
-                    <h4 class="text-sm font-extrabold text-crt-navy">{{ $companyInfo['name'] }}</h4>
+                    <h4 class="text-sm font-extrabold text-crt-navy">{{ $companyName }}</h4>
                 </div>
                 <div>
                     <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Délai de probation</span>
-                    <p class="font-semibold text-slate-700 font-mono">{{ $companyInfo['probationPeriod'] }}</p>
+                    <p class="font-semibold text-slate-700 font-mono">{{ $probationPeriod }}</p>
                 </div>
                 <div>
                     <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Description</span>
-                    <p class="font-medium text-slate-700 leading-relaxed max-w-4xl">{{ $companyInfo['description'] }}</p>
+                    <p class="font-medium text-slate-700 leading-relaxed max-w-4xl">{{ $companyDescription }}</p>
                 </div>
             </div>
         @else
             <!-- Saisie / Edition Mode: Form to edit directly -->
-            <form wire:submit.prevent="saveCompanyInfo" class="space-y-4 text-xs">
+            <form wire:submit.prevent="saveCompanyInfo" class="space-y-4 text-xs" novalidate>
 
                 @if ($errors->any())
                     <div class="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 font-bold text-xs rounded-xl flex items-center gap-2 animate-fade-in shadow-2xs">
@@ -72,7 +72,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                         <div>
-                            <span>Veuillez corriger les erreurs suivantes :</span>
+                            <span>Veuillez corriger l'erreur suivante :</span>
                             <ul class="list-disc list-inside mt-1 font-semibold text-rose-700">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -88,34 +88,38 @@
                     </label>
                     <input 
                         type="text"
-                        wire:model.live.blur="editedCompanyInfo.name"
-                        class="w-full text-xs font-semibold border @error('editedCompanyInfo.name') border-rose-500 bg-rose-50/50 focus:ring-rose-500/20 focus:border-rose-500 @else border-slate-300 bg-white focus:ring-crt-cyan/20 focus:border-crt-cyan @enderror rounded-xl p-2.5 transition focus:outline-none focus:ring-2"
+                        wire:model.live="editCompanyName"
+                        placeholder="Entrez le nom de l'entreprise..."
+                        class="w-full text-xs font-semibold border @error('editCompanyName') border-rose-500 bg-rose-50/50 focus:ring-rose-500/20 focus:border-rose-500 @else border-slate-300 bg-white focus:ring-crt-cyan/20 focus:border-crt-cyan @enderror rounded-xl p-2.5 transition focus:outline-none focus:ring-2"
                     />
-                    @error('editedCompanyInfo.name')
-                        <span class="text-[11px] font-bold text-rose-600 mt-1 flex items-center gap-1.5 animate-fade-in">
-                            <svg class="w-3.5 h-3.5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    @error('editCompanyName')
+                        <span class="text-[11px] font-bold text-rose-600 mt-1.5 flex items-center gap-1.5 animate-fade-in">
+                            <svg class="w-4 h-4 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             {{ $message }}
                         </span>
                     @enderror
                 </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Délai de probation</label>
                     <input 
                         type="text"
-                        wire:model="editedCompanyInfo.probationPeriod"
+                        wire:model="editProbationPeriod"
                         class="w-full text-xs font-semibold border border-slate-300 rounded-xl p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan"
                     />
                 </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Description</label>
                     <textarea 
                         rows="3"
-                        wire:model="editedCompanyInfo.description"
+                        wire:model="editCompanyDescription"
                         class="w-full text-xs font-medium border border-slate-300 rounded-xl p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan resize-none"
                     ></textarea>
                 </div>
+
                 <div class="flex justify-end pt-2">
                     <button 
                         type="submit"
