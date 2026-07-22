@@ -1610,7 +1610,208 @@
                     </div>
 
                     {/* MAIN WORKSPACE CONTENT */}
-                    {activeMenuItem.section === 'Entreprise' ? (
+                    {activeMenuItem.section === 'RH' ? (
+                        selectedEmployee === null ? (
+                            /* VIEW 1: EMPLOYEES LIST VIEW (list.png) */
+                            <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+                                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                    <div className="flex items-center gap-2 pb-3 border-b text-xs font-extrabold text-crt-navy">🔍 Filtres de recherche</div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-semibold">
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Employé</label>
+                                            <input type="text" placeholder="Matricule, Nom, Prénom..." value={empFilterQuery} onChange={(e) => setEmpFilterQuery(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Gestionnaire</label>
+                                            <input type="text" placeholder="Gestionnaire..." value={empFilterManager} onChange={(e) => setEmpFilterManager(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Probation</label>
+                                            <select value={empFilterProbation} onChange={(e) => setEmpFilterProbation(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50">
+                                                <option value="all">-- Tous --</option>
+                                                <option value="in_progress">1 heure restante</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-slate-700 mb-1">Statut</label>
+                                            <select value={empFilterStatus} onChange={(e) => setEmpFilterStatus(e.target.value)} className="w-full text-xs border rounded-xl p-2 bg-slate-50">
+                                                <option value="all">Tous</option>
+                                                <option value="active">Activé</option>
+                                                <option value="disabled">Désactivé</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                                    <div className="flex justify-between items-center pb-4 border-b">
+                                        <h3 className="text-sm font-extrabold text-crt-navy">👥 Liste des employés ({filteredEmployees.length})</h3>
+                                        <button onClick={() => setIsNewEmployeeModalOpen(true)} className="bg-crt-navy text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-lg">➕ Nouvel employé</button>
+                                    </div>
+
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left border-collapse min-w-[1000px] text-xs">
+                                            <thead>
+                                                <tr className="bg-slate-100 text-slate-700 uppercase font-extrabold">
+                                                    <th className="p-3.5">Matricule</th>
+                                                    <th className="p-3.5">Nom</th>
+                                                    <th className="p-3.5">Prénom</th>
+                                                    <th className="p-3.5">Rôle</th>
+                                                    <th className="p-3.5">Gestionnaire</th>
+                                                    <th className="p-3.5">Probation</th>
+                                                    <th className="p-3.5 text-center">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-slate-100 font-semibold">
+                                                {filteredEmployees.map(emp => (
+                                                    <tr key={emp.id} className="hover:bg-crt-cyan-light/30">
+                                                        <td className="p-3.5 font-mono text-crt-navy font-bold">{emp.matricule}</td>
+                                                        <td className="p-3.5 font-extrabold text-crt-navy">{emp.nom}</td>
+                                                        <td className="p-3.5">{emp.prenom}</td>
+                                                        <td className="p-3.5"><span className="bg-slate-100 border px-2 py-0.5 rounded text-[11px] font-bold">{emp.role}</span></td>
+                                                        <td className="p-3.5 text-slate-600">{emp.gestionnaire}</td>
+                                                        <td className="p-3.5"><span className="bg-crt-navy text-white text-[11px] font-bold px-3 py-1 rounded-full">{emp.probationStatus}</span></td>
+                                                        <td className="p-3.5">
+                                                            <div className="flex items-center justify-center space-x-1.5">
+                                                                <button onClick={() => setSelectedEmployee(emp)} title="Voir la fiche détaillée" className="p-1.5 text-crt-cyan bg-crt-cyan-light rounded-lg">👁️</button>
+                                                                <button onClick={() => setActiveMenuItem({ section: 'Feuilles de Temps', item: 'Projets & Suivi Hebdomadaire' })} title="Feuilles de temps" className="p-1.5 text-crt-navy bg-slate-100 rounded-lg">📑</button>
+                                                                <button onClick={() => showNotification(`Rapport de performance de ${emp.prenom} ${emp.nom} en cours...`, "info")} title="Performances" className="p-1.5 text-amber-600 bg-amber-50 rounded-lg">📊</button>
+                                                                <button onClick={() => toggleAccountStatus(emp.id)} title="Activer/Désactiver" className="p-1.5 text-slate-600 bg-slate-100 rounded-lg">🔓</button>
+                                                                <button onClick={() => showNotification(`Rôle de ${emp.prenom} ${emp.nom}`, "info")} title="Gestionnaire" className="p-1.5 text-purple-600 bg-purple-50 rounded-lg">👤</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </main>
+                        ) : (
+                            /* VIEW 2: EMPLOYEE DETAIL VIEW (employe_view_section_information.png & employe_view_section_historique.png) */
+                            <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+                                <div>
+                                    <button onClick={() => setSelectedEmployee(null)} className="text-xs font-bold text-slate-600 bg-white border px-3.5 py-2 rounded-xl">⬅ Retour à la liste des employés</button>
+                                </div>
+
+                                <div className="bg-gradient-to-r from-crt-cyan to-crt-navy rounded-2xl p-8 text-center text-white shadow-lg">
+                                    <div className="w-20 h-20 rounded-full bg-white text-crt-navy flex items-center justify-center text-2xl font-black mx-auto mb-3">👤</div>
+                                    <h2 className="text-xl font-black">{selectedEmployee.nom} {selectedEmployee.prenom}</h2>
+                                    <p className="text-xs text-crt-cyan-light font-mono mt-1">Matricule : {selectedEmployee.matricule} — {selectedEmployee.role}</p>
+                                </div>
+
+                                <div className="flex justify-between items-center bg-white p-2 rounded-2xl border shadow-sm">
+                                    <div className="flex space-x-2 text-xs font-extrabold">
+                                        <button onClick={() => setEmployeeActiveTab("information")} className={`px-4 py-2.5 rounded-xl ${employeeActiveTab === 'information' ? 'bg-crt-navy text-white' : 'text-slate-600'}`}>👤 Informations de l'employé</button>
+                                        <button onClick={() => setEmployeeActiveTab("historiques")} className={`px-4 py-2.5 rounded-xl ${employeeActiveTab === 'historiques' ? 'bg-crt-navy text-white' : 'text-slate-600'}`}>📜 Historiques</button>
+                                    </div>
+                                </div>
+
+                                {/* TAB 1: INFORMATIONS DE L'EMPLOYÉ */}
+                                {employeeActiveTab === 'information' ? (
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
+                                        <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                                            <h3 className="text-sm font-extrabold text-crt-navy">👤 Informations de l'employé</h3>
+                                            <button onClick={handleOpenEditEmployeeModal} className="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm flex items-center gap-1.5">
+                                                🖊️ Modifier
+                                            </button>
+                                        </div>
+
+                                        <div className="space-y-6 text-xs font-semibold">
+                                            <div className="space-y-3">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">IDENTITÉ</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">Matricule</span><span className="text-crt-navy font-bold font-mono">{selectedEmployee.matricule}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Nom</span><span className="text-crt-navy font-extrabold">{selectedEmployee.nom}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Prénom</span><span className="text-crt-navy font-extrabold">{selectedEmployee.prenom}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">📅 Date de naissance</span><span className="text-slate-700">{selectedEmployee.dob}</span></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">CONTACTS</h4>
+                                                <div><span className="block text-slate-500 text-[11px]">✉️ E-mail</span><span className="text-crt-cyan-dark font-bold font-mono">{selectedEmployee.email}</span></div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">STATUT PROFESSIONNEL</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">👥 Groupes</span><span className="bg-slate-100 border px-2 py-0.5 rounded text-[11px] font-bold">{selectedEmployee.role}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Statut du compte</span><span className="text-emerald-600 font-extrabold">{selectedEmployee.accountStatus}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Visibilité/Rapport</span><span className="text-slate-700 font-bold">{selectedEmployee.visibilityReport}</span></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">ORGANISATION</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">Gestionnaire</span><span className="text-crt-navy font-bold">{selectedEmployee.gestionnaire}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Rôle</span><span className="text-slate-700 font-medium">Gestionnaire ({selectedEmployee.isManager ? 'Oui' : 'Non'})</span></div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3 pt-3 border-t border-slate-100">
+                                                <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">AUTRES & EMBAUCHE</h4>
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                                    <div><span className="block text-slate-500 text-[11px]">Heures/semaine</span><span className="text-crt-navy font-extrabold font-mono">{selectedEmployee.weeklyHours} h</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">📅 Date d'embauche</span><span className="text-slate-700 font-mono">{selectedEmployee.hireDate}</span></div>
+                                                    <div><span className="block text-slate-500 text-[11px]">Statut de probation</span><span className="text-amber-700 font-bold bg-amber-50 border border-amber-200 px-2 py-0.5 rounded text-[11px]">En cours ({selectedEmployee.probationStatus})</span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    /* TAB 2: HISTORIQUES */
+                                    <div className="space-y-6">
+                                        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                                <h3 className="text-sm font-extrabold text-crt-navy">👤 Historique des heures par semaine</h3>
+                                                <button onClick={() => { setEditHoursForm({ newHours: selectedEmployee.weeklyHours, startDate: "2026-07-22 12:30:00" }); setIsEditHoursModalOpen(true); }} className="bg-crt-navy text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl">🖊️ Modifier l'heure</button>
+                                            </div>
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead><tr className="bg-slate-100 text-slate-700 font-extrabold uppercase"><th className="p-3">NOMBRE D'HEURE</th><th className="p-3">DATE DE DÉBUT</th><th className="p-3">DATE DE FIN</th></tr></thead>
+                                                <tbody className="divide-y divide-slate-100 font-mono">
+                                                    {selectedEmployee.hoursHistory.map((h, i) => (
+                                                        <tr key={i}><td className="p-3 font-extrabold text-crt-navy">{h.hours}</td><td className="p-3 text-slate-600">{h.startDate}</td><td className="p-3 text-slate-400">{h.endDate}</td></tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                                <h3 className="text-sm font-extrabold text-crt-navy">👥 Historique des gestionnaires</h3>
+                                                <button onClick={() => { setEditManagerForm({ newManager: selectedEmployee.gestionnaire || "Admin Plateforme GCS", startDate: "2026-07-22 12:31:00" }); setIsEditManagerModalOpen(true); }} className="bg-crt-navy text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl">🖊️ Modifier le gestionnaire</button>
+                                            </div>
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead><tr className="bg-slate-100 text-slate-700 font-extrabold uppercase"><th className="p-3">GESTIONNAIRE</th><th className="p-3">DATE DE DÉBUT</th><th className="p-3">DATE DE FIN</th></tr></thead>
+                                                <tbody className="divide-y divide-slate-100 font-medium">
+                                                    {selectedEmployee.managerHistory.map((m, i) => (
+                                                        <tr key={i}><td className="p-3 font-extrabold text-crt-navy">{m.manager}</td><td className="p-3 text-slate-600 font-mono">{m.startDate}</td><td className="p-3 text-slate-400 font-mono">{m.endDate}</td></tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                                            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                                                <h3 className="text-sm font-extrabold text-crt-navy">🏠 Historique des affectations aux sites</h3>
+                                                <button onClick={() => { setEditSiteForm({ newSiteName: selectedEmployee.site || "Centre Ville-Marie", startDate: "2026-07-22 12:32:00", endDate: "" }); setIsEditSiteModalOpen(true); }} className="bg-crt-navy text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl">🔗 Affecter à un site</button>
+                                            </div>
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead><tr className="bg-slate-100 text-slate-700 font-extrabold uppercase"><th className="p-3">NOM DU SITE</th><th className="p-3">ADRESSE</th><th className="p-3">DATE DE DÉBUT</th><th className="p-3">DATE DE FIN</th><th className="p-3">STATUT</th></tr></thead>
+                                                <tbody className="divide-y divide-slate-100 font-medium">
+                                                    {selectedEmployee.siteHistory.map((s, i) => (
+                                                        <tr key={i}><td className="p-3 font-extrabold text-crt-navy">{s.siteName}</td><td className="p-3 text-slate-600">{s.address}</td><td className="p-3 text-slate-600 font-mono">{s.startDate}</td><td className="p-3 text-slate-600 font-mono">{s.endDate}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-[11px] font-bold ${s.status === 'Actif' ? 'bg-emerald-100 text-emerald-800 border' : 'bg-slate-100'}`}>{s.status}</span></td></tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                            </main>
+                        )
+                    ) : activeMenuItem.section === 'Entreprise' ? (
                         /* ENTREPRISE > PRÉSENTATION & SITES VIEW */
                         <main className="flex-1 p-6 space-y-6 max-w-[1600px] mx-auto w-full">
                             
