@@ -35,6 +35,15 @@ class EntrepriseComponent extends Component
         'phone_pro' => '',
     ];
 
+    protected $rules = [
+        'editedCompanyInfo.name' => 'required|string|min:2',
+    ];
+
+    protected $messages = [
+        'editedCompanyInfo.name.required' => 'Le nom de l\'entreprise est obligatoire.',
+        'editedCompanyInfo.name.min' => 'Le nom de l\'entreprise doit comporter au moins 2 caractères.',
+    ];
+
     public function mount()
     {
         $this->editedCompanyInfo = $this->companyInfo;
@@ -47,6 +56,8 @@ class EntrepriseComponent extends Component
 
     public function saveCompanyInfo()
     {
+        $this->validate();
+
         $this->companyInfo = $this->editedCompanyInfo;
         $this->entrepriseMode = 'consultation';
         session()->flash('message', 'Informations de l\'entreprise enregistrées avec succès !');

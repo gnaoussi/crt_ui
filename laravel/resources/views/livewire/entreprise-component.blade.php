@@ -66,12 +66,22 @@
             <!-- Saisie / Edition Mode: Form to edit directly -->
             <div class="space-y-4 text-xs">
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Nom de l'entreprise</label>
+                    <label class="block font-bold text-slate-700 mb-1">
+                        Nom de l'entreprise <span class="text-rose-500">*</span>
+                    </label>
                     <input 
                         type="text"
-                        wire:model="editedCompanyInfo.name"
-                        class="w-full text-xs font-semibold border border-slate-300 rounded-xl p-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan"
+                        wire:model.live="editedCompanyInfo.name"
+                        class="w-full text-xs font-semibold border @error('editedCompanyInfo.name') border-rose-500 bg-rose-50/50 focus:ring-rose-500/20 focus:border-rose-500 @else border-slate-300 bg-white focus:ring-crt-cyan/20 focus:border-crt-cyan @enderror rounded-xl p-2.5 transition focus:outline-none focus:ring-2"
                     />
+                    @error('editedCompanyInfo.name')
+                        <span class="text-[11px] font-bold text-rose-600 mt-1 flex items-center gap-1.5 animate-fade-in">
+                            <svg class="w-3.5 h-3.5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Délai de probation</label>
