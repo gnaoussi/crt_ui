@@ -223,15 +223,15 @@
         {{ $slot }}
     </main>
 
-    <!-- APPLICATION FOOTER -->
-    <footer class="bg-crt-navy text-white border-t border-crt-navy-light py-5 mt-auto">
+    <!-- APPLICATION FOOTER (Harmonisé 100% avec le menu bg-slate-900) -->
+    <footer class="bg-slate-900 text-white border-t border-slate-800 py-5 mt-auto">
         <div class="max-w-[1600px] mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
             <div class="flex items-center space-x-2 font-medium text-slate-300">
                 <span>&copy; {{ date('Y') }} <strong class="text-white">CRT Solution</strong>. Tous droits réservés.</span>
             </div>
             <div class="flex items-center space-x-1.5 font-semibold text-slate-300">
                 <span>Powered by</span>
-                <span class="text-crt-cyan font-extrabold tracking-wide bg-crt-navy-light px-2.5 py-1 rounded-lg border border-crt-cyan/20">
+                <span class="text-crt-cyan font-extrabold tracking-wide bg-slate-800 px-2.5 py-1 rounded-lg border border-crt-cyan/20">
                     GCS Technologie
                 </span>
             </div>
