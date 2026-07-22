@@ -260,6 +260,17 @@ class RhComponent extends Component
         }
     }
 
+    
+    public function showReportNotification($prenom, $nom)
+    {
+        session()->flash('message', "Rapport de performance de {$prenom} {$nom}");
+    }
+
+    public function showRoleNotification($prenom, $nom)
+    {
+        session()->flash('message', "Attribution de rôle pour {$prenom} {$nom}");
+    }
+
     public function render()
     {
         $query = Employee::query();
