@@ -266,6 +266,9 @@
         </div>
     </footer>
 
+    <!-- Global Toast Component -->
+    <x-toast />
+
     @livewireScripts
 </body>
 </html>

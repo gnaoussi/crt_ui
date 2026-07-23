@@ -74,6 +74,9 @@
         {{ $slot }}
     </main>
 
+    <!-- Global Toast Component -->
+    <x-toast />
+
     @livewireScripts
 </body>
 </html>

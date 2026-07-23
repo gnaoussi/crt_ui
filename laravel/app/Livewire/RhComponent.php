@@ -299,12 +299,12 @@ class RhComponent extends Component
     
     public function showReportNotification($prenom, $nom)
     {
-        session()->flash('message', "Rapport de performance de {$prenom} {$nom}");
+        $this->dispatch('show-toast', message: "Rapport de performance de {$prenom} {$nom}", type: "info");
     }
 
     public function showRoleNotification($prenom, $nom)
     {
-        session()->flash('message', "Attribution de rôle pour {$prenom} {$nom}");
+        $this->dispatch('show-toast', message: "Attribution du groupe d'accès pour {$prenom} {$nom}", type: "warning");
     }
 
     public function render()
