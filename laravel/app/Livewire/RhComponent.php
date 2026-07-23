@@ -187,11 +187,20 @@ class RhComponent extends Component
     // Modal 3: Change Manager
     public function openEditManagerModal()
     {
+        $this->editManagerForm['startDate'] = date('Y-m-d\TH:i');
         $this->isEditManagerModalOpen = true;
     }
 
     public function handleSaveManagerChange()
     {
+        $this->validate([
+            'editManagerForm.newManager' => 'required',
+            'editManagerForm.startDate' => 'required',
+        ], [
+            'editManagerForm.newManager.required' => 'Veuillez sélectionner un gestionnaire.',
+            'editManagerForm.startDate.required' => 'La date de début du gestionnaire est obligatoire.',
+        ]);
+
         $emp = Employee::find($this->selectedEmployeeId);
         if ($emp) {
             $emp->gestionnaire = $this->editManagerForm['newManager'];
@@ -253,11 +262,21 @@ class RhComponent extends Component
     // Modal 5: Site Affectation
     public function openEditSiteModal()
     {
+        $this->editSiteForm['startDate'] = date('Y-m-d');
+        $this->editSiteForm['endDate'] = '';
         $this->isEditSiteModalOpen = true;
     }
 
     public function handleSaveSiteAffectation()
     {
+        $this->validate([
+            'editSiteForm.newSiteName' => 'required',
+            'editSiteForm.startDate' => 'required',
+        ], [
+            'editSiteForm.newSiteName.required' => 'Veuillez sélectionner un site.',
+            'editSiteForm.startDate.required' => 'La date de début d\'affectation est obligatoire.',
+        ]);
+
         $emp = Employee::find($this->selectedEmployeeId);
         if ($emp) {
             $emp->site = $this->editSiteForm['newSiteName'];

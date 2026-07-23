@@ -498,24 +498,43 @@
                     </button>
                 </div>
 
-                <form wire:submit.prevent="handleSaveManagerChange" class="space-y-4 text-xs">
+                <form novalidate wire:submit.prevent="handleSaveManagerChange" class="space-y-4 text-xs">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Nouveau gestionnaire *</label>
-                        <select wire:model="editManagerForm.newManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
+                        <select wire:model="editManagerForm.newManager" class="w-full font-semibold border @error('editManagerForm.newManager') border-rose-400 bg-rose-50/30 @else border-slate-200 bg-slate-50 focus:bg-white @enderror rounded-xl p-2.5">
                             <option value="Admin Plateforme GCS">Admin Plateforme GCS</option>
                             <option value="Fabrice DENOU">Fabrice DENOU</option>
                             <option value="Mitch Richmond">Mitch Richmond</option>
                             <option value="---">Aucun (---)</option>
                         </select>
+                        @error('editManagerForm.newManager')
+                            <span class="text-rose-600 font-bold text-[11px] mt-1.5 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Date de debut du nouveau gestionnaire *</label>
-                        <input type="text" wire:model="editManagerForm.startDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono" />
+                        <div class="relative">
+                            <input type="datetime-local" wire:model="editManagerForm.startDate" class="w-full font-semibold border @error('editManagerForm.startDate') border-rose-400 bg-rose-50/30 @else border-slate-200 bg-crt-cyan-light @enderror rounded-xl p-2.5 text-crt-navy font-mono cursor-pointer pr-10" />
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-crt-cyan">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        </div>
+                        @error('editManagerForm.startDate')
+                            <span class="text-rose-600 font-bold text-[11px] mt-1.5 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
-                        <button type="button" wire:click="$set('isEditManagerModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Fermer</button>
-                        <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">Enregistrer</button>
+                        <button type="button" wire:click="$set('isEditManagerModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Fermer</span></button>
+                        <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg> Sauvegarder</span></button>
                     </div>
                 </form>
             </div>
@@ -568,8 +587,8 @@
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
-                        <button type="button" wire:click="$set('isEditHoursModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Fermer</button>
-                        <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">Créer</button>
+                        <button type="button" wire:click="$set('isEditHoursModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Fermer</span></button>
+                        <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4" /></svg> Créer</span></button>
                     </div>
                 </form>
             </div>
@@ -593,27 +612,53 @@
                     </button>
                 </div>
 
-                <form wire:submit.prevent="handleSaveSiteAffectation" class="space-y-4 text-xs">
+                <form novalidate wire:submit.prevent="handleSaveSiteAffectation" class="space-y-4 text-xs">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Nouveau site *</label>
-                        <select wire:model="editSiteForm.newSiteName" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
+                        <select wire:model="editSiteForm.newSiteName" class="w-full font-semibold border @error('editSiteForm.newSiteName') border-rose-400 bg-rose-50/30 @else border-slate-200 bg-slate-50 focus:bg-white @enderror rounded-xl p-2.5">
                             @foreach ($sites as $site)
                                 <option value="{{ $site->name }}">{{ $site->name }}</option>
                             @endforeach
                         </select>
+                        @error('editSiteForm.newSiteName')
+                            <span class="text-rose-600 font-bold text-[11px] mt-1.5 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Date de début *</label>
-                        <input type="text" wire:model="editSiteForm.startDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono" />
+                        <div class="relative">
+                            <input type="date" wire:model="editSiteForm.startDate" class="w-full font-semibold border @error('editSiteForm.startDate') border-rose-400 bg-rose-50/30 @else border-slate-200 bg-crt-cyan-light @enderror rounded-xl p-2.5 text-crt-navy font-mono cursor-pointer pr-10" />
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-crt-cyan">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        </div>
+                        @error('editSiteForm.startDate')
+                            <span class="text-rose-600 font-bold text-[11px] mt-1.5 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-rose-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Date de fin</label>
-                        <input type="text" placeholder="Optionnel (ex: 2026-12-31)" wire:model="editSiteForm.endDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
+                        <div class="relative">
+                            <input type="date" placeholder="Optionnel (ex: 2026-12-31)" wire:model="editSiteForm.endDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono cursor-pointer pr-10" />
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-crt-cyan">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
-                        <button type="button" wire:click="$set('isEditSiteModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Fermer</button>
-                        <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">Enregistrer</button>
+                        <button type="button" wire:click="$set('isEditSiteModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Fermer</span></button>
+                        <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg> Sauvegarder</span></button>
                     </div>
                 </form>
             </div>
