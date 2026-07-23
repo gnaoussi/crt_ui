@@ -6,8 +6,9 @@
         type: 'success',
         timer: null,
         trigger(msg, toastType = 'success') {
+            if (!msg) return;
             this.message = msg;
-            this.type = toastType;
+            this.type = toastType || 'success';
             this.show = true;
             if (this.timer) clearTimeout(this.timer);
             this.timer = setTimeout(() => { this.show = false; }, 4500);
@@ -17,16 +18,24 @@
         @if (session()->has('message'))
             trigger('{{ session('message') }}', '{{ session('message_type', 'success') }}');
         @endif
-        Livewire.on('show-toast', (data) => {
-            let msg = typeof data === 'string' ? data : (data.message || (Array.isArray(data) ? data[0]?.message : ''));
-            let t = typeof data === 'object' ? (data.type || (Array.isArray(data) ? data[0]?.type : 'success')) : 'success';
-            if (msg) trigger(msg, t || 'success');
-        });
         window.addEventListener('notify', (e) => {
             if (e.detail && e.detail.message) {
                 trigger(e.detail.message, e.detail.type || 'success');
             }
         });
+        if (typeof Livewire !== 'undefined') {
+            Livewire.on('show-toast', (data) => {
+                let msg = typeof data === 'string' ? data : (data.message || (Array.isArray(data) ? data[0]?.message : ''));
+                let t = typeof data === 'object' ? (data.type || (Array.isArray(data) ? data[0]?.type : 'success')) : 'success';
+                if (msg) trigger(msg, t || 'success');
+            });
+        }
+    "
+    @show-toast.window="
+        let d = $event.detail;
+        let msg = typeof d === 'string' ? d : (d.message || (Array.isArray(d) ? (d[0]?.message || d[0]) : ''));
+        let t = typeof d === 'object' ? (d.type || (Array.isArray(d) ? d[0]?.type : 'success')) : 'success';
+        if (msg) trigger(msg, t || 'success');
     "
     x-show="show"
     x-cloak
