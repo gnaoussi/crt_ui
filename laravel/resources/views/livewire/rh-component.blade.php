@@ -545,7 +545,14 @@
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Date de debut de la nouvelle heure *</label>
-                        <input type="text" wire:model="editHoursForm.startDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono" />
+                        <div class="relative">
+                            <input type="datetime-local" wire:model="editHoursForm.startDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-crt-cyan-light text-crt-navy font-mono cursor-pointer pr-10" />
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-crt-cyan">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">

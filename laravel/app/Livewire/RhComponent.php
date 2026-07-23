@@ -212,6 +212,11 @@ class RhComponent extends Component
     // Modal 4: Change Weekly Hours
     public function openEditHoursModal()
     {
+        $emp = Employee::find($this->selectedEmployeeId);
+        if ($emp) {
+            $this->editHoursForm['newHours'] = $emp->weekly_hours;
+        }
+        $this->editHoursForm['startDate'] = date('Y-m-d\TH:i');
         $this->isEditHoursModalOpen = true;
     }
 
