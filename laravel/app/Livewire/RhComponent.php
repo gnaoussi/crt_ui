@@ -43,6 +43,7 @@ class RhComponent extends Component
         'nom' => '', 'prenom' => '', 'dob' => '07-21', 'email' => '',
         'matricule' => '', 'hireDate' => '2026-07-22', 'weeklyHours' => 37.5,
         'gestionnaire' => 'Admin Plateforme GCS', 'site' => 'Centre Ville-Marie',
+        'startDate' => '2026-07-22',
         'isManager' => 'Non', 'accessGroup' => 'ADMINISTRATEUR'
     ];
 
