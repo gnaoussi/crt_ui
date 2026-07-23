@@ -41,7 +41,7 @@
 <body class="bg-slate-100/90 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
     <!-- Navigation Header branded with CRT Solution Logo -->
-    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
+    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-20">
         <!-- Top Header Row -->
         <div class="px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100">
             <div class="flex items-center space-x-4">
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Horizontal Navbar Row -->
-        <div class="bg-slate-900 text-white relative z-50" x-data="{ openDropdown: null }">
+        <div class="bg-slate-900 text-white relative z-30" x-data="{ openDropdown: null }">
             <nav class="px-6 py-1 text-xs font-semibold flex items-center space-x-1.5 flex-wrap">
                 
                 <!-- 1. Tableau de bord -->

@@ -1,4 +1,4 @@
-<div class="p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+<div x-data x-effect="document.body.classList.toggle('overflow-hidden', $wire.isNewEmployeeModalOpen || $wire.isEditEmployeeModalOpen || $wire.isEditManagerModalOpen || $wire.isEditHoursModalOpen || $wire.isEditSiteModalOpen)" class="p-6 space-y-6 max-w-[1600px] mx-auto w-full">
     @if (session()->has('message'))
         <div class="bg-emerald-600 text-white px-4 py-3 rounded-xl shadow-lg flex items-center justify-between text-xs font-bold animate-fade-in">
             <span class="flex items-center gap-2">
@@ -281,7 +281,7 @@
 
     <!-- 1. MODALE: Création Nouvel Employé (new_employe_modal.png) -->
     @if ($isNewEmployeeModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -394,7 +394,7 @@
 
     <!-- 2. MODALE: Mise à jour des informations de l'employé (employe_edit.png) -->
     @if ($isEditEmployeeModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -477,7 +477,7 @@
 
     <!-- 3. MODALE: Modifier le gestionnaire (modifier_gestionnaire_dans_historique.png) -->
     @if ($isEditManagerModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -517,7 +517,7 @@
 
     <!-- 4. MODALE: Modifier l'heure (modifier_nombre_d_heure_par_semaine_dans_historique.png) -->
     @if ($isEditHoursModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -552,7 +552,7 @@
 
     <!-- 5. MODALE: Affectation un site (modifier_site_dans_historique.png) -->
     @if ($isEditSiteModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
