@@ -81,7 +81,9 @@ class EntrepriseComponent extends Component
         $this->companyDescription = trim($this->editCompanyDescription);
 
         $this->entrepriseMode = 'consultation';
-        session()->flash('message', 'Informations de l\'entreprise enregistrées avec succès !');
+        $msg = "Informations de l'entreprise enregistrées avec succès !";
+        session()->flash('message', $msg);
+        $this->dispatch('show-toast', message: $msg, type: 'success');
     }
 
     public function openCreateSiteModal()
@@ -101,7 +103,9 @@ class EntrepriseComponent extends Component
         CompanySite::create($this->siteForm);
         $this->isCreateSiteModalOpen = false;
         $this->resetSiteForm();
-        session()->flash('message', 'Nouveau site d\'entreprise créé avec succès !');
+        $msg = "Nouveau site d'entreprise créé avec succès !";
+        session()->flash('message', $msg);
+        $this->dispatch('show-toast', message: $msg, type: 'success');
     }
 
     public function openViewSiteModal(CompanySite $site)
@@ -140,7 +144,9 @@ class EntrepriseComponent extends Component
 
         $this->isEditSiteModalOpen = false;
         $this->resetSiteForm();
-        session()->flash('message', 'Site d\'entreprise mis à jour avec succès !');
+        $msg = "Site d'entreprise mis à jour avec succès !";
+        session()->flash('message', $msg);
+        $this->dispatch('show-toast', message: $msg, type: 'success');
     }
 
     public function confirmDeleteSite(CompanySite $site)
@@ -156,7 +162,9 @@ class EntrepriseComponent extends Component
         }
         $this->isDeleteSiteModalOpen = false;
         $this->selectedSite = null;
-        session()->flash('message', 'Site d\'entreprise supprimé avec succès !');
+        $msg = "Site d'entreprise supprimé avec succès !";
+        session()->flash('message', $msg);
+        $this->dispatch('show-toast', message: $msg, type: 'warning');
     }
 
     public function resetSiteForm()

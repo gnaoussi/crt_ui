@@ -141,7 +141,9 @@ class RhComponent extends Component
         ]);
 
         $this->isNewEmployeeModalOpen = false;
-        session()->flash('message', "L'employé {$created->prenom} {$created->nom} a été créé avec succès dans SQLite !");
+        $msg = "L'employé {$created->prenom} {$created->nom} a été créé avec succès !";
+        session()->flash('message', $msg);
+        $this->dispatch('show-toast', message: $msg, type: 'success');
     }
 
     // Modal 2: Edit Employee Info
@@ -180,7 +182,9 @@ class RhComponent extends Component
                 'visibility_report' => $this->editEmpForm['visibilityReport'],
             ]);
             $this->isEditEmployeeModalOpen = false;
-            session()->flash('message', "Informations de {$emp->prenom} {$emp->nom} enregistrées dans SQLite !");
+            $msg = "Informations de {$emp->prenom} {$emp->nom} enregistrées !";
+            session()->flash('message', $msg);
+            $this->dispatch('show-toast', message: $msg, type: 'success');
         }
     }
 
@@ -214,7 +218,9 @@ class RhComponent extends Component
             ]);
 
             $this->isEditManagerModalOpen = false;
-            session()->flash('message', "Nouveau gestionnaire {$this->editManagerForm['newManager']} attribué !");
+            $msg = "Nouveau gestionnaire {$this->editManagerForm['newManager']} attribué !";
+            session()->flash('message', $msg);
+            $this->dispatch('show-toast', message: $msg, type: 'success');
         }
     }
 
@@ -255,7 +261,9 @@ class RhComponent extends Component
             ]);
 
             $this->isEditHoursModalOpen = false;
-            session()->flash('message', "Contrat d'heures révisé à {$emp->weekly_hours}h !");
+            $msg = "Contrat d'heures révisé à {$emp->weekly_hours}h !";
+            session()->flash('message', $msg);
+            $this->dispatch('show-toast', message: $msg, type: 'success');
         }
     }
 
@@ -292,7 +300,9 @@ class RhComponent extends Component
             ]);
 
             $this->isEditSiteModalOpen = false;
-            session()->flash('message', "Affectation au site {$this->editSiteForm['newSiteName']} enregistrée !");
+            $msg = "Affectation au site {$this->editSiteForm['newSiteName']} enregistrée !";
+            session()->flash('message', $msg);
+            $this->dispatch('show-toast', message: $msg, type: 'success');
         }
     }
 
