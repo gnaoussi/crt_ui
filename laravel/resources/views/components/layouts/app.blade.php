@@ -37,6 +37,7 @@
     <link rel="icon" type="image/png" href="/logo.png">
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
     <style>
+        [x-cloak] { display: none !important; }
         input[type="date"]::-webkit-calendar-picker-indicator,
         input[type="datetime-local"]::-webkit-calendar-picker-indicator {
             cursor: pointer;
@@ -77,7 +78,7 @@
                     class="text-xs font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark border border-crt-cyan/30 px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer"
                 >
                     <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 01-3 3v1" />
                     </svg>
                     Page de Connexion (Login)
                 </a>
@@ -88,7 +89,7 @@
         </div>
 
         <!-- Horizontal Navbar Row -->
-        <div class="bg-slate-900 text-white relative z-30" x-data="{ openDropdown: null }">
+        <div class="bg-slate-900 text-white relative z-30">
             <nav class="px-6 py-1 text-xs font-semibold flex items-center space-x-1.5 flex-wrap">
                 
                 <!-- 1. Tableau de bord -->
@@ -100,19 +101,19 @@
                 </a>
 
                 <!-- 2. Entreprise -->
-                <div class="relative" @click.away="openDropdown = null">
+                <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button type="button" 
-                            @click="openDropdown = openDropdown === 'entreprise' ? null : 'entreprise'" 
+                            @click="open = !open" 
                             class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('entreprise') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" />
                         </svg>
                         Entreprise
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'entreprise' ? 'rotate-180 {{ request()->is('entreprise') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 {{ request()->is('entreprise') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'entreprise'" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                    <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">ENTREPRISE</div>
                         <a href="/entreprise" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,19 +125,19 @@
                 </div>
 
                 <!-- 3. Budget -->
-                <div class="relative" @click.away="openDropdown = null">
+                <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button type="button" 
-                            @click="openDropdown = openDropdown === 'budget' ? null : 'budget'" 
+                            @click="open = !open" 
                             class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all hover:bg-slate-800 text-slate-300 hover:text-white cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Budget
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'budget' ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'budget'" x-cloak class="absolute left-0 top-full mt-1 w-56 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                    <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-56 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">BUDGET</div>
                         <a href="#" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,19 +149,19 @@
                 </div>
 
                 <!-- 4. RH -->
-                <div class="relative" @click.away="openDropdown = null">
+                <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button type="button" 
-                            @click="openDropdown = openDropdown === 'rh' ? null : 'rh'" 
+                            @click="open = !open" 
                             class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('rh') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         RH
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'rh' ? 'rotate-180 {{ request()->is('rh') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 {{ request()->is('rh') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'rh'" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                    <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">RESSOURCES HUMAINES</div>
                         <a href="/rh" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,19 +173,19 @@
                 </div>
 
                 <!-- 5. Feuilles de Temps -->
-                <div class="relative" @click.away="openDropdown = null">
+                <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button type="button" 
-                            @click="openDropdown = openDropdown === 'feuilles' ? null : 'feuilles'" 
+                            @click="open = !open" 
                             class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('timesheets') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                         Feuilles de Temps
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'feuilles' ? 'rotate-180 {{ request()->is('timesheets') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 {{ request()->is('timesheets') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'feuilles'" x-cloak class="absolute left-0 top-full mt-1 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                    <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">FEUILLES DE TEMPS</div>
                         <a href="/timesheets" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,19 +197,19 @@
                 </div>
 
                 <!-- 6. Rapport -->
-                <div class="relative" @click.away="openDropdown = null">
+                <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button type="button" 
-                            @click="openDropdown = openDropdown === 'rapports' ? null : 'rapports'" 
+                            @click="open = !open" 
                             class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all hover:bg-slate-800 text-slate-300 hover:text-white cursor-pointer">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         Rapport
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'rapports' ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'rapports'" x-cloak class="absolute left-0 top-full mt-1 w-60 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
+                    <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-60 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">RAPPORTS & AUDIT</div>
                         <a href="#" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
