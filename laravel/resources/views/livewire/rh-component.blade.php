@@ -410,65 +410,72 @@
 
                 <form wire:submit.prevent="handleSaveEmployeeUpdate" class="space-y-5 text-xs">
                     <div class="space-y-3">
-                        <h4 class="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-6 0h6" /></svg> Informations personnelles</span></h4>
+                        <h4 class="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 012-2h2a2 2 0 012 2v1m-6 0h6" /></svg> Informations personnelles</span></h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Nom *</label>
-                                <input type="text" required wire:model="editEmpForm.nom" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
+                                <input type="text" required wire:model="editEmpForm.nom" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Prénom *</label>
-                                <input type="text" required wire:model="editEmpForm.prenom" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
+                                <input type="text" required wire:model="editEmpForm.prenom" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date de naissance</span> *</label>
-                                <input type="text" wire:model="editEmpForm.dob" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
+                                <label class="block font-bold text-slate-700 mb-1">Date de naissance *</label>
+                                <input type="text" wire:model="editEmpForm.dob" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">E-mail *</label>
-                                <input type="email" required wire:model="editEmpForm.email" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white" />
+                                <input type="email" required wire:model="editEmpForm.email" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-3 pt-3 border-t border-slate-100">
-                        <h4 class="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> Informations professionnelles</span></h4>
+                        <h4 class="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> Informations professionnelles</span></h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Matricule ID Unique</label>
-                                <input type="text" wire:model="editEmpForm.matricule" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
+                                <input type="text" wire:model="editEmpForm.matricule" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date d'embauche</span> *</label>
-                                <input type="date" wire:model="editEmpForm.hireDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-mono" />
+                                <label class="block font-bold text-slate-700 mb-1">Date d'embauche *</label>
+                                <input type="date" wire:model="editEmpForm.hireDate" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
                             </div>
                         </div>
                     </div>
 
                     <div class="space-y-3 pt-3 border-t border-slate-100">
-                        <h4 class="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg> Rôles et permissions</span></h4>
+                        <h4 class="font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">👤 Rôles et permissions</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Définir comme gestionnaire ?</label>
-                                <select wire:model="editEmpForm.isManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white">
+                                <select wire:model="editEmpForm.isManager" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
                                     <option value="Non">Non</option>
                                     <option value="Oui">Oui</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block font-bold text-slate-700 mb-1">Groupe d'accès *</label>
-                                <select wire:model="editEmpForm.accessGroup" class="w-full font-semibold border border-slate-200 rounded-xl p-2 bg-slate-50 focus:bg-white font-bold text-crt-navy">
+                                <select wire:model="editEmpForm.accessGroup" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-bold text-crt-navy">
                                     <option value="ADMINISTRATEUR">ADMINISTRATEUR</option>
                                     <option value="MANAGER">MANAGER</option>
                                     <option value="EMPLOYE">EMPLOYÉ</option>
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block font-bold text-slate-700 mb-1">Définir comme visible dans les rapports ?</label>
+                                <select wire:model="editEmpForm.visibilityReport" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white">
+                                    <option value="Oui">Oui</option>
+                                    <option value="Non">Non</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                        <button type="button" wire:click="$set('isEditEmployeeModalOpen', false)" class="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Fermer</button>
-                        <button type="submit" class="px-5 py-2.5 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">Enregistrer</button>
+                        <button type="button" wire:click="$set('isEditEmployeeModalOpen', false)" class="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Fermer</span></button>
+                        <button type="submit" class="px-5 py-2.5 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg> Modifier</span></button>
                     </div>
                 </form>
             </div>
