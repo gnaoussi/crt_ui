@@ -37,6 +37,7 @@ class EntrepriseComponent extends Component
         'city' => '',
         'phone' => '',
         'phone_pro' => '',
+        'extension' => '',
     ];
 
     public function mount()
@@ -126,6 +127,7 @@ class EntrepriseComponent extends Component
             'city' => $site->city,
             'phone' => $site->phone,
             'phone_pro' => $site->phone_pro,
+            'extension' => $site->extension,
         ];
         $this->isEditSiteModalOpen = true;
     }
@@ -178,6 +180,7 @@ class EntrepriseComponent extends Component
             'city' => '',
             'phone' => '',
             'phone_pro' => '',
+            'extension' => '',
         ];
         $this->selectedSite = null;
     }
