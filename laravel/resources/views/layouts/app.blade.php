@@ -37,7 +37,7 @@
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
     <!-- Header Navbar -->
-    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
+    <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
         <div class="px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100">
             <div class="flex items-center space-x-4">
                 <div>
