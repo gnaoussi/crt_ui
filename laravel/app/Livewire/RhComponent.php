@@ -222,6 +222,17 @@ class RhComponent extends Component
 
     public function handleSaveHoursChange()
     {
+        $this->validate([
+            'editHoursForm.newHours' => 'required|numeric|min:1|max:168',
+            'editHoursForm.startDate' => 'required',
+        ], [
+            'editHoursForm.newHours.required' => 'Le nombre d\'heures est obligatoire.',
+            'editHoursForm.newHours.numeric' => 'Le nombre d\'heures doit être un nombre valide.',
+            'editHoursForm.newHours.min' => 'Le nombre d\'heures doit être d\'au moins 1 heure.',
+            'editHoursForm.newHours.max' => 'Le nombre d\'heures ne peut pas dépasser 168 heures.',
+            'editHoursForm.startDate.required' => 'La date de début est obligatoire.',
+        ]);
+
         $emp = Employee::find($this->selectedEmployeeId);
         if ($emp) {
             $emp->weekly_hours = (float)$this->editHoursForm['newHours'];
