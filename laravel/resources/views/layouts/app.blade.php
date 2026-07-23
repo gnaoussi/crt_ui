@@ -32,6 +32,18 @@
             }
         }
     </script>
+    <style>
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0;
+            position: absolute;
+            right: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            z-index: 10;
+        }
+    </style>
     @livewireStyles
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">

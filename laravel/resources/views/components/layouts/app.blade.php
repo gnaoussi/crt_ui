@@ -36,6 +36,18 @@
         <!-- Favicon -->
     <link rel="icon" type="image/png" href="/logo.png">
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
+    <style>
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0;
+            position: absolute;
+            right: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            z-index: 10;
+        }
+    </style>
     @livewireStyles
 </head>
 <body class="bg-slate-100/90 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
