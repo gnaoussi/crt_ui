@@ -266,8 +266,8 @@
 
     <!-- MODALE 1: Nouveau Site -->
     @if ($isCreateSiteModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
                         <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -326,8 +326,8 @@
 
     <!-- MODALE 2: Consulter le Site -->
     @if ($isViewSiteModalOpen && $selectedSite)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-xs">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-xs animate-fade-in">
                 <div class="flex justify-between items-center pb-3 border-b border-slate-100">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
                         <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -371,8 +371,8 @@
 
     <!-- MODALE 3: Modifier le Site -->
     @if ($isEditSiteModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
                         <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -430,8 +430,8 @@
 
     <!-- MODALE 4: Confirmation de suppression du Site -->
     @if ($isDeleteSiteModalOpen && $selectedSite)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-xs text-center">
+        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-xs text-center animate-fade-in">
                 <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
