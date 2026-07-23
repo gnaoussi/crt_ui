@@ -256,57 +256,74 @@
     @if ($isCreateSiteModalOpen)
         <template x-teleport="body">
             <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
-                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
+                <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar animate-fade-in">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                         <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
                             <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                             Nouveau site d'entreprise
                         </h3>
-                        <button wire:click="$set('isCreateSiteModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <button wire:click="$set('isCreateSiteModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
 
-                    <form wire:submit.prevent="createSite" class="space-y-4 text-xs">
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nom du site *</label>
-                            <input type="text" required wire:model="siteForm.name" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Description</label>
-                            <textarea rows="2" wire:model="siteForm.description" class="w-full font-medium border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Adresse complète *</label>
-                            <input type="text" required wire:model="siteForm.address" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
+                    <form wire:submit.prevent="createSite" class="space-y-5 text-xs">
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" /></svg> Informations du Site</span>
+                            </h4>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Code postal</label>
-                                <input type="text" wire:model="siteForm.postal_code" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <label class="block font-bold text-slate-700 mb-1">Nom du site *</label>
+                                <input type="text" required placeholder="Nom du Site" wire:model="siteForm.name" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Ville</label>
-                                <input type="text" wire:model="siteForm.city" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block font-bold text-slate-700 mb-1">Téléphone *</label>
-                                <input type="text" required wire:model="siteForm.phone" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
-                            </div>
-                            <div>
-                                <label class="block font-bold text-slate-700 mb-1">Téléphone Pro</label>
-                                <input type="text" wire:model="siteForm.phone_pro" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <label class="block font-bold text-slate-700 mb-1">Description</label>
+                                <textarea rows="3" placeholder="Description du site" wire:model="siteForm.description" class="w-full font-medium border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white resize-none"></textarea>
                             </div>
                         </div>
 
-                        <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
-                            <button type="button" wire:click="$set('isCreateSiteModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Fermer</button>
-                            <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">Créer le site</button>
+                        <div class="space-y-3 pt-3 border-t border-slate-100">
+                            <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Adresse</span>
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="sm:col-span-2">
+                                    <label class="block font-bold text-slate-700 mb-1">Adresse complète *</label>
+                                    <input type="text" required placeholder="Adresse de la rue" wire:model="siteForm.address" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Ville</label>
+                                    <input type="text" placeholder="Ville" wire:model="siteForm.city" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Code postal</label>
+                                    <input type="text" placeholder="Code postal" wire:model="siteForm.postal_code" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 pt-3 border-t border-slate-100">
+                            <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> Contacts</span>
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Téléphone *</label>
+                                    <input type="text" required placeholder="XXX.XXX.XXXX" wire:model="siteForm.phone" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Téléphone Pro</label>
+                                    <input type="text" placeholder="XXX.XXX.XXXX" wire:model="siteForm.phone_pro" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                            <button type="button" wire:click="$set('isCreateSiteModalOpen', false)" class="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Fermer</span></button>
+                            <button type="submit" class="px-5 py-2.5 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg transition"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4v16m8-8H4" /></svg> Créer le site</span></button>
                         </div>
                     </form>
                 </div>
@@ -314,47 +331,93 @@
         </template>
     @endif
 
-    <!-- MODALE 2: Consulter le Site -->
+    <!-- MODALE 2: Fiche détaillée du Site -->
     @if ($isViewSiteModalOpen && $selectedSite)
         <template x-teleport="body">
             <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-xs animate-fade-in">
-                    <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar animate-fade-in space-y-5 text-xs">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                         <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
                             <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            Détails du site
+                            Fiche détaillée du site
                         </h3>
-                        <button wire:click="$set('isViewSiteModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <button wire:click="$set('isViewSiteModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
-                    <div>
-                        <span class="block text-slate-400 uppercase font-bold text-[10px]">Nom du site</span>
-                        <h4 class="text-sm font-extrabold text-crt-navy">{{ $selectedSite->name }}</h4>
-                    </div>
-                    <div>
-                        <span class="block text-slate-400 uppercase font-bold text-[10px]">Description</span>
-                        <p class="font-medium text-slate-700 leading-relaxed">{{ $selectedSite->description ?: 'Aucune description fournie.' }}</p>
-                    </div>
-                    <div>
-                        <span class="block text-slate-400 uppercase font-bold text-[10px]">Adresse</span>
-                        <p class="font-semibold text-slate-700">{{ $selectedSite->address }}, {{ $selectedSite->postal_code }} {{ $selectedSite->city }}</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 font-mono">
+
+                    <!-- Section 1: Informations du Site -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" /></svg> Informations du Site</span>
+                        </h4>
                         <div>
-                            <span class="block text-slate-400 uppercase font-bold text-[10px]">Téléphone</span>
-                            <p class="font-bold text-slate-700">{{ $selectedSite->phone }}</p>
+                            <span class="block font-bold text-slate-700 mb-1">Nom du Site</span>
+                            <div class="w-full font-extrabold text-crt-navy text-sm border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                {{ $selectedSite->name }}
+                            </div>
                         </div>
                         <div>
-                            <span class="block text-slate-400 uppercase font-bold text-[10px]">Téléphone Pro</span>
-                            <p class="font-bold text-slate-700">{{ $selectedSite->phone_pro ?: '—' }}</p>
+                            <span class="block font-bold text-slate-700 mb-1">Description</span>
+                            <div class="w-full font-medium text-slate-700 border border-slate-200 rounded-xl p-2.5 bg-slate-50 leading-relaxed">
+                                {{ $selectedSite->description ?: 'Aucune description fournie.' }}
+                            </div>
                         </div>
                     </div>
-                    <div class="flex justify-end pt-3 border-t border-slate-100">
-                        <button wire:click="$set('isViewSiteModalOpen', false)" class="px-5 py-2 font-bold text-crt-navy bg-slate-100 hover:bg-slate-200 rounded-xl">Fermer</button>
+
+                    <!-- Section 2: Adresse -->
+                    <div class="space-y-3 pt-3 border-t border-slate-100">
+                        <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Adresse</span>
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="sm:col-span-2">
+                                <span class="block font-bold text-slate-700 mb-1">Adresse complète</span>
+                                <div class="w-full font-semibold text-slate-800 border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                    {{ $selectedSite->address }}
+                                </div>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-700 mb-1">Ville</span>
+                                <div class="w-full font-semibold text-slate-800 border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                    {{ $selectedSite->city }}
+                                </div>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-700 mb-1">Code postal</span>
+                                <div class="w-full font-semibold text-slate-800 border border-slate-200 rounded-xl p-2.5 bg-slate-50 font-mono">
+                                    {{ $selectedSite->postal_code }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Contacts -->
+                    <div class="space-y-3 pt-3 border-t border-slate-100">
+                        <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> Contacts</span>
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
+                            <div>
+                                <span class="block font-bold text-slate-700 mb-1 font-sans">Téléphone</span>
+                                <div class="w-full font-bold text-slate-800 border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                    {{ $selectedSite->phone }}
+                                </div>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-700 mb-1 font-sans">Téléphone Pro</span>
+                                <div class="w-full font-bold text-slate-800 border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                    {{ $selectedSite->phone_pro ?: '—' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-4 border-t border-slate-100">
+                        <button wire:click="$set('isViewSiteModalOpen', false)" class="px-5 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Fermer</span></button>
                     </div>
                 </div>
             </div>
@@ -365,56 +428,73 @@
     @if ($isEditSiteModalOpen)
         <template x-teleport="body">
             <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-fade-in">
-                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
+                <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar animate-fade-in">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                         <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
                             <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                             </svg>
                             Modifier le site d'entreprise
                         </h3>
-                        <button wire:click="$set('isEditSiteModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                        <button wire:click="$set('isEditSiteModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
 
-                    <form wire:submit.prevent="updateSite" class="space-y-4 text-xs">
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Nom du site *</label>
-                            <input type="text" required wire:model="siteForm.name" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Description</label>
-                            <textarea rows="2" wire:model="siteForm.description" class="w-full font-medium border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">Adresse complète *</label>
-                            <input type="text" required wire:model="siteForm.address" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
+                    <form wire:submit.prevent="updateSite" class="space-y-5 text-xs">
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" /></svg> Informations du Site</span>
+                            </h4>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Code postal</label>
-                                <input type="text" wire:model="siteForm.postal_code" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <label class="block font-bold text-slate-700 mb-1">Nom du site *</label>
+                                <input type="text" required placeholder="Nom du Site" wire:model="siteForm.name" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Ville</label>
-                                <input type="text" wire:model="siteForm.city" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block font-bold text-slate-700 mb-1">Téléphone *</label>
-                                <input type="text" required wire:model="siteForm.phone" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
-                            </div>
-                            <div>
-                                <label class="block font-bold text-slate-700 mb-1">Téléphone Pro</label>
-                                <input type="text" wire:model="siteForm.phone_pro" class="w-full font-semibold border border-slate-200 rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                <label class="block font-bold text-slate-700 mb-1">Description</label>
+                                <textarea rows="3" placeholder="Description du site" wire:model="siteForm.description" class="w-full font-medium border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white resize-none"></textarea>
                             </div>
                         </div>
 
-                        <div class="flex justify-end gap-3 pt-3 border-t border-slate-100">
-                            <button type="button" wire:click="$set('isEditSiteModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Annuler</button>
-                            <button type="submit" class="px-5 py-2 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg">Sauvegarder</button>
+                        <div class="space-y-3 pt-3 border-t border-slate-100">
+                            <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg> Adresse</span>
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="sm:col-span-2">
+                                    <label class="block font-bold text-slate-700 mb-1">Adresse complète *</label>
+                                    <input type="text" required placeholder="Adresse de la rue" wire:model="siteForm.address" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Ville</label>
+                                    <input type="text" placeholder="Ville" wire:model="siteForm.city" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white" />
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Code postal</label>
+                                    <input type="text" placeholder="Code postal" wire:model="siteForm.postal_code" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 pt-3 border-t border-slate-100">
+                            <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider flex items-center gap-2">
+                                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> Contacts</span>
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Téléphone *</label>
+                                    <input type="text" required placeholder="XXX.XXX.XXXX" wire:model="siteForm.phone" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Téléphone Pro</label>
+                                    <input type="text" placeholder="XXX.XXX.XXXX" wire:model="siteForm.phone_pro" class="w-full font-semibold border border-slate-200 focus:border-crt-cyan rounded-xl p-2.5 bg-slate-50 focus:bg-white font-mono" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                            <button type="button" wire:click="$set('isEditSiteModalOpen', false)" class="px-4 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" /></svg> Annuler</span></button>
+                            <button type="submit" class="px-5 py-2.5 font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl shadow-lg transition"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg> Sauvegarder</span></button>
                         </div>
                     </form>
                 </div>
