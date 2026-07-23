@@ -387,34 +387,150 @@ Pour éviter tout problème de superposition (*z-index*) ou d'empilement dans vo
 
 ---
 
-## 💡 Étape 5 : Exemples d'Utilisation dans vos Composants Livewire
+## 💡 Étape 5 : Exemples Détaillés d'Utilisation dans vos Composants Livewire
 
-### 1. Déclencher un Message Flash (Toast) depuis PHP :
-Dans votre composant Livewire PHP (`app/Livewire/MonComposant.php`) :
+### 1. Utilisation du Toast Global Notification (`<x-toast />`)
 
+Le composant Toast réagit aux événements navigateur `show-toast`. Vous pouvez le déclencher depuis n'importe quel contrôleur Livewire PHP ou script JavaScript / Alpine.js.
+
+#### A. Depuis un composant Livewire (PHP) :
 ```php
-// Message de succès
-$this->dispatch('show-toast', type: 'success', message: 'Opération réussie avec succès !');
+namespace App\Livewire;
 
-// Message d'erreur
-$this->dispatch('show-toast', type: 'danger', message: 'Une erreur s\'est produite.');
+use Livewire\Component;
+
+class MonComposant extends Component
+{
+    public function enregistrer()
+    {
+        // 1. Toast de Succès
+        $this->dispatch('show-toast', 
+            type: 'success', 
+            message: 'Le site a été enregistré avec succès !'
+        );
+
+        // 2. Toast d'Erreur / Danger
+        $this->dispatch('show-toast', 
+            type: 'danger', 
+            message: 'Impossible de supprimer cet élément.'
+        );
+
+        // 3. Toast d'Avertissement
+        $this->dispatch('show-toast', 
+            type: 'warning', 
+            message: 'Veuillez vérifier les heures saisies.'
+        );
+
+        // 4. Toast d'Information
+        $this->dispatch('show-toast', 
+            type: 'info', 
+            message: 'Une mise à jour système est disponible.'
+        );
+    }
+}
 ```
 
-### 2. Utiliser la Modale de Suppression Globale dans Blade :
-Dans votre vue Blade Livewire :
-
+#### B. Depuis Alpine.js ou JavaScript (Blade) :
 ```html
+<!-- Bouton Alpine.js -->
+<button @click="$dispatch('show-toast', { type: 'success', message: 'Action effectuée !' })">
+    Tester Toast
+</button>
+
+<!-- En JavaScript standard -->
+<script>
+    window.dispatchEvent(new CustomEvent('show-toast', {
+        detail: { type: 'success', message: 'Enregistré en JS !' }
+    }));
+</script>
+```
+
+---
+
+### 2. Utilisation du Dialog Global de Confirmation de Suppression (`<x-confirm-delete-modal />`)
+
+Ce composant réutilisable gère le dialogue de suppression avec l'icône de corbeille rouge et le titre aligné à gauche.
+
+#### A. Structure du Composant Livewire (PHP) :
+```php
+namespace App\Livewire;
+
+use Livewire\Component;
+use App\Models\Site;
+
+class EnterpriseComponent extends Component
+{
+    public bool $isDeleteSiteModalOpen = false;
+    public ?Site $selectedSite = null;
+
+    // Ouvrir le dialogue de suppression
+    public function confirmDeleteSite(int $siteId)
+    {
+        $this->selectedSite = Site::findOrFail($siteId);
+        $this->isDeleteSiteModalOpen = true;
+    }
+
+    // Fermer le dialogue
+    public function closeDeleteSiteModal()
+    {
+        $this->isDeleteSiteModalOpen = false;
+        $this->selectedSite = null;
+    }
+
+    // Exécuter la suppression
+    public function deleteSite()
+    {
+        if ($this->selectedSite) {
+            $this->selectedSite->delete();
+
+            $this->dispatch('show-toast', 
+                type: 'success', 
+                message: 'Le site a été supprimé avec succès.'
+            );
+        }
+
+        $this->closeDeleteSiteModal();
+    }
+}
+```
+
+#### B. Appel dans la Vue Blade :
+```html
+<!-- 1. Bouton d'action dans le tableau ou la carte -->
+<button 
+    wire:click="confirmDeleteSite({{ $site->id }})" 
+    class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition"
+    title="Supprimer"
+>
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    </svg>
+</button>
+
+<!-- 2. Composant Global de Confirmation de Suppression -->
 <x-confirm-delete-modal 
-    :show="$isDeleteModalOpen && $selectedItem"
-    title="Confirmer la suppression"
+    :show="$isDeleteSiteModalOpen && $selectedSite"
+    title="Confirmer la suppression du site"
     confirmText="Oui, supprimer"
     cancelText="Annuler"
-    onConfirm="deleteItem"
-    onCancel="$set('isDeleteModalOpen', false)"
+    onConfirm="deleteSite"
+    onCancel="closeDeleteSiteModal"
 >
-    Êtes-vous sûr de vouloir retirer cet élément (<strong class="font-bold text-crt-navy">{{ $selectedItem?->name }}</strong>) ? Cette action est irréversible.
+    Êtes-vous sûr de vouloir supprimer le site 
+    <strong class="font-extrabold text-crt-navy">{{ $selectedSite?->name }}</strong> ? 
+    Cette action est définitive et retirera l'ensemble des données associées.
 </x-confirm-delete-modal>
 ```
+
+#### C. Propriétés du Composant `<x-confirm-delete-modal />` :
+| Propriété | Type | Par Défaut | Description |
+| :--- | :--- | :--- | :--- |
+| `:show` | `bool` | `false` | Contrôle l'ouverture de la modale |
+| `title` | `string` | `'Confirmer la suppression'` | Titre affiché à gauche dans l'en-tête |
+| `confirmText` | `string` | `'Oui, supprimer'` | Libellé du bouton de suppression rouge |
+| `cancelText` | `string` | `'Annuler'` | Libellé du bouton d'annulation |
+| `onConfirm` | `string` | `''` | Méthode Livewire PHP exécutée lors de la confirmation (ex: `deleteSite`) |
+| `onCancel` | `string` | `''` | Méthode Livewire PHP exécutée lors de l'annulation (ex: `closeDeleteSiteModal`) |
 
 ---
 
