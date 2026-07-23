@@ -98,6 +98,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                     </svg>
                     Tableau de bord
+                    @if (request()->is('dashboard') || request()->is('/'))
+                        <svg class="w-3 h-3 text-crt-navy ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    @endif
                 </a>
 
                 <!-- 2. Entreprise -->
@@ -109,9 +114,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" />
                         </svg>
                         Entreprise
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 {{ request()->is('entreprise') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
-                        </svg>
+                        @if (request()->is('entreprise'))
+                            <svg class="w-3 h-3 text-crt-navy transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" :d="open ? 'M19 9l-7 7-7-7' : 'M9 5l7 7-7 7'" />
+                            </svg>
+                        @else
+                            <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        @endif
                     </button>
                     <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">ENTREPRISE</div>
@@ -157,9 +168,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         RH
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 {{ request()->is('rh') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
-                        </svg>
+                        @if (request()->is('rh'))
+                            <svg class="w-3 h-3 text-crt-navy transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" :d="open ? 'M19 9l-7 7-7-7' : 'M9 5l7 7-7 7'" />
+                            </svg>
+                        @else
+                            <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        @endif
                     </button>
                     <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">RESSOURCES HUMAINES</div>
@@ -181,9 +198,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                         Feuilles de Temps
-                        <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 {{ request()->is('timesheets') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
-                        </svg>
+                        @if (request()->is('timesheets'))
+                            <svg class="w-3 h-3 text-crt-navy transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" :d="open ? 'M19 9l-7 7-7-7' : 'M9 5l7 7-7 7'" />
+                            </svg>
+                        @else
+                            <svg class="w-3 h-3 transition-transform duration-200" :class="open ? 'rotate-180 text-crt-cyan font-bold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        @endif
                     </button>
                     <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">FEUILLES DE TEMPS</div>
