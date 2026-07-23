@@ -100,19 +100,17 @@
                 </a>
 
                 <!-- 2. Entreprise -->
-                <div class="relative flex items-center rounded-lg transition-all {{ request()->is('entreprise') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}" @click.away="openDropdown = null">
-                    <a href="/entreprise" class="flex items-center gap-1.5 pl-3.5 pr-1 py-2">
+                <div class="relative" @click.away="openDropdown = null">
+                    <button type="button" @click="openDropdown = openDropdown === 'entreprise' ? null : 'entreprise'" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('entreprise') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m3 0h1m-1-4h.01M9 16h.01M9 12h.01M9 8h.01M15 16h.01M15 12h.01M15 8h.01" />
                         </svg>
                         Entreprise
-                    </a>
-                    <button type="button" @click.stop="openDropdown = openDropdown === 'entreprise' ? null : 'entreprise'" class="pr-3.5 pl-0.5 py-2 cursor-pointer focus:outline-none flex items-center">
-                        <svg class="w-3 h-3 transition-transform duration-200 {{ request()->is('entreprise') ? 'text-crt-navy font-bold' : 'text-slate-400' }}" :class="openDropdown === 'entreprise' ? 'rotate-180 {{ request()->is('entreprise') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'entreprise' ? 'rotate-180 {{ request()->is('entreprise') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'entreprise'" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50">
+                    <div x-show="openDropdown === 'entreprise'" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">ENTREPRISE</div>
                         <a href="/entreprise" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +132,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'budget'" x-cloak class="absolute left-0 top-full mt-1 w-56 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50">
+                    <div x-show="openDropdown === 'budget'" x-cloak class="absolute left-0 top-full mt-1 w-56 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">BUDGET</div>
                         <a href="#" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,19 +144,17 @@
                 </div>
 
                 <!-- 4. RH -->
-                <div class="relative flex items-center rounded-lg transition-all {{ request()->is('rh') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}" @click.away="openDropdown = null">
-                    <a href="/rh" class="flex items-center gap-1.5 pl-3.5 pr-1 py-2">
+                <div class="relative" @click.away="openDropdown = null">
+                    <button type="button" @click="openDropdown = openDropdown === 'rh' ? null : 'rh'" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('rh') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         RH
-                    </a>
-                    <button type="button" @click.stop="openDropdown = openDropdown === 'rh' ? null : 'rh'" class="pr-3.5 pl-0.5 py-2 cursor-pointer focus:outline-none flex items-center">
-                        <svg class="w-3 h-3 transition-transform duration-200 {{ request()->is('rh') ? 'text-crt-navy font-bold' : 'text-slate-400' }}" :class="openDropdown === 'rh' ? 'rotate-180 {{ request()->is('rh') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'rh' ? 'rotate-180 {{ request()->is('rh') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'rh'" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50">
+                    <div x-show="openDropdown === 'rh'" x-cloak class="absolute left-0 top-full mt-1 w-52 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">RESSOURCES HUMAINES</div>
                         <a href="/rh" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,19 +166,17 @@
                 </div>
 
                 <!-- 5. Feuilles de Temps -->
-                <div class="relative flex items-center rounded-lg transition-all {{ request()->is('timesheets') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}" @click.away="openDropdown = null">
-                    <a href="/timesheets" class="flex items-center gap-1.5 pl-3.5 pr-1 py-2">
+                <div class="relative" @click.away="openDropdown = null">
+                    <button type="button" @click="openDropdown = openDropdown === 'feuilles' ? null : 'feuilles'" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('timesheets') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                         Feuilles de Temps
-                    </a>
-                    <button type="button" @click.stop="openDropdown = openDropdown === 'feuilles' ? null : 'feuilles'" class="pr-3.5 pl-0.5 py-2 cursor-pointer focus:outline-none flex items-center">
-                        <svg class="w-3 h-3 transition-transform duration-200 {{ request()->is('timesheets') ? 'text-crt-navy font-bold' : 'text-slate-400' }}" :class="openDropdown === 'feuilles' ? 'rotate-180 {{ request()->is('timesheets') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        <svg class="w-3 h-3 transition-transform duration-200" :class="openDropdown === 'feuilles' ? 'rotate-180 {{ request()->is('timesheets') ? 'text-crt-navy' : 'text-crt-cyan' }} font-extrabold scale-110' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    <div x-show="openDropdown === 'feuilles'" x-cloak class="absolute left-0 top-full mt-1 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50">
+                    <div x-show="openDropdown === 'feuilles'" x-cloak class="absolute left-0 top-full mt-1 w-64 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">FEUILLES DE TEMPS</div>
                         <a href="/timesheets" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
