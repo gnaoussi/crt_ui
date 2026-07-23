@@ -38,27 +38,27 @@
 
     <!-- Header Navbar -->
     <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
-        <div className="px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 px-6 py-3">
-            <div className="flex items-center space-x-4">
+        <div class="px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100">
+            <div class="flex items-center space-x-4">
                 <div>
-                    <h1 className="text-base font-extrabold text-crt-navy tracking-tight flex items-center gap-2">
+                    <h1 class="text-base font-extrabold text-crt-navy tracking-tight flex items-center gap-2">
                         CRT Solution — Laravel Livewire v3
-                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-crt-cyan-light border border-crt-cyan/20 text-crt-navy">Docker SQLite</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-crt-cyan-light border border-crt-cyan/20 text-crt-navy">Docker SQLite</span>
                     </h1>
-                    <p className="text-xs text-slate-500 font-medium">Jean-Marc Dupont — Application RH & Timesheet</p>
+                    <p class="text-xs text-slate-500 font-medium">Jean-Marc Dupont — Application RH & Timesheet</p>
                 </div>
             </div>
         </div>
 
-        <div className="bg-slate-900 text-white px-6 py-2 text-xs font-semibold flex items-center space-x-4">
-            <a href="/dashboard" className="hover:text-crt-cyan transition">📊 Tableau de bord</a>
-            <a href="/entreprise" className="hover:text-crt-cyan transition">🏢 Entreprise</a>
-            <a href="/rh" className="text-crt-cyan font-bold hover:underline transition">👥 RH (Employés)</a>
-            <a href="/timesheets" className="hover:text-crt-cyan transition">📑 Feuilles de Temps</a>
+        <div class="bg-slate-900 text-white px-6 py-2 text-xs font-semibold flex items-center space-x-4">
+            <a href="/dashboard" class="hover:text-crt-cyan transition">📊 Tableau de bord</a>
+            <a href="/entreprise" class="hover:text-crt-cyan transition">🏢 Entreprise</a>
+            <a href="/rh" class="text-crt-cyan font-bold hover:underline transition">👥 RH (Employés)</a>
+            <a href="/timesheets" class="hover:text-crt-cyan transition">📑 Feuilles de Temps</a>
         </div>
     </header>
 
-    <main className="min-h-screen">
+    <main class="min-h-screen">
         {{ $slot }}
     </main>
 

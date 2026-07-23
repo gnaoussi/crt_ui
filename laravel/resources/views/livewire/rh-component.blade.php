@@ -280,8 +280,9 @@
     @endif
 
     <!-- 1. MODALE: Création Nouvel Employé (new_employe_modal.png) -->
+    @teleport('body')
     @if ($isNewEmployeeModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div class="fixed inset-0 w-screen h-screen bg-crt-navy/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in">
             <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -391,10 +392,12 @@
             </div>
         </div>
     @endif
+    @endteleport
 
     <!-- 2. MODALE: Mise à jour des informations de l'employé (employe_edit.png) -->
+    @teleport('body')
     @if ($isEditEmployeeModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div class="fixed inset-0 w-screen h-screen bg-crt-navy/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in">
             <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -474,10 +477,12 @@
             </div>
         </div>
     @endif
+    @endteleport
 
     <!-- 3. MODALE: Modifier le gestionnaire (modifier_gestionnaire_dans_historique.png) -->
+    @teleport('body')
     @if ($isEditManagerModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div class="fixed inset-0 w-screen h-screen bg-crt-navy/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in">
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -514,10 +519,12 @@
             </div>
         </div>
     @endif
+    @endteleport
 
     <!-- 4. MODALE: Modifier l'heure (modifier_nombre_d_heure_par_semaine_dans_historique.png) -->
+    @teleport('body')
     @if ($isEditHoursModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div class="fixed inset-0 w-screen h-screen bg-crt-navy/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in">
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -549,10 +556,12 @@
             </div>
         </div>
     @endif
+    @endteleport
 
     <!-- 5. MODALE: Affectation un site (modifier_site_dans_historique.png) -->
+    @teleport('body')
     @if ($isEditSiteModalOpen)
-        <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div class="fixed inset-0 w-screen h-screen bg-crt-navy/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in">
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
                 <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-4">
                     <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
@@ -593,4 +602,5 @@
             </div>
         </div>
     @endif
+    @endteleport
 </div>
