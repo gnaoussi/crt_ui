@@ -514,23 +514,14 @@
     @endif
 
     <!-- MODALE 4: Confirmation de suppression du Site -->
-    @if ($isDeleteSiteModalOpen && $selectedSite)
-        <template x-teleport="body">
-            <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-                <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4 text-xs text-center animate-fade-in">
-                    <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </div>
-                    <h3 class="text-sm font-extrabold text-crt-navy">Supprimer le site ?</h3>
-                    <p class="text-slate-500 font-medium">Êtes-vous sûr de vouloir supprimer le site <strong class="text-crt-navy">{{ $selectedSite->name }}</strong> ? Cette action est irréversible.</p>
-                    <div class="flex justify-center gap-3 pt-2">
-                        <button wire:click="$set('isDeleteSiteModalOpen', false)" class="px-4 py-2 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">Annuler</button>
-                        <button wire:click="deleteSite" class="px-5 py-2 font-extrabold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-lg shadow-rose-600/20">Oui, Supprimer</button>
-                    </div>
-                </div>
-            </div>
-        </template>
-    @endif
+    <x-confirm-delete-modal 
+        :show="$isDeleteSiteModalOpen && $selectedSite"
+        title="Confirmer la suppression"
+        confirmText="Oui, supprimer"
+        cancelText="Annuler"
+        onConfirm="deleteSite"
+        onCancel="$set('isDeleteSiteModalOpen', false)"
+    >
+        Êtes-vous sûr de vouloir retirer cet élément (<strong class="font-bold text-crt-navy">{{ $selectedSite?->name }}</strong>) ? Cette action est irréversible.
+    </x-confirm-delete-modal>
 </div>
