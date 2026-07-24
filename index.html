@@ -745,7 +745,8 @@
                     weeksCount: 53,
                     openWeeks: 4,
                     closedWeeks: 0,
-                    inactiveWeeks: 49
+                    inactiveWeeks: 49,
+                    hasTimesheets: true
                 },
                 {
                     id: 2,
@@ -757,7 +758,21 @@
                     weeksCount: 52,
                     openWeeks: 0,
                     closedWeeks: 52,
-                    inactiveWeeks: 0
+                    inactiveWeeks: 0,
+                    hasTimesheets: true
+                },
+                {
+                    id: 3,
+                    startDate: '01/04/2027',
+                    endDate: '31/03/2028',
+                    firstDay: 'Dimanche',
+                    timeBankCeiling: '37.5h',
+                    isActive: false,
+                    weeksCount: 52,
+                    openWeeks: 0,
+                    closedWeeks: 0,
+                    inactiveWeeks: 52,
+                    hasTimesheets: false
                 }
             ]);
 
@@ -2706,7 +2721,7 @@
                                                     <th className="p-3.5">PREMIER JOUR</th>
                                                     <th className="p-3.5">PLAFOND BANQUE DE TEMPS</th>
                                                     <th className="p-3.5">STATUT</th>
-                                                    <th className="p-3.5 text-center">DÉTAILS</th>
+                                                    <th className="p-3.5 text-center">ACTIONS</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-slate-100 text-xs">
@@ -2729,33 +2744,12 @@
                                                                 </span>
                                                             </td>
                                                             <td className="p-3.5">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="bg-crt-cyan-light border border-crt-cyan/30 text-crt-navy font-bold font-mono px-2.5 py-1 rounded-lg flex items-center gap-1 text-[11px]">
-                                                                        <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                                        </svg>
-                                                                        {fy.timeBankCeiling}
-                                                                    </span>
-                                                                    <button 
-                                                                        onClick={() => {
-                                                                            setSelectedAnnee(fy);
-                                                                            setAnneeForm({
-                                                                                startDate: fy.startDate,
-                                                                                endDate: fy.endDate,
-                                                                                firstDay: fy.firstDay,
-                                                                                timeBankCeiling: fy.timeBankCeiling.replace('h', ''),
-                                                                                isActive: fy.isActive
-                                                                            });
-                                                                            setIsEditAnneeModalOpen(true);
-                                                                        }}
-                                                                        className="p-1 text-crt-navy hover:text-crt-cyan border border-slate-200 rounded-lg transition cursor-pointer"
-                                                                        title="Modifier"
-                                                                    >
-                                                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                                        </svg>
-                                                                    </button>
-                                                                </div>
+                                                                <span className="bg-crt-cyan-light border border-crt-cyan/30 text-crt-navy font-bold font-mono px-2.5 py-1 rounded-lg inline-flex items-center gap-1 text-[11px]">
+                                                                    <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                    </svg>
+                                                                    {fy.timeBankCeiling}
+                                                                </span>
                                                             </td>
                                                             <td className="p-3.5">
                                                                 {fy.isActive ? (
@@ -2772,18 +2766,82 @@
                                                                 )}
                                                             </td>
                                                             <td className="p-3.5 text-center">
-                                                                <button 
-                                                                    onClick={() => {
-                                                                        setSelectedAnnee(fy);
-                                                                        setAnneeFinanciereView('detail');
-                                                                    }}
-                                                                    className="p-2 text-crt-cyan bg-crt-cyan-light hover:bg-crt-cyan hover:text-white border border-crt-cyan/30 rounded-xl transition cursor-pointer"
-                                                                    title="Voir les détails de l'année"
-                                                                >
-                                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                                    </svg>
-                                                                </button>
+                                                                <div className="flex items-center justify-center gap-1.5">
+                                                                    {/* Bouton 1: Consultation Fiche / Détails */}
+                                                                    <button 
+                                                                        onClick={() => {
+                                                                            setSelectedAnnee(fy);
+                                                                            setAnneeFinanciereView('detail');
+                                                                        }}
+                                                                        className="p-1.5 text-crt-cyan bg-crt-cyan-light hover:bg-crt-cyan hover:text-white border border-crt-cyan/30 rounded-lg transition cursor-pointer"
+                                                                        title="Consulter la fiche détaillée de l'année"
+                                                                    >
+                                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                                        </svg>
+                                                                    </button>
+
+                                                                    {/* Bouton 2: Édition (Uniquement si AUCUNE feuille de temps créée) */}
+                                                                    {fy.hasTimesheets ? (
+                                                                        <button 
+                                                                            disabled
+                                                                            className="p-1.5 text-slate-300 bg-slate-50 border border-slate-200 rounded-lg cursor-not-allowed opacity-60"
+                                                                            title="Modification impossible : des feuilles de temps existent déjà pour cette année"
+                                                                        >
+                                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    ) : (
+                                                                        <button 
+                                                                            onClick={() => {
+                                                                                setSelectedAnnee(fy);
+                                                                                setAnneeForm({
+                                                                                    startDate: fy.startDate,
+                                                                                    endDate: fy.endDate,
+                                                                                    firstDay: fy.firstDay,
+                                                                                    timeBankCeiling: fy.timeBankCeiling.replace('h', ''),
+                                                                                    isActive: fy.isActive
+                                                                                });
+                                                                                setIsEditAnneeModalOpen(true);
+                                                                            }}
+                                                                            className="p-1.5 text-crt-navy bg-slate-100 hover:bg-crt-navy hover:text-white border border-slate-200 rounded-lg transition cursor-pointer"
+                                                                            title="Modifier l'année financière"
+                                                                        >
+                                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    )}
+
+                                                                    {/* Bouton 3: Suppression (Uniquement si AUCUNE feuille de temps créée) */}
+                                                                    {fy.hasTimesheets ? (
+                                                                        <button 
+                                                                            disabled
+                                                                            className="p-1.5 text-slate-300 bg-slate-50 border border-slate-200 rounded-lg cursor-not-allowed opacity-60"
+                                                                            title="Suppression impossible : des feuilles de temps existent déjà pour cette année"
+                                                                        >
+                                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    ) : (
+                                                                        <button 
+                                                                            onClick={() => {
+                                                                                if (confirm(`Êtes-vous sûr de vouloir supprimer l'année financière ${fy.startDate} - ${fy.endDate} ?`)) {
+                                                                                    setFinancialYears(financialYears.filter(f => f.id !== fy.id));
+                                                                                    showNotification("L'année financière a été supprimée avec succès.", "warning");
+                                                                                }
+                                                                            }}
+                                                                            className="p-1.5 text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-200 rounded-lg transition cursor-pointer"
+                                                                            title="Supprimer l'année financière"
+                                                                        >
+                                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                            </svg>
+                                                                        </button>
+                                                                    )}
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     ))}
