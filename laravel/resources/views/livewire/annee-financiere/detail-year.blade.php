@@ -1,50 +1,62 @@
 <div class="space-y-6">
-    {{-- Back Button --}}
-    <div>
-        <button 
-            wire:click="backToList" 
-            class="text-xs font-bold text-slate-600 bg-white border border-slate-200 px-3.5 py-2 rounded-xl hover:bg-slate-50 transition flex items-center gap-1.5 cursor-pointer shadow-xs"
-        >
-            <svg class="w-4 h-4 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Retour à l'historique des années financières
-        </button>
-    </div>
+    {{-- 1. Header Card (Exact alignment with index.html) --}}
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
+            <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Détails de l'Année Financière
+            </h3>
 
-    {{-- Detail Banner --}}
-    <div class="bg-gradient-to-r from-crt-navy via-slate-900 to-crt-navy rounded-2xl p-6 text-white shadow-lg border border-slate-800">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-                <div class="flex items-center gap-2 text-crt-cyan text-xs font-extrabold tracking-wider uppercase mb-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <div class="flex items-center gap-3">
+                <button 
+                    wire:click="backToList"
+                    class="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md cursor-pointer"
+                >
+                    <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Fiche Année Financière
-                </div>
-                <h2 class="text-2xl font-black text-white font-mono">
-                    {{ $selectedAnnee['startDate'] }} — {{ $selectedAnnee['endDate'] }}
-                </h2>
-                <p class="text-xs text-slate-300 mt-1">
-                    Premier jour : <span class="font-bold text-white">{{ $selectedAnnee['firstDay'] }}</span> | Plafond Banque de Temps : <span class="font-bold text-white">{{ $selectedAnnee['timeBankCeiling'] }}</span>
-                </p>
+                    Retour à l'année
+                </button>
+                <button 
+                    wire:click="closeYear"
+                    class="bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-rose-600/10 cursor-pointer"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                    </svg>
+                    Clôturer l'année
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-semibold">
+            <div>
+                <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Date de début</span>
+                <p class="font-mono text-slate-800 text-xs font-extrabold">{{ $selectedAnnee ? $selectedAnnee['startDate'] : '01/04/2026' }}</p>
             </div>
             <div>
-                @if($selectedAnnee['isActive'])
-                    <span class="px-3.5 py-1.5 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 inline-flex items-center gap-1.5 shadow-xs">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Exercice Actif
+                <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Date de fin</span>
+                <p class="font-mono text-slate-800 text-xs font-extrabold">{{ $selectedAnnee ? $selectedAnnee['endDate'] : '31/03/2027' }}</p>
+            </div>
+            <div>
+                <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Statut</span>
+                @if($selectedAnnee && $selectedAnnee['isActive'])
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1">
+                        <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                        Actif
                     </span>
                 @else
-                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
-                        Exercice Inactif
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                        Inactif
                     </span>
                 @endif
             </div>
         </div>
     </div>
 
-    {{-- 4 Stat KPI Cards --}}
+    {{-- 2. 4 Stat KPI Cards (Exact alignment with index.html) --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
             <div>
@@ -87,7 +99,7 @@
                 <h4 class="text-2xl font-black text-slate-700 font-mono">{{ $selectedAnnee['inactiveWeeks'] ?? 49 }}</h4>
                 <span class="text-xs font-bold text-slate-500">Semaines inactives</span>
             </div>
-            <div class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                 </svg>
@@ -95,21 +107,30 @@
         </div>
     </div>
 
-    {{-- Weeks Section --}}
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-6">
-        {{-- Section Title & Filters --}}
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-100">
-            <div>
-                <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
-                    <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    Semaines de l'année financière
-                </h3>
-                <p class="text-xs text-slate-500 mt-0.5">Gérez l'ouverture, la fermeture et le statut de paie de chaque semaine</p>
-            </div>
+    {{-- 3. Semaines de l'année Table Card --}}
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-5">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 pb-4 border-b border-slate-100">
+            <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
+                <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Semaines de l'année
+            </h3>
 
-            <div class="flex flex-wrap items-center gap-2 text-xs font-extrabold">
+            {{-- Filter Controls Bar --}}
+            <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
+                <span class="text-slate-500">Du :</span>
+                <input 
+                    type="date" 
+                    wire:model.live="weekSearchDateFrom"
+                    class="border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 text-xs text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 cursor-pointer"
+                />
+                <span class="text-slate-500">Au :</span>
+                <input 
+                    type="date" 
+                    wire:model.live="weekSearchDateTo"
+                    class="border border-slate-200 rounded-xl px-2.5 py-1.5 bg-slate-50 text-xs text-slate-700 font-mono focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 cursor-pointer"
+                />
                 <span class="text-slate-500">État :</span>
                 <select 
                     wire:model.live="weekStatusFilter"
@@ -120,20 +141,35 @@
                     <option value="Fermées">Fermées</option>
                     <option value="Inactive">Inactive</option>
                 </select>
-                @if($weekStatusFilter !== 'Tous')
-                    <button 
-                        wire:click="$set('weekStatusFilter', 'Tous')"
-                        class="bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 font-bold px-3 py-1.5 rounded-xl transition cursor-pointer"
-                    >
-                        Réinitialiser
-                    </button>
-                @endif
+                <button 
+                    wire:click="$dispatch('show-toast', { message: 'Filtres appliqués aux semaines', type: 'info' })"
+                    class="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer"
+                >
+                    <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                    Filtrer
+                </button>
+                <button 
+                    wire:click="$set('weekSearchDateFrom', ''); $set('weekSearchDateTo', ''); $set('weekStatusFilter', 'Tous')"
+                    class="bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer"
+                >
+                    <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Réinitialiser
+                </button>
             </div>
         </div>
 
         {{-- Weeks Table & Pagination --}}
         @php
-            $filteredWeeks = collect($weeksList)->filter(fn($w) => $weekStatusFilter === 'Tous' || $w['status'] === $weekStatusFilter);
+            $filteredWeeks = collect($weeksList)->filter(function($w) use ($weekStatusFilter, $weekSearchDateFrom, $weekSearchDateTo) {
+                $matchStatus = ($weekStatusFilter === 'Tous' || $w['status'] === $weekStatusFilter);
+                $matchFrom = empty($weekSearchDateFrom) || $w['startDate'] >= $weekSearchDateFrom;
+                $matchTo = empty($weekSearchDateTo) || $w['endDate'] <= $weekSearchDateTo;
+                return $matchStatus && $matchFrom && $matchTo;
+            });
             $totalWeeks = $filteredWeeks->count();
             $totalPages = ceil($totalWeeks / $weeksPerPage) ?: 1;
             $paginatedWeeks = $filteredWeeks->slice(($weeksCurrentPage - 1) * $weeksPerPage, $weeksPerPage);
@@ -210,7 +246,7 @@
                                         @else
                                             <button 
                                                 wire:click="toggleWeekStatus({{ $week['id'] }}, 'Fermées')"
-                                                class="p-1.5 text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-200 rounded-lg transition cursor-pointer"
+                                                class="p-1.5 text-amber-600 bg-amber-50 hover:bg-amber-600 hover:text-white border border-amber-200 rounded-lg transition cursor-pointer"
                                                 title="Fermer la semaine"
                                             >
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,34 +255,22 @@
                                             </button>
                                         @endif
 
-                                        {{-- 🚫 Action 2: Toggle Activer / Désactiver --}}
-                                        @if($week['status'] === 'Inactive')
-                                            <button 
-                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Ouvertes')"
-                                                class="p-1.5 text-emerald-600 bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200 rounded-lg transition cursor-pointer"
-                                                title="Activer la semaine"
-                                            >
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                            </button>
-                                        @else
-                                            <button 
-                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Inactive')"
-                                                class="p-1.5 text-slate-600 bg-slate-100 hover:bg-slate-700 hover:text-white border border-slate-200 rounded-lg transition cursor-pointer"
-                                                title="Désactiver la semaine"
-                                            >
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                                </svg>
-                                            </button>
-                                        @endif
+                                        {{-- 🚫 Action 2: Désactiver la semaine --}}
+                                        <button 
+                                            wire:click="toggleWeekStatus({{ $week['id'] }}, 'Inactive')"
+                                            class="p-1.5 text-slate-500 bg-slate-100 hover:bg-slate-600 hover:text-white border border-slate-200 rounded-lg transition cursor-pointer"
+                                            title="Désactiver la semaine"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg>
+                                        </button>
 
-                                        {{-- 📅 Action 3: Marquer comme Semaine de paie --}}
+                                        {{-- 📅 Action 3: Marquer comme semaine de paie --}}
                                         <button 
                                             wire:click="togglePayStatus({{ $week['id'] }})"
-                                            class="p-1.5 rounded-lg transition cursor-pointer border {{ $week['payStatus'] === 'Paie validée' ? 'text-amber-800 bg-amber-100 hover:bg-amber-200 border-amber-300' : 'text-amber-600 bg-amber-50 hover:bg-amber-500 hover:text-white border-amber-200' }}"
-                                            title="Marquer comme semaine de paie"
+                                            class="p-1.5 text-indigo-600 bg-indigo-50 hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg transition cursor-pointer"
+                                            title="Basculer le statut de paie"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -279,30 +303,30 @@
                 
                 <div class="flex items-center space-x-1">
                     <button 
+                        wire:click="setPageNum({{ max(1, $weeksCurrentPage - 1) }})" 
                         @if($weeksCurrentPage <= 1) disabled @endif
-                        wire:click="setPageNum({{ max($weeksCurrentPage - 1, 1) }})"
-                        class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                        class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition font-mono"
                     >
                         ‹
                     </button>
 
-                    @foreach(range(1, min(6, $totalPages)) as $page)
-                        <button
-                            wire:click="setPageNum({{ $page }})"
-                            class="px-3 py-1 rounded-lg text-xs font-extrabold transition cursor-pointer {{ $weeksCurrentPage == $page ? 'bg-crt-navy text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' }}"
-                        >
-                            {{ $page }}
-                        </button>
-                    @endforeach
-
-                    @if($totalPages > 6)
-                        <span class="px-1 text-slate-400">...</span>
-                    @endif
+                    @for($i = 1; $i <= $totalPages; $i++)
+                        @if($i == 1 || $i == $totalPages || ($i >= $weeksCurrentPage - 1 && $i <= $weeksCurrentPage + 1))
+                            <button 
+                                wire:click="setPageNum({{ $i }})" 
+                                class="px-3 py-1.5 rounded-lg border text-xs font-bold transition font-mono {{ $weeksCurrentPage == $i ? 'bg-crt-navy text-white border-crt-navy shadow-xs' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50' }}"
+                            >
+                                {{ $i }}
+                            </button>
+                        @elseif(($i == 2 && $weeksCurrentPage > 3) || ($i == $totalPages - 1 && $weeksCurrentPage < $totalPages - 2))
+                            <span class="px-1 text-slate-400 font-mono">...</span>
+                        @endif
+                    @endfor
 
                     <button 
+                        wire:click="setPageNum({{ min($totalPages, $weeksCurrentPage + 1) }})" 
                         @if($weeksCurrentPage >= $totalPages) disabled @endif
-                        wire:click="setPageNum({{ min($weeksCurrentPage + 1, $totalPages) }})"
-                        class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                        class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition font-mono"
                     >
                         ›
                     </button>
