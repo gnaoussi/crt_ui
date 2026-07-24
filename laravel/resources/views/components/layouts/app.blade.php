@@ -259,6 +259,7 @@
             <span class="text-slate-600">
                 @if (request()->is('rh')) RH
                 @elseif (request()->is('entreprise')) Entreprise
+                @elseif (request()->is('annee-financiere')) Budget
                 @elseif (request()->is('timesheets')) Feuilles de Temps
                 @else Dashboard
                 @endif
@@ -267,6 +268,7 @@
             <span class="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
                 @if (request()->is('rh')) Employés
                 @elseif (request()->is('entreprise')) Présentation entreprise
+                @elseif (request()->is('annee-financiere')) Années Financières
                 @elseif (request()->is('timesheets')) Projets & Suivi Hebdomadaire
                 @else Tableau de bord
                 @endif
