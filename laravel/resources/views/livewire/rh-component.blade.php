@@ -169,10 +169,18 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-semibold">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 text-xs font-semibold">
                     <div>
                         <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Matricule</span>
                         <p class="font-mono text-crt-navy text-xs font-extrabold">{{ $selectedEmployee->matricule }}</p>
+                    </div>
+                    <div>
+                        <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Email</span>
+                        <p class="font-mono text-crt-cyan-dark text-xs font-bold">{{ $selectedEmployee->email }}</p>
+                    </div>
+                    <div>
+                        <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Date de naissance</span>
+                        <p class="text-slate-800 text-xs font-bold">{{ $selectedEmployee->dob }}</p>
                     </div>
                     <div>
                         <span class="block font-bold text-slate-500 uppercase tracking-wider mb-1">Gestionnaire</span>
@@ -194,7 +202,7 @@
                 </div>
             </div>
 
-            {{-- 2. 4 Stat KPI Cards (Harmonisés 1-à-1) --}}
+            {{-- 2. 4 Stat KPI Cards (Informations rapides) --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
@@ -245,73 +253,8 @@
                 </div>
             </div>
 
-            {{-- 3. Navigation par Onglets (Harmonisé 1-à-1) --}}
-            <div class="flex justify-between items-center bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex space-x-2 text-xs font-extrabold">
-                    <button wire:click="setTab('information')" class="px-4 py-2.5 rounded-xl transition cursor-pointer {{ $employeeActiveTab === 'information' ? 'bg-crt-navy text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg> Informations de l'employé</span></button>
-                    <button wire:click="setTab('historiques')" class="px-4 py-2.5 rounded-xl transition cursor-pointer {{ $employeeActiveTab === 'historiques' ? 'bg-crt-navy text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> Historiques</span></button>
-                </div>
-            </div>
-
-            @if ($employeeActiveTab === 'information')
-                <!-- TAB 1: INFORMATIONS DE L'EMPLOYÉ -->
-                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-6">
-                    <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-                        <h3 class="text-sm font-extrabold text-crt-navy"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg> Informations de l'employé</span></h3>
-                        <button wire:click="openEditEmployeeModal" class="bg-crt-navy hover:bg-crt-navy-dark text-white font-extrabold text-xs px-4 py-2 rounded-xl transition shadow-sm flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                            Modifier
-                        </button>
-                    </div>
-
-                    <div class="space-y-6 text-xs font-semibold">
-                        <div class="space-y-3">
-                            <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">IDENTITÉ</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                                <div><span class="block text-slate-500 text-[11px]">Matricule</span><span class="text-crt-navy font-bold font-mono">{{ $selectedEmployee->matricule }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]">Nom</span><span class="text-crt-navy font-extrabold">{{ $selectedEmployee->nom }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]">Prénom</span><span class="text-crt-navy font-extrabold">{{ $selectedEmployee->prenom }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date de naissance</span></span><span class="text-slate-700">{{ $selectedEmployee->dob }}</span></div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">CONTACTS</h4>
-                            <div><span class="block text-slate-500 text-[11px]"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> E-mail</span></span><span class="text-crt-cyan-dark font-bold font-mono">{{ $selectedEmployee->email }}</span></div>
-                        </div>
-
-                        <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">STATUT PROFESSIONNEL</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div><span class="block text-slate-500 text-[11px]"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg> Groupes</span></span><span class="bg-slate-100 border px-2 py-0.5 rounded text-[11px] font-bold">{{ $selectedEmployee->role }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]">Statut du compte</span><span class="text-emerald-600 font-extrabold">{{ $selectedEmployee->account_status }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]">Visibilité/Rapport</span><span class="text-slate-700 font-bold">{{ $selectedEmployee->visibility_report }}</span></div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">ORGANISATION</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div><span class="block text-slate-500 text-[11px]">Gestionnaire</span><span class="text-crt-navy font-bold">{{ $selectedEmployee->gestionnaire }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]">Rôle</span><span class="text-slate-700 font-medium">Gestionnaire ({{ $selectedEmployee->is_manager ? 'Oui' : 'Non' }})</span></div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-wider border-b pb-1">AUTRES & EMBAUCHE</h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div><span class="block text-slate-500 text-[11px]">Heures/semaine</span><span class="text-crt-navy font-extrabold font-mono">{{ $selectedEmployee->weekly_hours }} h</span></div>
-                                <div><span class="block text-slate-500 text-[11px]"><span class="flex items-center gap-1.5"><svg class="w-3.5 h-3.5 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> Date d'embauche</span></span><span class="text-slate-700 font-mono">{{ $selectedEmployee->hire_date }}</span></div>
-                                <div><span class="block text-slate-500 text-[11px]">Statut de probation</span><span class="text-amber-700 font-bold bg-amber-50 border border-amber-200 px-2 py-0.5 rounded text-[11px]">En cours ({{ $selectedEmployee->probation_status }})</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <!-- TAB 2: HISTORIQUES -->
-                <div class="space-y-6">
+            {{-- 3. Historiques de l'Employé (Direct) --}}
+            <div class="space-y-6">
                     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
                         <div class="flex justify-between items-center pb-3 border-b border-slate-100">
                             <h3 class="text-sm font-extrabold text-crt-navy"><span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-crt-cyan inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Historique des heures par semaine</span></h3>
