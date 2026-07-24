@@ -23,6 +23,17 @@ class AnneeFinanciereComponent extends Component
     public $isDeleteModalOpen = false;
     public $deleteTargetAnnee = null;
 
+    // Confirm Action Dialogues State
+    public $isConfirmActionModalOpen = false;
+    public $confirmActionTitle = '';
+    public $confirmActionMessage = '';
+    public $confirmActionConfirmText = 'Confirmer';
+    public $confirmActionCancelText = 'Annuler';
+    public $confirmActionColor = 'bg-crt-navy hover:bg-crt-navy-dark';
+    public $confirmActionIconBg = 'bg-crt-cyan-light text-crt-navy';
+    public $confirmActionType = '';
+    public $pendingActionData = [];
+
     // Financial Year Form
     public $anneeForm = [
         'id' => null,
@@ -204,17 +215,98 @@ class AnneeFinanciereComponent extends Component
         }
     }
 
-    public function closeYear()
+    public function openConfirmYearModal($mode)
     {
-        if ($this->selectedAnnee) {
-            $this->selectedAnnee['isActive'] = false;
-            foreach ($this->financialYears as &$year) {
-                if ($year['id'] == $this->selectedAnnee['id']) {
-                    $year['isActive'] = false;
-                }
-            }
-            $this->dispatch('show-toast', message: "L'année financière a été clôturée avec succès.", type: 'warning');
+        $this->confirmActionType = 'toggle_year';
+        $this->pendingActionData = ['mode' => $mode];
+
+        if ($mode === 'close') {
+            $this->confirmActionTitle = "Clôturer l'année financière";
+            $this->confirmActionMessage = "Êtes-vous sûr de vouloir clôturer cette année financière ? Les semaines fermées ne pourront plus recevoir de nouvelles feuilles de temps.";
+            $this->confirmActionConfirmText = "Oui, clôturer";
+            $this->confirmActionColor = "bg-rose-600 hover:bg-rose-700";
+            $this->confirmActionIconBg = "bg-rose-100 text-rose-600";
+        } else {
+            $this->confirmActionTitle = "Ouvrir l'année financière";
+            $this->confirmActionMessage = "Êtes-vous sûr de vouloir réouvrir cette année financière pour la rendre active ?";
+            $this->confirmActionConfirmText = "Oui, ouvrir";
+            $this->confirmActionColor = "bg-emerald-600 hover:bg-emerald-700";
+            $this->confirmActionIconBg = "bg-emerald-100 text-emerald-600";
         }
+
+        $this->isConfirmActionModalOpen = true;
+    }
+
+    public function openConfirmWeekModal($weekId, $type, $newStatus = null)
+    {
+        $week = collect($this->weeksList)->firstWhere('id', $weekId);
+        if (!$week) return;
+
+        $this->confirmActionType = $type === 'status' ? 'week_status' : 'week_pay';
+        $this->pendingActionData = [
+            'weekId' => $weekId,
+            'newStatus' => $newStatus,
+            'weekName' => $week['name']
+        ];
+
+        if ($type === 'status') {
+            if ($newStatus === 'Ouvertes') {
+                $this->confirmActionTitle = "Ouvrir la {$week['name']}";
+                $this->confirmActionMessage = "Êtes-vous sûr de vouloir réouvrir la {$week['name']} ?";
+                $this->confirmActionConfirmText = "Oui, ouvrir";
+                $this->confirmActionColor = "bg-emerald-600 hover:bg-emerald-700";
+                $this->confirmActionIconBg = "bg-emerald-100 text-emerald-600";
+            } elseif ($newStatus === 'Fermées') {
+                $this->confirmActionTitle = "Fermer la {$week['name']}";
+                $this->confirmActionMessage = "Êtes-vous sûr de vouloir fermer la {$week['name']} ?";
+                $this->confirmActionConfirmText = "Oui, fermer";
+                $this->confirmActionColor = "bg-rose-600 hover:bg-rose-700";
+                $this->confirmActionIconBg = "bg-rose-100 text-rose-600";
+            } else {
+                $this->confirmActionTitle = "Désactiver la {$week['name']}";
+                $this->confirmActionMessage = "Êtes-vous sûr de vouloir désactiver la {$week['name']} ?";
+                $this->confirmActionConfirmText = "Oui, désactiver";
+                $this->confirmActionColor = "bg-slate-700 hover:bg-slate-800";
+                $this->confirmActionIconBg = "bg-slate-100 text-slate-700";
+            }
+        } else {
+            $this->confirmActionTitle = "Statut de Paie - {$week['name']}";
+            $this->confirmActionMessage = "Êtes-vous sûr de vouloir modifier le statut de paie de la {$week['name']} ?";
+            $this->confirmActionConfirmText = "Oui, modifier";
+            $this->confirmActionColor = "bg-amber-600 hover:bg-amber-700";
+            $this->confirmActionIconBg = "bg-amber-100 text-amber-800";
+        }
+
+        $this->isConfirmActionModalOpen = true;
+    }
+
+    public function executeConfirmedAction()
+    {
+        if ($this->confirmActionType === 'toggle_year') {
+            $mode = $this->pendingActionData['mode'] ?? 'close';
+            if ($this->selectedAnnee) {
+                $newState = ($mode === 'open');
+                $this->selectedAnnee['isActive'] = $newState;
+                foreach ($this->financialYears as &$year) {
+                    if ($year['id'] == $this->selectedAnnee['id']) {
+                        $year['isActive'] = $newState;
+                    }
+                }
+                $msg = $newState ? "L'année financière a été ouverte avec succès." : "L'année financière a été clôturée avec succès.";
+                $type = $newState ? 'success' : 'warning';
+                $this->dispatch('show-toast', message: $msg, type: $type);
+            }
+        } elseif ($this->confirmActionType === 'week_status') {
+            $weekId = $this->pendingActionData['weekId'];
+            $newStatus = $this->pendingActionData['newStatus'];
+            $this->toggleWeekStatus($weekId, $newStatus);
+        } elseif ($this->confirmActionType === 'week_pay') {
+            $weekId = $this->pendingActionData['weekId'];
+            $this->togglePayStatus($weekId);
+        }
+
+        $this->isConfirmActionModalOpen = false;
+        $this->pendingActionData = [];
     }
 
     public function toggleWeekStatus($weekId, $newStatus)

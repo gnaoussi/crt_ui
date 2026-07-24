@@ -19,15 +19,27 @@
                     </svg>
                     Retour à l'année
                 </button>
-                <button 
-                    wire:click="closeYear"
-                    class="bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-rose-600/10 cursor-pointer"
-                >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                    </svg>
-                    Clôturer l'année
-                </button>
+                @if($selectedAnnee && $selectedAnnee['isActive'])
+                    <button 
+                        wire:click="openConfirmYearModal('close')"
+                        class="bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-rose-600/10 cursor-pointer"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        Clôturer l'année
+                    </button>
+                @else
+                    <button 
+                        wire:click="openConfirmYearModal('open')"
+                        class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-emerald-600/10 cursor-pointer"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Ouvrir l'année
+                    </button>
+                @endif
             </div>
         </div>
 
@@ -242,7 +254,7 @@
                                         {{-- 🔒 Action 1: Toggle Fermer / Ouvrir --}}
                                         @if($week['status'] === 'Fermées')
                                             <button 
-                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Ouvertes')"
+                                                wire:click="openConfirmWeekModal({{ $week['id'] }}, 'status', 'Ouvertes')"
                                                 class="p-1.5 text-emerald-600 bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200 rounded-lg transition cursor-pointer"
                                                 title="Ouvrir la semaine"
                                             >
@@ -252,7 +264,7 @@
                                             </button>
                                         @else
                                             <button 
-                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Fermées')"
+                                                wire:click="openConfirmWeekModal({{ $week['id'] }}, 'status', 'Fermées')"
                                                 class="p-1.5 text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-200 rounded-lg transition cursor-pointer"
                                                 title="Fermer la semaine"
                                             >
@@ -265,7 +277,7 @@
                                         {{-- 🚫 Action 2: Toggle Activer / Désactiver --}}
                                         @if($week['status'] === 'Inactive')
                                             <button 
-                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Ouvertes')"
+                                                wire:click="openConfirmWeekModal({{ $week['id'] }}, 'status', 'Ouvertes')"
                                                 class="p-1.5 text-emerald-600 bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200 rounded-lg transition cursor-pointer"
                                                 title="Activer la semaine"
                                             >
@@ -275,7 +287,7 @@
                                             </button>
                                         @else
                                             <button 
-                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Inactive')"
+                                                wire:click="openConfirmWeekModal({{ $week['id'] }}, 'status', 'Inactive')"
                                                 class="p-1.5 text-slate-600 bg-slate-100 hover:bg-slate-700 hover:text-white border border-slate-200 rounded-lg transition cursor-pointer"
                                                 title="Désactiver la semaine"
                                             >
@@ -287,7 +299,7 @@
 
                                         {{-- 📅 Action 3: Marquer comme semaine de paie --}}
                                         <button 
-                                            wire:click="togglePayStatus({{ $week['id'] }})"
+                                            wire:click="openConfirmWeekModal({{ $week['id'] }}, 'pay')"
                                             class="p-1.5 rounded-lg transition cursor-pointer border {{ $week['payStatus'] === 'Paie validée' ? 'text-amber-800 bg-amber-100 hover:bg-amber-200 border-amber-300' : 'text-amber-600 bg-amber-50 hover:bg-amber-500 hover:text-white border-amber-200' }}"
                                             title="Marquer comme semaine de paie"
                                         >
