@@ -139,7 +139,7 @@
                 <div x-data="{ open: false }" @click.outside="open = false" class="relative">
                     <button type="button" 
                             @click="open = !open" 
-                            class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all hover:bg-slate-800 text-slate-300 hover:text-white cursor-pointer">
+                            class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg transition-all cursor-pointer {{ request()->is('annee-financiere') ? 'bg-crt-cyan text-crt-navy font-extrabold shadow-sm' : 'hover:bg-slate-800 text-slate-300 hover:text-white' }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -150,7 +150,7 @@
                     </button>
                     <div x-show="open" x-cloak class="absolute left-0 top-full mt-1 w-56 bg-white text-slate-800 rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-fade-in">
                         <div class="px-3.5 py-1 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">BUDGET</div>
-                        <a href="#" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5">
+                        <a href="{{ route('annee-financiere') }}" class="w-full text-left px-3.5 py-2.5 text-xs font-semibold hover:bg-crt-cyan-light hover:text-crt-navy transition flex items-center gap-2.5 {{ request()->is('annee-financiere') ? 'bg-crt-cyan-light text-crt-navy font-bold' : '' }}">
                             <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
