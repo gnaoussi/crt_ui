@@ -105,24 +105,31 @@
                 </table>
             </div>
 
-            <!-- PAGINATION COMPACTE 10 PAR PAGE -->
+            <!-- PAGINATION UNIFORMISÉE OPTION A (10 PAR PAGE) -->
             <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-semibold text-slate-600">
-                <div class="text-[11px]">
-                    Affichage <strong class="text-crt-navy font-bold">{{ $employees->firstItem() ?? 0 }}</strong> - <strong class="text-crt-navy font-bold">{{ $employees->lastItem() ?? 0 }}</strong> sur <strong class="text-crt-navy font-bold">{{ $employees->total() }}</strong> employés (10 / page)
+                <div class="text-slate-500">
+                    Montrant <strong class="text-slate-800 font-mono">{{ $employees->firstItem() ?? 0 }}</strong> à <strong class="text-slate-800 font-mono">{{ $employees->lastItem() ?? 0 }}</strong> de <strong class="text-slate-800 font-mono">{{ $employees->total() }}</strong> résultats
                 </div>
-                <div class="flex items-center space-x-1 font-mono text-xs">
+
+                <div class="flex items-center space-x-1">
                     @if ($employees->onFirstPage())
-                        <span class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed">‹ Précédent</span>
+                        <span class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed">‹</span>
                     @else
-                        <button wire:click="previousPage" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-crt-navy font-bold shadow-2xs transition">‹ Précédent</button>
+                        <button wire:click="previousPage" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-crt-navy font-bold shadow-2xs transition">‹</button>
                     @endif
 
-                    <span class="px-3 py-1 rounded-lg bg-crt-navy text-white font-bold">{{ $employees->currentPage() }} / {{ $employees->lastPage() }}</span>
+                    @foreach (range(1, $employees->lastPage()) as $page)
+                        @if ($page == $employees->currentPage())
+                            <span class="px-3 py-1 rounded-lg bg-crt-navy text-white font-extrabold shadow-xs">{{ $page }}</span>
+                        @else
+                            <button wire:click="gotoPage({{ $page }})" class="px-3 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold transition">{{ $page }}</button>
+                        @endif
+                    @endforeach
 
                     @if ($employees->hasMorePages())
-                        <button wire:click="nextPage" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-crt-navy font-bold shadow-2xs transition">Suivant ›</button>
+                        <button wire:click="nextPage" class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-crt-navy font-bold shadow-2xs transition">›</button>
                     @else
-                        <span class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed">Suivant ›</span>
+                        <span class="px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed">›</span>
                     @endif
                 </div>
             </div>
