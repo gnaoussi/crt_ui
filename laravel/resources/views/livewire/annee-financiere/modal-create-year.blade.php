@@ -53,14 +53,14 @@
                 </div>
 
                 <div>
-                    <label class="block text-slate-500 mb-1">Plafond banque de temps (heures)</label>
+                    <label class="block text-slate-500 mb-1">Plafond banque de temps</label>
                     <input 
-                        type="number" 
+                        type="text" 
                         wire:model="anneeForm.timeBankCeiling" 
-                        placeholder="0 pour sans plafond"
+                        placeholder="ex: 40 h"
                         class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition font-mono"
                     />
-                    <p class="text-[11px] text-slate-400 mt-1 font-normal">Saisir 0 si aucun plafond d'heures supplémentaires n'est imposé.</p>
+                    <p class="text-[11px] text-slate-400 mt-1 font-normal">Plafond d'heures initialisé par défaut à 40 h (le suffixe "h" est ajouté automatiquement si omis).</p>
                 </div>
 
                 <div class="pt-2">

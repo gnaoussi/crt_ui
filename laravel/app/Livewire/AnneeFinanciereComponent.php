@@ -27,7 +27,7 @@ class AnneeFinanciereComponent extends Component
         'startDate' => '01/04/2026',
         'endDate' => '31/03/2027',
         'firstDay' => 'Dimanche',
-        'timeBankCeiling' => '0',
+        'timeBankCeiling' => '40 h',
         'isActive' => true,
         'hasTimesheets' => false
     ];
@@ -49,7 +49,7 @@ class AnneeFinanciereComponent extends Component
                 'startDate' => '01/04/2027',
                 'endDate' => '31/03/2028',
                 'firstDay' => 'Dimanche',
-                'timeBankCeiling' => '0 (sans plafond)',
+                'timeBankCeiling' => '40 h',
                 'isActive' => false,
                 'hasTimesheets' => false,
                 'weeksCount' => 53,
@@ -62,7 +62,7 @@ class AnneeFinanciereComponent extends Component
                 'startDate' => '01/04/2026',
                 'endDate' => '31/03/2027',
                 'firstDay' => 'Dimanche',
-                'timeBankCeiling' => '0 (sans plafond)',
+                'timeBankCeiling' => '40 h',
                 'isActive' => true,
                 'hasTimesheets' => true,
                 'weeksCount' => 53,
@@ -75,7 +75,7 @@ class AnneeFinanciereComponent extends Component
                 'startDate' => '01/04/2025',
                 'endDate' => '31/03/2026',
                 'firstDay' => 'Dimanche',
-                'timeBankCeiling' => '0 (sans plafond)',
+                'timeBankCeiling' => '40 h',
                 'isActive' => false,
                 'hasTimesheets' => true,
                 'weeksCount' => 52,
@@ -120,7 +120,7 @@ class AnneeFinanciereComponent extends Component
             'startDate' => '01/04/2027',
             'endDate' => '31/03/2028',
             'firstDay' => 'Dimanche',
-            'timeBankCeiling' => '0',
+            'timeBankCeiling' => '40 h',
             'isActive' => false,
             'hasTimesheets' => false
         ];
@@ -130,12 +130,17 @@ class AnneeFinanciereComponent extends Component
     public function createAnnee()
     {
         $newId = count($this->financialYears) + 1;
+        $ceilingVal = trim($this->anneeForm['timeBankCeiling']);
+        if (!str_contains(strtolower($ceilingVal), 'h')) {
+            $ceilingVal .= ' h';
+        }
+
         $this->financialYears[] = [
             'id' => $newId,
             'startDate' => $this->anneeForm['startDate'],
             'endDate' => $this->anneeForm['endDate'],
             'firstDay' => $this->anneeForm['firstDay'],
-            'timeBankCeiling' => $this->anneeForm['timeBankCeiling'] == '0' ? '0 (sans plafond)' : $this->anneeForm['timeBankCeiling'] . ' h',
+            'timeBankCeiling' => $ceilingVal,
             'isActive' => $this->anneeForm['isActive'],
             'hasTimesheets' => false,
             'weeksCount' => 53,
@@ -159,12 +164,17 @@ class AnneeFinanciereComponent extends Component
 
     public function updateAnnee()
     {
+        $ceilingVal = trim($this->anneeForm['timeBankCeiling']);
+        if (!str_contains(strtolower($ceilingVal), 'h')) {
+            $ceilingVal .= ' h';
+        }
+
         foreach ($this->financialYears as &$year) {
             if ($year['id'] == $this->anneeForm['id']) {
                 $year['startDate'] = $this->anneeForm['startDate'];
                 $year['endDate'] = $this->anneeForm['endDate'];
                 $year['firstDay'] = $this->anneeForm['firstDay'];
-                $year['timeBankCeiling'] = $this->anneeForm['timeBankCeiling'];
+                $year['timeBankCeiling'] = $ceilingVal;
                 $year['isActive'] = $this->anneeForm['isActive'];
             }
         }
