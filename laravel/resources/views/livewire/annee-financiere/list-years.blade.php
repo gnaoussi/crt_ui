@@ -144,8 +144,7 @@
                                 {{-- Bouton 3: Suppression (Uniquement si AUCUNE feuille de temps créée) --}}
                                 @if(!$annee['hasTimesheets'])
                                     <button 
-                                        wire:click="deleteAnnee({{ $annee['id'] }})"
-                                        wire:confirm="Êtes-vous sûr de vouloir supprimer cette année financière ?"
+                                        wire:click="openDeleteModal({{ $annee['id'] }})"
                                         class="p-1.5 text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-200 rounded-lg transition cursor-pointer"
                                         title="Supprimer l'année financière"
                                     >

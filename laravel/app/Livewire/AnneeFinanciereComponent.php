@@ -20,6 +20,8 @@ class AnneeFinanciereComponent extends Component
     // Modals
     public $isCreateModalOpen = false;
     public $isEditModalOpen = false;
+    public $isDeleteModalOpen = false;
+    public $deleteTargetAnnee = null;
 
     // Financial Year Form
     public $anneeForm = [
@@ -182,11 +184,22 @@ class AnneeFinanciereComponent extends Component
         $this->dispatch('show-toast', message: "L'année financière a été modifiée avec succès.", type: 'success');
     }
 
-    public function deleteAnnee($id)
+    public function openDeleteModal($id)
     {
         $annee = collect($this->financialYears)->firstWhere('id', $id);
         if ($annee && !$annee['hasTimesheets']) {
+            $this->deleteTargetAnnee = $annee;
+            $this->isDeleteModalOpen = true;
+        }
+    }
+
+    public function deleteAnnee()
+    {
+        if ($this->deleteTargetAnnee) {
+            $id = $this->deleteTargetAnnee['id'];
             $this->financialYears = collect($this->financialYears)->reject(fn($item) => $item['id'] == $id)->values()->toArray();
+            $this->isDeleteModalOpen = false;
+            $this->deleteTargetAnnee = null;
             $this->dispatch('show-toast', message: "L'année financière a été supprimée avec succès.", type: 'warning');
         }
     }

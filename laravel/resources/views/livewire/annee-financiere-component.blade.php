@@ -10,4 +10,5 @@
     {{-- Modals --}}
     @include('livewire.annee-financiere.modal-create-year')
     @include('livewire.annee-financiere.modal-edit-year')
+    @include('livewire.annee-financiere.modal-delete-year')
 </main>
