@@ -215,6 +215,15 @@ class AnneeFinanciereComponent extends Component
         }
     }
 
+    public function openConfirmYearModalTarget($id, $mode)
+    {
+        $annee = collect($this->financialYears)->firstWhere('id', $id);
+        if (!$annee) return;
+
+        $this->selectedAnnee = $annee;
+        $this->openConfirmYearModal($mode);
+    }
+
     public function openConfirmYearModal($mode)
     {
         $this->confirmActionType = 'toggle_year';
