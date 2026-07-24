@@ -316,7 +316,6 @@
                         </table>
                     </div>
                 </div>
-            @endif
         </div>
     @endif
 
