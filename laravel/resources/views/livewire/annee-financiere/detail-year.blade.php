@@ -1,6 +1,6 @@
 <div class="space-y-6">
     {{-- 1. Header Card (Exact 1-to-1 alignment with index.html View B) --}}
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
             <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
                 <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@
 
     {{-- 2. 4 Stat KPI Cards (Exact alignment with index.html View B) --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <h4 class="text-2xl font-black text-crt-navy font-mono">{{ $selectedAnnee['weeksCount'] ?? 53 }}</h4>
                 <span class="text-xs font-bold text-slate-500">Total semaines</span>
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <h4 class="text-2xl font-black text-emerald-700 font-mono">{{ $selectedAnnee['openWeeks'] ?? 4 }}</h4>
                 <span class="text-xs font-bold text-slate-500">Semaines ouvertes</span>
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <h4 class="text-2xl font-black text-rose-700 font-mono">{{ $selectedAnnee['closedWeeks'] ?? 0 }}</h4>
                 <span class="text-xs font-bold text-slate-500">Semaines fermées</span>
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
             <div>
                 <h4 class="text-2xl font-black text-slate-700 font-mono">{{ $selectedAnnee['inactiveWeeks'] ?? 49 }}</h4>
                 <span class="text-xs font-bold text-slate-500">Semaines inactives</span>
@@ -108,7 +108,7 @@
     </div>
 
     {{-- 3. Semaines de l'année Table Card --}}
-    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-5">
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 pb-4 border-b border-slate-100">
             <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
                 <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -333,7 +333,7 @@
                         @if($i == 1 || $i == $totalPages || ($i >= $weeksCurrentPage - 1 && $i <= $weeksCurrentPage + 1))
                             <button 
                                 wire:click="setPageNum({{ $i }})" 
-                                class="px-3 py-1.5 rounded-lg border text-xs font-bold transition font-mono {{ $weeksCurrentPage == $i ? 'bg-crt-navy text-white border-crt-navy shadow-xs' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50' }}"
+                                class="px-3 py-1.5 rounded-lg border text-xs font-bold transition font-mono {{ $weeksCurrentPage == $i ? 'bg-crt-navy text-white border-crt-navy shadow-sm' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50' }}"
                             >
                                 {{ $i }}
                             </button>
