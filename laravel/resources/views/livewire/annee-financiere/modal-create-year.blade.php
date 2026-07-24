@@ -1,95 +1,113 @@
 @if($isCreateModalOpen)
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-5">
+    <div class="fixed inset-0 bg-crt-navy/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar animate-fade-in space-y-4">
             {{-- Header --}}
-            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
-                    <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100 mb-5">
+                <h3 class="text-base font-extrabold text-crt-navy flex items-center gap-2">
+                    <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     Créer une Année Financière
                 </h3>
                 <button 
                     wire:click="$set('isCreateModalOpen', false)" 
-                    class="text-slate-400 hover:text-slate-600 transition font-bold text-lg cursor-pointer"
+                    class="text-slate-400 hover:text-slate-700 p-1.5 rounded-lg transition cursor-pointer"
                 >
-                    ✕
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 
             {{-- Form Inputs --}}
-            <div class="space-y-4 text-xs font-semibold text-slate-700">
+            <form wire:submit.prevent="createAnnee" class="space-y-4 text-xs">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-slate-500 mb-1">Date de début *</label>
+                        <label class="block font-bold text-slate-700 mb-1">
+                            Date de début <span class="text-rose-500">*</span>
+                        </label>
                         <input 
                             type="text" 
+                            required
                             wire:model="anneeForm.startDate" 
-                            placeholder="ex: 01/04/2027"
-                            class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition font-mono"
+                            class="w-full border border-slate-200 rounded-xl p-2.5 bg-slate-50 font-mono font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20"
                         />
+                        <span class="text-[11px] text-slate-400 mt-1 block">Doit être le 1er avril</span>
                     </div>
+
                     <div>
-                        <label class="block text-slate-500 mb-1">Date de fin *</label>
+                        <label class="block font-bold text-slate-700 mb-1">
+                            Date de fin <span class="text-rose-500">*</span>
+                        </label>
                         <input 
                             type="text" 
+                            required
                             wire:model="anneeForm.endDate" 
-                            placeholder="ex: 31/03/2028"
-                            class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition font-mono"
+                            class="w-full border border-slate-200 rounded-xl p-2.5 bg-slate-50 font-mono font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20"
                         />
+                        <span class="text-[11px] text-slate-400 mt-1 block">Doit être le 31 mars de l'année suivante</span>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-slate-500 mb-1">Premier jour de la semaine *</label>
+                    <label class="block font-bold text-slate-700 mb-1">
+                        Premier jour de la semaine <span class="text-rose-500">*</span>
+                    </label>
                     <select 
                         wire:model="anneeForm.firstDay"
-                        class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition cursor-pointer"
+                        class="w-full border border-slate-200 rounded-xl p-2.5 bg-slate-50 font-semibold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20"
                     >
                         <option value="Dimanche">Dimanche</option>
                         <option value="Lundi">Lundi</option>
-                        <option value="Samedi">Samedi</option>
                     </select>
+                    <span class="text-[11px] text-slate-400 mt-1 block">Jour de début des semaines pour cette année financière</span>
                 </div>
 
                 <div>
-                    <label class="block text-slate-500 mb-1">Plafond banque de temps</label>
+                    <label class="block font-bold text-slate-700 mb-1">
+                        Plafond banque de temps <span class="text-rose-500">*</span>
+                    </label>
                     <input 
                         type="text" 
+                        required
                         wire:model="anneeForm.timeBankCeiling" 
-                        placeholder="ex: 40 h"
-                        class="w-full border border-slate-200 rounded-xl px-3 py-2 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20 focus:border-crt-cyan transition font-mono"
+                        class="w-full border border-slate-200 rounded-xl p-2.5 bg-slate-50 font-mono font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-crt-cyan/20"
                     />
-                    <p class="text-[11px] text-slate-400 mt-1 font-normal">Plafond d'heures initialisé par défaut à 40 h (le suffixe "h" est ajouté automatiquement si omis).</p>
+                    <span class="text-[11px] text-slate-400 mt-1 block">Nombre maximum d'heures dans la banque de temps</span>
                 </div>
 
                 <div class="pt-2">
-                    <label class="inline-flex items-center gap-2 cursor-pointer">
+                    <label class="flex items-center gap-2 font-bold text-slate-700 cursor-pointer">
                         <input 
                             type="checkbox" 
                             wire:model="anneeForm.isActive" 
-                            class="w-4 h-4 rounded border-slate-300 text-crt-navy focus:ring-crt-cyan"
+                            class="w-4 h-4 rounded text-crt-cyan focus:ring-crt-cyan"
                         />
-                        <span class="text-xs font-bold text-crt-navy">Définir comme année financière active</span>
+                        Année active
                     </label>
+                    <span class="text-[11px] text-slate-400 mt-1 block pl-6">Une seule année peut être active à la fois</span>
                 </div>
-            </div>
 
-            {{-- Actions --}}
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                <button 
-                    wire:click="$set('isCreateModalOpen', false)" 
-                    class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 transition cursor-pointer"
-                >
-                    Annuler
-                </button>
-                <button 
-                    wire:click="createAnnee" 
-                    class="px-4 py-2 rounded-xl text-xs font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark transition shadow-md shadow-crt-navy/10 cursor-pointer"
-                >
-                    Créer l'Année
-                </button>
-            </div>
+                {{-- Footer Actions --}}
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <button 
+                        type="button" 
+                        wire:click="$set('isCreateModalOpen', false)" 
+                        class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition flex items-center gap-1 cursor-pointer"
+                    >
+                        ✕ Fermer
+                    </button>
+                    <button 
+                        type="submit" 
+                        class="px-5 py-2 text-xs font-extrabold text-white bg-crt-navy hover:bg-crt-navy-dark rounded-xl transition shadow-lg flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                        </svg>
+                        Créer
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 @endif
