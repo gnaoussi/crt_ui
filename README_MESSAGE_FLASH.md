@@ -13,16 +13,16 @@ Il repose sur **Alpine.js**, **Livewire 3** et **Tailwind CSS** pour offrir une 
 ### 🎨 Les 3 Types de Toasts Disponibles
 
 | Type | Couleur de fond | Icône | Cas d'utilisation |
-| :--- | :--- | :--- | :--- |
-| **`success`** | `bg-emerald-600` (Vert émeraude) | Coche de validation animée (`M9 12l2 2 4-4...`) | Création d'employé, mise à jour de données, affectation de site réussie. |
-| **`warning`** / **`alert`** | `bg-amber-600` (Ambre / Orange) | Triangle d'avertissement animé (`M12 9v2m0...`) | Attribution de rôles sensible, avertissements de contrat ou de quota. |
-| **`info`** | `bg-crt-navy` (Navy CRT avec bordure cyan) | Bulle d'information cyan animée (`M13 16h-1...`) | Génération de rapports de performance, informations générales. |
+| --- | --- | --- | --- |
+| `**success**` | `bg-emerald-600` (Vert émeraude) | Coche de validation animée (`M9 12l2 2 4-4...`) | Création d'employé, mise à jour de données, affectation de site réussie. |
+| `**warning**` / `**alert**` | `bg-amber-600` (Ambre / Orange) | Triangle d'avertissement animé (`M12 9v2m0...`) | Attribution de rôles sensible, avertissements de contrat ou de quota. |
+| `**info**` | `bg-crt-navy` (Navy CRT avec bordure cyan) | Bulle d'information cyan animée (`M13 16h-1...`) | Génération de rapports de performance, informations générales. |
 
 ---
 
 ## 💻 Modes d'Appel du Toast
 
-### 1. Depuis un Composant Livewire (Méthode recommandée PHP)
+### 1\. Depuis un Composant Livewire (Méthode recommandée PHP)
 
 Vous pouvez déclencher un Toast directement depuis vos méthodes PHP Livewire à l'aide de `$this->dispatch('show-toast')` :
 
@@ -39,7 +39,7 @@ $this->dispatch('show-toast', message: "Génération du rapport de performance e
 
 ---
 
-### 2. Via la Session Flash Laravel (Redirections / Page Reloads)
+### 2\. Via la Session Flash Laravel (Redirections / Page Reloads)
 
 Lors d'une redirection ou d'une soumission classique, utilisez les clés de session `message` et `message_type` :
 
@@ -51,7 +51,7 @@ session()->flash('message_type', 'success'); // Options: 'success', 'warning', '
 
 ---
 
-### 3. Depuis Alpine.js ou JavaScript (Front-end)
+### 3\. Depuis Alpine.js ou JavaScript (Front-end)
 
 Vous pouvez également déclencher un Toast depuis le navigateur en JS ou Alpine :
 
@@ -75,7 +75,7 @@ Livewire.dispatch('show-toast', {
 
 ## ⏱️ Caractéristiques & Animations
 
-- **Positionnement** : Flottant en haut à droite de l'écran (`fixed top-4 right-4 z-[120]`).
-- **Temporisation** : Disparition automatique au bout de **4.5 secondes** (`setTimeout`).
-- **Fermeture manuelle** : Bouton d'action "X" pour fermer instantanément le Toast.
-- **Transitions** : Glissement et fondu fluides à l'apparition et à la disparition (`x-transition`).
+*   **Positionnement** : Flottant en haut à droite de l'écran (`fixed top-4 right-4 z-[120]`).
+*   **Temporisation** : Disparition automatique au bout de **4.5 secondes** (`setTimeout`).
+*   **Fermeture manuelle** : Bouton d'action "X" pour fermer instantanément le Toast.
+*   **Transitions** : Glissement et fondu fluides à l'apparition et à la disparition (`x-transition`).

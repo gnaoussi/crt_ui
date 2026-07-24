@@ -5,24 +5,25 @@ Ce document fournit un guide étape par étape pour intégrer le **Thème UI CRT
 ---
 
 ## 📋 Table des Matières
-1. [Prérequis & Stack Technique](#-prérequis--stack-technique)
-2. [Étape 1 : Configuration du Layout Principal & CSS](#-étape-1--configuration-du-layout-principal--css)
-3. [Étape 2 : Barre de Navigation & Fil d'Ariane](#-étape-2--barre-de-navigation--fil-dariane)
-4. [Étape 3 : Installation des Composants Blade Globaux](#-étape-3--installation-des-composants-blade-globaux)
-   - [A. Le Composant Toast Global (`<x-toast />`)](#a-le-composant-toast-global-x-toast-)
-   - [B. La Modale Globale de Suppression (`<x-confirm-delete-modal />`)](#b-la-modale-globale-de-suppression-x-confirm-delete-modal-)
-5. [Étape 4 : Gestion des Modales avec Téléportation Alpine.js](#-étape-4--gestion-des-modales-avec-téléportation-alpinejs)
-6. [Étape 5 : Exemples d'Utilisation dans vos Composants Livewire](#-étape-5--exemples-dutilisation-dans-vos-composants-livewire)
-7. [Étape 6 : Publication & Nettoyage du Cache](#-étape-6--publication--nettoyage-du-cache)
+
+1.  [Prérequis & Stack Technique](#-pr%C3%A9requis--stack-technique)
+2.  [Étape 1 : Configuration du Layout Principal & CSS](#-%C3%A9tape-1--configuration-du-layout-principal--css)
+3.  [Étape 2 : Barre de Navigation & Fil d'Ariane](#-%C3%A9tape-2--barre-de-navigation--fil-dariane)
+4.  [Étape 3 : Installation des Composants Blade Globaux](#-%C3%A9tape-3--installation-des-composants-blade-globaux)
+    *   [A. Le Composant Toast Global (`<x-toast />`)](#a-le-composant-toast-global-x-toast-)
+    *   [B. La Modale Globale de Suppression (`<x-confirm-delete-modal />`)](#b-la-modale-globale-de-suppression-x-confirm-delete-modal-)
+5.  [Étape 4 : Gestion des Modales avec Téléportation Alpine.js](#-%C3%A9tape-4--gestion-des-modales-avec-t%C3%A9l%C3%A9portation-alpinejs)
+6.  [Étape 5 : Exemples d'Utilisation dans vos Composants Livewire](#-%C3%A9tape-5--exemples-dutilisation-dans-vos-composants-livewire)
+7.  [Étape 6 : Publication & Nettoyage du Cache](#-%C3%A9tape-6--publication--nettoyage-du-cache)
 
 ---
 
 ## 🛠️ Prérequis & Stack Technique
 
-- **Laravel 10 / 11**
-- **Livewire v3** (`composer require livewire/livewire`)
-- **Tailwind CSS** (via CDN ou npm)
-- **Alpine.js** (intégré automatiquement avec Livewire v3)
+*   **Laravel 10 / 11**
+*   **Livewire v3** (`composer require livewire/livewire`)
+*   **Tailwind CSS** (via CDN ou npm)
+*   **Alpine.js** (intégré automatiquement avec Livewire v3)
 
 ---
 
@@ -360,7 +361,7 @@ Créez le fichier `resources/views/components/confirm-delete-modal.blade.php` :
 
 ## ⚡ Étape 4 : Gestion des Modales avec Téléportation Alpine.js
 
-Pour éviter tout problème de superposition (*z-index*) ou d'empilement dans vos vues Livewire, enrobez toujours vos modales dans un bloc `<template x-teleport="body">` :
+Pour éviter tout problème de superposition (_z-index_) ou d'empilement dans vos vues Livewire, enrobez toujours vos modales dans un bloc `<template x-teleport="body">` :
 
 ```html
 @if ($isModalOpen)
@@ -389,11 +390,12 @@ Pour éviter tout problème de superposition (*z-index*) ou d'empilement dans vo
 
 ## 💡 Étape 5 : Exemples Détaillés d'Utilisation dans vos Composants Livewire
 
-### 1. Utilisation du Toast Global Notification (`<x-toast />`)
+### 1\. Utilisation du Toast Global Notification (`<x-toast />`)
 
 Le composant Toast réagit aux événements navigateur `show-toast`. Vous pouvez le déclencher depuis n'importe quel contrôleur Livewire PHP ou script JavaScript / Alpine.js.
 
 #### A. Depuis un composant Livewire (PHP) :
+
 ```php
 namespace App\Livewire;
 
@@ -431,6 +433,7 @@ class MonComposant extends Component
 ```
 
 #### B. Depuis Alpine.js ou JavaScript (Blade) :
+
 ```html
 <!-- Bouton Alpine.js -->
 <button @click="$dispatch('show-toast', { type: 'success', message: 'Action effectuée !' })">
@@ -447,11 +450,12 @@ class MonComposant extends Component
 
 ---
 
-### 2. Utilisation du Dialog Global de Confirmation de Suppression (`<x-confirm-delete-modal />`)
+### 2\. Utilisation du Dialog Global de Confirmation de Suppression (`<x-confirm-delete-modal />`)
 
 Ce composant réutilisable gère le dialogue de suppression avec l'icône de corbeille rouge et le titre aligné à gauche.
 
 #### A. Structure du Composant Livewire (PHP) :
+
 ```php
 namespace App\Livewire;
 
@@ -495,6 +499,7 @@ class EnterpriseComponent extends Component
 ```
 
 #### B. Appel dans la Vue Blade :
+
 ```html
 <!-- 1. Bouton d'action dans le tableau ou la carte -->
 <button 
@@ -523,8 +528,9 @@ class EnterpriseComponent extends Component
 ```
 
 #### C. Propriétés du Composant `<x-confirm-delete-modal />` :
+
 | Propriété | Type | Par Défaut | Description |
-| :--- | :--- | :--- | :--- |
+| --- | --- | --- | --- |
 | `:show` | `bool` | `false` | Contrôle l'ouverture de la modale |
 | `title` | `string` | `'Confirmer la suppression'` | Titre affiché à gauche dans l'en-tête |
 | `confirmText` | `string` | `'Oui, supprimer'` | Libellé du bouton de suppression rouge |
@@ -538,7 +544,7 @@ class EnterpriseComponent extends Component
 
 Une fois les fichiers ajoutés, exécutez ces commandes dans le terminal :
 
-```bash
+```
 # Recompiler les vues Laravel
 php artisan view:clear
 
