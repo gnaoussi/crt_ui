@@ -150,7 +150,7 @@ class AnneeFinanciereComponent extends Component
         ];
 
         $this->isCreateModalOpen = false;
-        session()->flash('message', 'Nouvelle année financière créée avec succès !');
+        $this->dispatch('show-toast', message: "L'année financière a été créée avec succès.", type: 'success');
     }
 
     public function openEditModal($id)
@@ -179,7 +179,7 @@ class AnneeFinanciereComponent extends Component
             }
         }
         $this->isEditModalOpen = false;
-        session()->flash('message', 'Année financière mise à jour avec succès.');
+        $this->dispatch('show-toast', message: "L'année financière a été modifiée avec succès.", type: 'success');
     }
 
     public function deleteAnnee($id)
@@ -187,28 +187,53 @@ class AnneeFinanciereComponent extends Component
         $annee = collect($this->financialYears)->firstWhere('id', $id);
         if ($annee && !$annee['hasTimesheets']) {
             $this->financialYears = collect($this->financialYears)->reject(fn($item) => $item['id'] == $id)->values()->toArray();
-            session()->flash('message', 'Année financière supprimée avec succès.');
+            $this->dispatch('show-toast', message: "L'année financière a été supprimée avec succès.", type: 'warning');
+        }
+    }
+
+    public function closeYear()
+    {
+        if ($this->selectedAnnee) {
+            $this->selectedAnnee['isActive'] = false;
+            foreach ($this->financialYears as &$year) {
+                if ($year['id'] == $this->selectedAnnee['id']) {
+                    $year['isActive'] = false;
+                }
+            }
+            $this->dispatch('show-toast', message: "L'année financière a été clôturée avec succès.", type: 'warning');
         }
     }
 
     public function toggleWeekStatus($weekId, $newStatus)
     {
+        $weekName = '';
         foreach ($this->weeksList as &$week) {
             if ($week['id'] == $weekId) {
                 $week['status'] = $newStatus;
+                $weekName = $week['name'];
             }
         }
-        session()->flash('message', "Statut de la semaine mis à jour.");
+
+        $toastType = $newStatus === 'Fermées' ? 'warning' : 'success';
+        $label = $newStatus === 'Fermées' ? 'fermée' : ($newStatus === 'Ouvertes' ? 'réouverte' : 'désactivée');
+        $this->dispatch('show-toast', message: "{$weekName} {$label} avec succès.", type: $toastType);
     }
 
     public function togglePayStatus($weekId)
     {
+        $weekName = '';
         foreach ($this->weeksList as &$week) {
             if ($week['id'] == $weekId) {
                 $week['payStatus'] = $week['payStatus'] === 'Paie validée' ? 'Normale' : 'Paie validée';
+                $weekName = $week['name'];
             }
         }
-        session()->flash('message', "Statut de paie de la semaine mis à jour.");
+        $this->dispatch('show-toast', message: "Statut de paie mis à jour pour la {$weekName}.", type: 'success');
+    }
+
+    public function showAuditLog($weekName)
+    {
+        $this->dispatch('show-toast', message: "Ouverture du journal d'audit de la {$weekName}...", type: 'info');
     }
 
     public function setPageNum($page)

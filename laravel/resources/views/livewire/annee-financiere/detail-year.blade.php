@@ -255,6 +255,7 @@
 
                                         {{-- 🔄 Action 4: Journal de la semaine --}}
                                         <button 
+                                            wire:click="showAuditLog('{{ $week['name'] }}')"
                                             class="p-1.5 text-crt-cyan bg-crt-cyan-light hover:bg-crt-cyan hover:text-white border border-crt-cyan/30 rounded-lg transition cursor-pointer"
                                             title="Consulter le journal de la semaine"
                                         >
