@@ -1,5 +1,5 @@
 <div class="space-y-6">
-    {{-- 1. Header Card (Exact alignment with index.html) --}}
+    {{-- 1. Header Card (Exact 1-to-1 alignment with index.html View B) --}}
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">
             <h3 class="text-sm font-extrabold text-crt-navy flex items-center gap-2">
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    {{-- 2. 4 Stat KPI Cards (Exact alignment with index.html) --}}
+    {{-- 2. 4 Stat KPI Cards (Exact alignment with index.html View B) --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
             <div>
@@ -225,10 +225,17 @@
                                     @endif
                                 </td>
                                 <td class="p-3.5">
-                                    <span class="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 inline-flex items-center gap-1">
-                                        <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                        {{ $week['payStatus'] }}
-                                    </span>
+                                    @if($week['payStatus'] === 'Paie validée')
+                                        <span class="px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300 inline-flex items-center gap-1">
+                                            <svg class="w-3 h-3 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                            {{ $week['payStatus'] }}
+                                        </span>
+                                    @else
+                                        <span class="px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 inline-flex items-center gap-1">
+                                            <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                            {{ $week['payStatus'] }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="p-3.5 text-center">
                                     <div class="flex items-center justify-center gap-1.5">
@@ -246,7 +253,7 @@
                                         @else
                                             <button 
                                                 wire:click="toggleWeekStatus({{ $week['id'] }}, 'Fermées')"
-                                                class="p-1.5 text-amber-600 bg-amber-50 hover:bg-amber-600 hover:text-white border border-amber-200 rounded-lg transition cursor-pointer"
+                                                class="p-1.5 text-rose-600 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-200 rounded-lg transition cursor-pointer"
                                                 title="Fermer la semaine"
                                             >
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -255,22 +262,34 @@
                                             </button>
                                         @endif
 
-                                        {{-- 🚫 Action 2: Désactiver la semaine --}}
-                                        <button 
-                                            wire:click="toggleWeekStatus({{ $week['id'] }}, 'Inactive')"
-                                            class="p-1.5 text-slate-500 bg-slate-100 hover:bg-slate-600 hover:text-white border border-slate-200 rounded-lg transition cursor-pointer"
-                                            title="Désactiver la semaine"
-                                        >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                            </svg>
-                                        </button>
+                                        {{-- 🚫 Action 2: Toggle Activer / Désactiver --}}
+                                        @if($week['status'] === 'Inactive')
+                                            <button 
+                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Ouvertes')"
+                                                class="p-1.5 text-emerald-600 bg-emerald-50 hover:bg-emerald-600 hover:text-white border border-emerald-200 rounded-lg transition cursor-pointer"
+                                                title="Activer la semaine"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </button>
+                                        @else
+                                            <button 
+                                                wire:click="toggleWeekStatus({{ $week['id'] }}, 'Inactive')"
+                                                class="p-1.5 text-slate-600 bg-slate-100 hover:bg-slate-700 hover:text-white border border-slate-200 rounded-lg transition cursor-pointer"
+                                                title="Désactiver la semaine"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                </svg>
+                                            </button>
+                                        @endif
 
                                         {{-- 📅 Action 3: Marquer comme semaine de paie --}}
                                         <button 
                                             wire:click="togglePayStatus({{ $week['id'] }})"
-                                            class="p-1.5 text-indigo-600 bg-indigo-50 hover:bg-indigo-600 hover:text-white border border-indigo-200 rounded-lg transition cursor-pointer"
-                                            title="Basculer le statut de paie"
+                                            class="p-1.5 rounded-lg transition cursor-pointer border {{ $week['payStatus'] === 'Paie validée' ? 'text-amber-800 bg-amber-100 hover:bg-amber-200 border-amber-300' : 'text-amber-600 bg-amber-50 hover:bg-amber-500 hover:text-white border-amber-200' }}"
+                                            title="Marquer comme semaine de paie"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
