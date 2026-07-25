@@ -9,8 +9,16 @@
             $items = [
                 ['label' => 'Accueil', 'url' => '/dashboard'],
                 ['label' => 'RH', 'url' => '#'],
-                ['label' => 'Employés', 'active' => true],
             ];
+
+            // Récupération dynamique depuis l'instance Livewire RH si disponible
+            if (isset($this) && isset($this->selectedEmployeeId) && $this->selectedEmployeeId) {
+                $items[] = ['label' => 'Employés', 'wireClick' => 'backToList'];
+                $emp = \App\Models\Employee::find($this->selectedEmployeeId);
+                $items[] = ['label' => ($emp ? $emp->prenom . ' ' . $emp->nom : 'Fiche employé'), 'active' => true];
+            } else {
+                $items[] = ['label' => 'Employés', 'active' => true];
+            }
         } elseif (request()->is('entreprise*')) {
             $items = [
                 ['label' => 'Accueil', 'url' => '/dashboard'],
@@ -21,8 +29,14 @@
             $items = [
                 ['label' => 'Accueil', 'url' => '/dashboard'],
                 ['label' => 'Budget', 'url' => '#'],
-                ['label' => 'Années Financières', 'active' => true],
             ];
+
+            if (isset($this) && isset($this->viewMode) && $this->viewMode === 'detail') {
+                $items[] = ['label' => 'Années Financières', 'wireClick' => 'backToList'];
+                $items[] = ['label' => 'Détails de l\'Année', 'active' => true];
+            } else {
+                $items[] = ['label' => 'Années Financières', 'active' => true];
+            }
         } elseif (request()->is('timesheets*')) {
             $items = [
                 ['label' => 'Accueil', 'url' => '/dashboard'],
