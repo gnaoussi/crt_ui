@@ -247,7 +247,7 @@
     </header>
 
     <!-- Sub Header Breadcrumb Navigation Bar -->
-    @if(!request()->is('rh*'))
+    @if(!request()->is('rh*') && !request()->is('annee-financiere*'))
         <x-breadcrumb />
     @endif
 

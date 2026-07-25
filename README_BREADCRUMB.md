@@ -1,6 +1,6 @@
 # 🍞 Documentation du Composant Fil d'Ariane (*Breadcrumb*)
 
-Cette documentation détaille le fonctionnement, l'architecture et la cartographie d'utilisation du **Fil d'Ariane (*Breadcrumb*)** harmonisé pour le prototype HTML/React et l'application Laravel Livewire de **CRT Solution**.
+Cette documentation détaille le fonctionnement, l'architecture, la réactivité Livewire et les guides de mise en place du **Fil d'Ariane (*Breadcrumb*)** pour l'application Laravel Livewire de **CRT Solution**.
 
 ---
 
@@ -12,81 +12,79 @@ Cette documentation détaille le fonctionnement, l'architecture et la cartograph
   - **Lien Accueil** : Icône SVG (`w-3.5 h-3.5 text-crt-cyan stroke-width="1.8"`) avec texte `Accueil` cliquable (`hover:text-crt-navy`).
   - **Séparateur** : Slash grisé `text-slate-300` (`/`).
   - **Section Parente** : Texte grisé cliquable (`text-slate-600 hover:text-crt-navy`).
-  - **Item Actif (Feuille)** : Badge pill turquoise rétroéclairé (`px-2.5 py-0.5 rounded-md bg-crt-cyan-light text-crt-navy font-extrabold border border-crt-cyan/20`).
+  - **Lien Intermédiaire (Vue parente)** : Bouton ou lien cliquable interactif (ex: `wire:click="backToList"`).
+  - **Item Actif (Feuille / Vue active)** : Badge pill turquoise rétroéclairé (`px-2.5 py-0.5 rounded-md bg-crt-cyan-light text-crt-navy font-extrabold border border-crt-cyan/20`).
 
 ---
 
-## ⚙️ Architecture Technologique
+## ⚡ Réactivité Livewire v3 (Single-Page App Experience)
 
-### 1. Prototype HTML/React (`index.html`)
-Dans le prototype React, la barre de navigation fil d'Ariane est rendue de manière réactive selon les états `activeMenuItem.section` et `activeMenuItem.item`.
+Dans une application Livewire v3 avec basculement de vues au sein d'un composant (ex: passage de la vue **Liste** à la vue **Détail** sans rechargement de page), le layout principal HTML statique n'est pas réévalué lors d'une requête AJAX.
 
-- **Fichier principal** : [`index.html`](file:///home/gervais/Development/gemini_workspace/gemini_project/crt_ui/index.html)
-- **Position** : Placé directement sous le `<header>` principal de l'application.
+Pour garantir que le fil d'Ariane se mette à jour **instantanément lors des événements Livewire**, la barre de navigation Fil d'Ariane est placée au sommet de la vue racine du composant Livewire réactif.
 
-```jsx
-{/* Breadcrumb Bar */}
-<div className="bg-white border-b border-slate-200/80 px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">
-    <nav className="flex items-center space-x-2 text-slate-600">
-        <span className="flex items-center gap-1 hover:text-crt-navy cursor-pointer" onClick={() => selectMenuItem('Dashboard', 'Tableau de bord')}>
-            <svg className="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Accueil
-        </span>
-        <span className="text-slate-300">/</span>
-        <span className="text-slate-600 hover:text-crt-navy cursor-pointer">{activeMenuItem.section}</span>
-        <span className="text-slate-300">/</span>
-        <span className="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
-            {activeMenuItem.item}
-        </span>
-    </nav>
-</div>
-```
+### 📌 Modèle d'Intégration d'un nouveau Module Réactif
 
----
+Pour ajouter la gestion dynamique du Fil d'Ariane à un nouveau composant Livewire (ex: `ModuleXComponent`) :
 
-### 2. Application Laravel Livewire (`<x-breadcrumb />`)
-Dans l'application Laravel, le fil d'Ariane est encapsulé dans un composant Blade réutilisable :
+1. **Exclure la route dans le Layout global (`app.blade.php`)** :
+   ```blade
+   <!-- Sub Header Breadcrumb Navigation Bar -->
+   @if(!request()->is('rh*') && !request()->is('annee-financiere*') && !request()->is('votre-module*'))
+       <x-breadcrumb />
+   @endif
+   ```
 
-- **Composant Blade** : [`laravel/resources/views/components/breadcrumb.blade.php`](file:///home/gervais/Development/gemini_workspace/gemini_project/crt_ui/laravel/resources/views/components/breadcrumb.blade.php)
-- **Inclusion globale** : [`laravel/resources/views/components/layouts/app.blade.php`](file:///home/gervais/Development/gemini_workspace/gemini_project/crt_ui/laravel/resources/views/components/layouts/app.blade.php)
+2. **Ajouter la barre de fil d'Ariane réactive en haut du template Blade du composant** (ex: `resources/views/livewire/votre-module-component.blade.php`) :
+   ```blade
+   <div x-data>
+       <!-- Sub Header Breadcrumb Navigation Bar (Livewire Reactive) -->
+       <div class="bg-white border-b border-slate-200/80 px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">
+           <nav class="flex items-center space-x-2 text-slate-600">
+               <a href="/dashboard" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer">
+                   <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                   </svg>
+                   Accueil
+               </a>
+               <span class="text-slate-300">/</span>
+               <span class="text-slate-600 hover:text-crt-navy cursor-pointer">NomDuGroupe</span>
+               <span class="text-slate-300">/</span>
 
-#### Usage 1 : Détection Automatique (Mode Fallback par Défaut)
-Appelé sans argument dans le layout principal, il inspecte automatiquement la route (`request()->is(...)`) pour générer le fil d'Ariane :
+               @if ($viewMode === 'detail' && $selectedItem)
+                   <!-- Niveau 1 cliquable pour retourner à la liste -->
+                   <button wire:click="backToList" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer text-slate-600 font-semibold">
+                       NomDuModule
+                   </button>
+                   <span class="text-slate-300">/</span>
+                   <!-- Niveau 2 actif (Détail de l'élément) -->
+                   <span class="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
+                       Détails {{ $selectedItem->name }}
+                   </span>
+               @else
+                   <!-- Niveau 1 actif (Liste) -->
+                   <span class="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
+                       NomDuModule
+                   </span>
+               @endif
+           </nav>
+       </div>
 
-```blade
-<x-breadcrumb />
-```
-
-#### Usage 2 : Configuration Personnalisée (Tableau d'Éléments)
-Vous pouvez surcharger le fil d'Ariane dans n'importe quelle vue ou composant en fournissant un tableau `:items` :
-
-```blade
-<x-breadcrumb :items="[
-    ['label' => 'Accueil', 'url' => '/dashboard'],
-    ['label' => 'Budget', 'url' => '#'],
-    ['label' => 'Années Financières', 'url' => '/annee-financiere'],
-    ['label' => 'Détail 2026-2027', 'active' => true]
-]" />
-```
+       <!-- Reste du contenu avec padding p-6 -->
+       <div class="p-6 space-y-6 max-w-[1600px] mx-auto w-full">
+           ...
+       </div>
+   </div>
+   ```
 
 ---
 
 ## 🗺️ Cartographie d'Utilisation par Module
 
-Voici la liste exacte des emplacements et arborescences générées pour chaque module de l'application :
-
-| Module | Route / Vue Laravel | Arborescence du Fil d'Ariane |
-| :--- | :--- | :--- |
-| **Dashboard** | `/dashboard` | `Accueil` / `Dashboard` / **`Tableau de bord`** |
-| **Années Financières** | `/annee-financiere` (Vues Liste et Détail) | `Accueil` / `Budget` / **`Années Financières`** |
-| **Ressources Humaines (RH)** | `/rh` (Vues Liste et Détail Employé) | `Accueil` / `RH` / **`Employés`** |
-| **Entreprise** | `/entreprise` (Informations & Sites) | `Accueil` / `Entreprise` / **`Présentation entreprise`** |
-| **Feuilles de Temps** | `/timesheets` (Modes Saisie & Consultation) | `Accueil` / `Feuilles de Temps` / **`Projets & Suivi Hebdomadaire`** |
-
----
-
-## 📌 Maintenance & Évolutions
-
-Pour ajouter un nouveau module ou une sous-vue dans Laravel, ajoutez simplement le cas dans le tableau de fallback de [`breadcrumb.blade.php`](file:///home/gervais/Development/gemini_workspace/gemini_project/crt_ui/laravel/resources/views/components/breadcrumb.blade.php) ou passez la propriété `:items` directement au composant.
+| Module | Route / Component | Vue Liste (État par défaut) | Vue Détail (Au clic / Sélection) |
+| :--- | :--- | :--- | :--- |
+| **Dashboard** | `/dashboard` | `Accueil` / `Dashboard` / **`Tableau de bord`** | - |
+| **Années Financières (Budget)** | `/annee-financiere` | `Accueil` / `Budget` / **`Années Financières`** | `Accueil` / `Budget` / `Années Financières` / **`Détails [Dates]`** |
+| **Ressources Humaines (RH)** | `/rh` | `Accueil` / `RH` / **`Employés`** | `Accueil` / `RH` / `Employés` / **`[Prénom Nom]`** |
+| **Entreprise** | `/entreprise` | `Accueil` / `Entreprise` / **`Présentation entreprise`** | - |
+| **Feuilles de Temps** | `/timesheets` | `Accueil` / `Feuilles de Temps` / **`Projets & Suivi Hebdomadaire`** | - |
