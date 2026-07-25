@@ -1,5 +1,48 @@
 <!-- VIEW 2: EMPLOYEE DETAIL VIEW (Simplifié & Harmonisé 1-à-1 sans redondance) -->
+@php
+    $breadcrumbItems = [
+        ['label' => 'Accueil', 'url' => '/dashboard'],
+        ['label' => 'RH', 'url' => '#'],
+        ['label' => 'Employés', 'wireClick' => 'backToList'],
+        ['label' => $selectedEmployee->prenom . ' ' . $selectedEmployee->nom, 'active' => true],
+    ];
+@endphp
+
 <div class="space-y-6">
+    <!-- Header card for Breadcrumb -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">
+        <nav class="flex items-center space-x-2 text-slate-600">
+            @foreach($breadcrumbItems as $index => $item)
+                @if($index > 0)
+                    <span class="text-slate-300">/</span>
+                @endif
+
+                @if(!empty($item['active']))
+                    <span class="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
+                        {{ $item['label'] }}
+                    </span>
+                @elseif(!empty($item['wireClick']))
+                    <button wire:click="{{ $item['wireClick'] }}" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer text-slate-600 font-semibold">
+                        {{ $item['label'] }}
+                    </button>
+                @elseif(!empty($item['url']) && $item['url'] !== '#')
+                    <a href="{{ $item['url'] }}" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer">
+                        @if($index === 0)
+                            <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        @endif
+                        {{ $item['label'] }}
+                    </a>
+                @else
+                    <span class="text-slate-600 hover:text-crt-navy cursor-pointer">
+                        {{ $item['label'] }}
+                    </span>
+                @endif
+            @endforeach
+        </nav>
+    </div>
+
     {{-- 1. Header Card (Synthèse complète de l'employé) --}}
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-100">

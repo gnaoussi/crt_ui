@@ -247,9 +247,7 @@
     </header>
 
     <!-- Sub Header Breadcrumb Navigation Bar -->
-    @if(!request()->is('rh*'))
-        <x-breadcrumb />
-    @endif
+    <x-breadcrumb />
 
     <!-- MAIN WORKSPACE CONTENT -->
     <main class="flex-1">
