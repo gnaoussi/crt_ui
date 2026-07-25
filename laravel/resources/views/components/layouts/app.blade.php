@@ -247,7 +247,11 @@
     </header>
 
     <!-- Sub Header Breadcrumb Navigation Bar -->
-    <x-breadcrumb />
+    @if(isset($breadcrumb))
+        {{ $breadcrumb }}
+    @else
+        <x-breadcrumb />
+    @endif
 
     <!-- MAIN WORKSPACE CONTENT -->
     <main class="flex-1">

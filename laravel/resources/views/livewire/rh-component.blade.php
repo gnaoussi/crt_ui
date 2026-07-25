@@ -1,3 +1,20 @@
+<x-slot:breadcrumb>
+    @php
+        $breadcrumbItems = [
+            ['label' => 'Accueil', 'url' => '/dashboard'],
+            ['label' => 'RH', 'url' => '#'],
+        ];
+
+        if ($selectedEmployee) {
+            $breadcrumbItems[] = ['label' => 'Employés', 'wireClick' => 'backToList'];
+            $breadcrumbItems[] = ['label' => $selectedEmployee->prenom . ' ' . $selectedEmployee->nom, 'active' => true];
+        } else {
+            $breadcrumbItems[] = ['label' => 'Employés', 'active' => true];
+        }
+    @endphp
+    <x-breadcrumb :items="$breadcrumbItems" />
+</x-slot:breadcrumb>
+
 <div x-data x-effect="document.body.classList.toggle('overflow-hidden', $wire.isNewEmployeeModalOpen || $wire.isEditEmployeeModalOpen || $wire.isEditManagerModalOpen || $wire.isEditHoursModalOpen || $wire.isEditSiteModalOpen)" class="p-6 space-y-6 max-w-[1600px] mx-auto w-full">
 
     @if ($selectedEmployeeId === null)
