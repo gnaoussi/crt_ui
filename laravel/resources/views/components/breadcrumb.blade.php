@@ -50,6 +50,10 @@
                 <span class="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
                     {{ $item['label'] }}
                 </span>
+            @elseif(!empty($item['wireClick']))
+                <button wire:click="{{ $item['wireClick'] }}" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer text-slate-600 font-semibold">
+                    {{ $item['label'] }}
+                </button>
             @elseif(!empty($item['url']) && $item['url'] !== '#')
                 <a href="{{ $item['url'] }}" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer">
                     @if($index === 0)
