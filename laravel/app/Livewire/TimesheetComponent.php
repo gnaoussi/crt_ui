@@ -12,6 +12,7 @@ class TimesheetComponent extends Component
     public $selectedTaskId = null;
     public $viewMode = 'overview'; // 'overview', 'saisie', 'consultation'
     public $currentMode = 'saisie';
+    public $consultationViewType = 'grid'; // 'grid' ou 'timeline'
 
     public function openFormSaisie()
     {

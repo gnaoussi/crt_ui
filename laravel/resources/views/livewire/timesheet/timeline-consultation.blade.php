@@ -1,7 +1,7 @@
 <!-- Subview: Consultation Timeline Journal View -->
 <div class="space-y-6">
     @php
-        $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
+        $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
     @endphp
     @foreach ($days as $day)
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">

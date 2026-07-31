@@ -115,27 +115,33 @@
         </div>
     </div>
 
-    <!-- Active Grid Saisie Table (Du Lundi au Vendredi uniquement) -->
+    <!-- Active Grid Saisie Table (Du Lundi au Dimanche - 7 Jours Complet) -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse table-fixed min-w-[1100px]">
+            <table class="w-full text-left border-collapse table-fixed min-w-[1300px]">
                 <thead>
                     <tr class="bg-slate-100/80 text-slate-700 border-b border-slate-200 text-xs uppercase tracking-wider font-extrabold">
                         <th class="p-4 w-[240px]">Clients / Tâches Actives</th>
-                        <th class="p-4 text-center w-[180px]">
+                        <th class="p-4 text-center w-[150px]">
                             <div class="font-extrabold text-crt-navy">Lundi</div>
                         </th>
-                        <th class="p-4 text-center w-[180px]">
+                        <th class="p-4 text-center w-[150px]">
                             <div class="font-extrabold text-crt-navy">Mardi</div>
                         </th>
-                        <th class="p-4 text-center w-[180px]">
+                        <th class="p-4 text-center w-[150px]">
                             <div class="font-extrabold text-crt-navy">Mercredi</div>
                         </th>
-                        <th class="p-4 text-center w-[180px]">
+                        <th class="p-4 text-center w-[150px]">
                             <div class="font-extrabold text-crt-navy">Jeudi</div>
                         </th>
-                        <th class="p-4 text-center w-[180px]">
+                        <th class="p-4 text-center w-[150px]">
                             <div class="font-extrabold text-crt-navy">Vendredi</div>
+                        </th>
+                        <th class="p-4 text-center w-[150px] bg-amber-50/60">
+                            <div class="font-extrabold text-amber-900">Samedi</div>
+                        </th>
+                        <th class="p-4 text-center w-[150px] bg-amber-50/60">
+                            <div class="font-extrabold text-amber-900">Dimanche</div>
                         </th>
                         <th class="p-4 text-center w-[100px]">Total</th>
                         <th class="p-4 text-center w-[60px]">Action</th>
@@ -150,7 +156,7 @@
                                     {{ $client->name }}
                                 </span>
                             </td>
-                            <td colspan="6" class="p-3"></td>
+                            <td colspan="8" class="p-3"></td>
                             <td class="p-3 text-center">
                                 <button title="Retirer toutes les tâches de ce client" class="text-slate-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded-lg transition">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -164,8 +170,8 @@
                                     {{ $task->name }}
                                 </td>
 
-                                @for ($i = 0; $i < 5; $i++)
-                                    <td class="p-2 transition-all relative border-r border-slate-100">
+                                @for ($i = 0; $i < 7; $i++)
+                                    <td class="p-2 transition-all relative border-r border-slate-100 {{ $i >= 5 ? 'bg-amber-50/30' : '' }}">
                                         <div class="flex flex-col gap-1.5">
                                             <div class="flex items-center bg-white border border-slate-300 focus-within:border-crt-cyan rounded-lg px-2 py-1 shadow-xs transition">
                                                 <span class="text-xs font-bold text-crt-cyan-dark mr-1.5 select-none font-mono">H</span>
@@ -175,7 +181,7 @@
                                                     min="0" 
                                                     max="24"
                                                     placeholder="0.0"
-                                                    value="7.5"
+                                                    value="{{ $i < 5 ? '7.5' : '0.0' }}"
                                                     class="w-full bg-transparent text-crt-navy text-xs font-bold text-right outline-none focus:ring-0 p-0 font-mono"
                                                 />
                                             </div>
@@ -185,7 +191,7 @@
                                                     type="text"
                                                     maxlength="50"
                                                     placeholder="Réalisation..."
-                                                    value="Développement feature CRT"
+                                                    value="{{ $i < 5 ? 'Développement feature CRT' : '' }}"
                                                     class="w-full bg-slate-100 focus:bg-white text-xs px-2.5 py-1 rounded-md text-slate-700 placeholder-slate-500 border border-transparent focus:border-slate-300 outline-none transition font-medium"
                                                 />
                                             </div>
@@ -206,7 +212,7 @@
                         @endforeach
                     @empty
                         <tr>
-                            <td colSpan="8" class="text-center py-16 text-slate-500 text-sm font-medium">
+                            <td colSpan="10" class="text-center py-16 text-slate-500 text-sm font-medium">
                                 <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
@@ -225,6 +231,8 @@
                             <td class="p-4 text-center text-sm font-extrabold text-slate-100 font-mono">7.5h</td>
                             <td class="p-4 text-center text-sm font-extrabold text-slate-100 font-mono">7.5h</td>
                             <td class="p-4 text-center text-sm font-extrabold text-slate-100 font-mono">7.5h</td>
+                            <td class="p-4 text-center text-sm font-extrabold text-amber-300 font-mono bg-crt-navy-dark/40">0.0h</td>
+                            <td class="p-4 text-center text-sm font-extrabold text-amber-300 font-mono bg-crt-navy-dark/40">0.0h</td>
                             <td class="p-4 text-center text-base font-black text-crt-cyan bg-crt-navy-dark font-mono border-l border-crt-navy-light">
                                 37.5h
                             </td>
