@@ -4,51 +4,6 @@
     consultationViewType: 'grid' 
 }">
 
-    <!-- Sub Header Breadcrumb & Mode Selector Navigation Bar (Identique index.html) -->
-    <div class="bg-white border-b border-slate-200/80 px-6 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs font-semibold">
-        <nav class="flex items-center space-x-2 text-slate-600">
-            <a href="/dashboard" class="flex items-center gap-1 hover:text-crt-navy transition cursor-pointer">
-                <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Accueil
-            </a>
-            <span class="text-slate-300">/</span>
-            <span class="text-slate-600 hover:text-crt-navy cursor-pointer">Feuilles de Temps</span>
-            <span class="text-slate-300">/</span>
-            <span class="text-crt-navy font-extrabold bg-crt-cyan-light text-crt-navy px-2.5 py-0.5 rounded-md border border-crt-cyan/20">
-                Projets & Suivi Hebdomadaire
-            </span>
-        </nav>
-
-        <!-- Mode Toggle (Saisie vs Consultation) -->
-        <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-                <button 
-                    type="button"
-                    wire:click="$set('currentMode', 'saisie')"
-                    class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all {{ $currentMode === 'saisie' ? 'bg-white text-crt-navy shadow-sm' : 'text-slate-500 hover:text-crt-navy' }}"
-                >
-                    <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    Mode Saisie (Grille)
-                </button>
-                <button 
-                    type="button"
-                    wire:click="$set('currentMode', 'consultation')"
-                    class="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg transition-all {{ $currentMode === 'consultation' ? 'bg-white text-crt-cyan-dark shadow-sm' : 'text-slate-500 hover:text-crt-navy' }}"
-                >
-                    <svg class="w-3.5 h-3.5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Mode Consultation (Manager)
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- MAIN CONTAINER (Prend TOUT l'espace horizontal) -->
     <main class="flex-1 flex flex-col xl:flex-row p-6 gap-6 w-full">
         
@@ -87,7 +42,11 @@
 
                         <div class="flex-1 w-full space-y-1">
                             <label class="block text-xs font-bold text-slate-700">2. Associer une Tâche (50 dispos)</label>
-                            <select wire:model.live="selectedTaskId" class="w-full bg-white border border-slate-300 text-slate-800 text-xs rounded-xl px-3 py-2 focus:ring-2 focus:ring-crt-cyan focus:outline-none font-medium shadow-xs">
+                            <select 
+                                wire:model.live="selectedTaskId" 
+                                @if(!$selectedClientId) disabled @endif
+                                class="w-full bg-white border border-slate-300 text-slate-800 text-xs rounded-xl px-3 py-2 focus:ring-2 focus:ring-crt-cyan focus:outline-none font-medium shadow-xs disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
                                 <option value="">Tapez (ex: Dev, Audit, Figma...)</option>
                                 @if ($selectedClientId)
                                     @php
@@ -104,7 +63,8 @@
 
                         <button 
                             type="button" 
-                            class="bg-crt-cyan hover:bg-crt-cyan-dark text-crt-navy font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-lg shadow-crt-cyan/20 h-[38px] flex items-center justify-center gap-1.5 w-full md:w-auto cursor-pointer"
+                            @if(!$selectedClientId || !$selectedTaskId) disabled @endif
+                            class="bg-crt-cyan hover:bg-crt-cyan-dark text-crt-navy font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-lg shadow-crt-cyan/20 h-[38px] flex items-center justify-center gap-1.5 w-full md:w-auto cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
                         >
                             <svg class="w-4 h-4 text-crt-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
@@ -246,6 +206,27 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Footer d'action de la Grille (Soumission par l'employé) -->
+                    <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                            <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Assurez-vous d'avoir complété toutes vos imputations de la semaine avant de soumettre.</span>
+                        </div>
+                        
+                        <button 
+                            type="button"
+                            wire:click="$set('currentMode', 'consultation')"
+                            class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-6 py-2.5 rounded-xl transition shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Soumettre ma feuille de temps
+                        </button>
+                    </div>
                 </div>
             </div>
         @else
@@ -265,6 +246,17 @@
                     </div>
 
                     <div class="flex flex-wrap gap-2.5 w-full lg:w-auto">
+                        <button 
+                            type="button"
+                            wire:click="$set('currentMode', 'saisie')"
+                            class="flex-1 lg:flex-initial bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-xs cursor-pointer"
+                            title="Rappeler la feuille de temps pour effectuer des modifications"
+                        >
+                            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            </svg>
+                            Rappeler pour modification
+                        </button>
                         <button class="flex-1 lg:flex-initial bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-rose-600 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -362,8 +354,15 @@
                                                 {{ $task->name }}
                                             </td>
                                             @for ($i = 0; $i < 5; $i++)
-                                                <td class="p-3 text-center font-mono font-bold text-xs text-slate-700 border-r border-slate-100">
-                                                    7.5h
+                                                <td class="p-3 border-r border-slate-100 transition-colors">
+                                                    <div class="flex flex-col gap-1.5">
+                                                        <span class="text-xs font-bold text-crt-navy bg-crt-cyan-light border border-crt-cyan/30 px-2 py-0.5 rounded-md w-fit shadow-xs font-mono">
+                                                            7.5 h
+                                                        </span>
+                                                        <p class="text-xs text-slate-600 leading-relaxed italic pr-2 break-words font-medium">
+                                                            "Développement feature CRT Solution"
+                                                        </p>
+                                                    </div>
                                                 </td>
                                             @endfor
                                             <td class="p-3 text-center font-extrabold text-sm text-crt-navy bg-slate-50/60 font-mono">
@@ -389,6 +388,48 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+
+                <!-- Consultation Timeline Journal View (Identique index.html) -->
+                <div x-show="consultationViewType === 'timeline'" class="space-y-6">
+                    @php
+                        $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
+                    @endphp
+                    @foreach ($days as $day)
+                        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-crt-cyan"></span>
+                                    <h3 class="text-sm font-extrabold text-crt-navy uppercase tracking-wider">{{ $day }}</h3>
+                                </div>
+                                <span class="text-xs font-bold bg-crt-cyan-light border border-crt-cyan/30 text-crt-navy px-2.5 py-1 rounded-lg">
+                                    Total journée : <strong class="text-crt-cyan-dark font-mono">7.5h</strong>
+                                </span>
+                            </div>
+
+                            <div class="space-y-4">
+                                @foreach ($clients as $client)
+                                    @foreach ($client->tasks as $task)
+                                        <div class="flex items-start gap-4 p-3 rounded-xl hover:bg-crt-cyan-light/30 transition-colors border border-transparent hover:border-crt-cyan/20">
+                                            <div class="bg-crt-cyan-light border border-crt-cyan/30 text-crt-navy font-extrabold text-xs px-2.5 py-1.5 rounded-xl min-w-[50px] text-center shadow-sm font-mono">
+                                                7.5h
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex flex-wrap items-center gap-x-2 text-xs">
+                                                    <span class="font-extrabold text-crt-navy">{{ $client->name }}</span>
+                                                    <span class="text-slate-400">/</span>
+                                                    <span class="text-slate-600 font-semibold">{{ $task->name }}</span>
+                                                </div>
+                                                <p class="text-xs text-slate-700 italic mt-1 font-serif pr-4">
+                                                    "Développement feature CRT Solution"
+                                                </p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
             </div>
