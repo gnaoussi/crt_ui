@@ -10,7 +10,14 @@ class TimesheetComponent extends Component
 {
     public $selectedClientId = null;
     public $selectedTaskId = null;
+    public $viewMode = 'overview'; // 'overview', 'saisie', 'consultation'
     public $currentMode = 'saisie';
+
+    public function openFormSaisie()
+    {
+        $this->viewMode = 'saisie';
+        $this->currentMode = 'saisie';
+    }
 
     public function render()
     {

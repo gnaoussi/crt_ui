@@ -4,11 +4,13 @@
     consultationViewType: 'grid' 
 }">
 
-    <!-- MAIN CONTAINER (Prend TOUT l'espace horizontal) -->
-    <main class="flex-1 flex flex-col xl:flex-row p-6 gap-6 w-full">
+    <!-- MAIN CONTAINER (Centré pour overview, pleine largeur pour Saisie & Consultation) -->
+    <main class="flex-1 flex flex-col xl:flex-row p-6 gap-6 w-full {{ $viewMode === 'overview' ? 'max-w-[1600px] mx-auto' : '' }}">
         
-        <!-- LEFT AREA: Saisie Mode ou Consultation Mode -->
-        @if ($currentMode === 'saisie')
+        <!-- LEFT AREA: Overview vs Saisie Mode vs Consultation Mode -->
+        @if ($viewMode === 'overview')
+            @include('livewire.timesheet.overview')
+        @elseif ($viewMode === 'saisie' && $currentMode === 'saisie')
             @include('livewire.timesheet.form-saisie')
         @else
             <!-- LEFT AREA: Consultation Mode (Manager) -->
@@ -30,7 +32,7 @@
                     <div class="flex flex-wrap gap-2.5 w-full lg:w-auto">
                         <button 
                             type="button"
-                            wire:click="$set('currentMode', 'saisie')"
+                            wire:click="$set('viewMode', 'saisie'); $set('currentMode', 'saisie')"
                             class="flex-1 lg:flex-initial bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-xs cursor-pointer"
                             title="Rappeler la feuille de temps pour effectuer des modifications"
                         >
@@ -107,66 +109,10 @@
             </div>
         @endif
 
-        <!-- RIGHT AREA: Analytics Dashboard (Identique index.html) -->
-        <div class="w-full xl:w-80 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col h-fit space-y-5">
-            <div>
-                <h2 class="text-xs font-extrabold text-crt-navy flex items-center gap-2 uppercase tracking-wider">
-                    <svg class="w-4 h-4 text-crt-cyan font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                    </svg>
-                    Indicateurs CRT Solution
-                </h2>
-            </div>
-
-            <div class="bg-crt-cyan-light border border-crt-cyan/30 rounded-2xl p-4 text-center">
-                <span class="text-xs text-crt-navy font-bold uppercase tracking-wider">Cumul de la semaine</span>
-                <h3 class="text-3xl font-black text-crt-navy mt-1 font-mono">37.5h</h3>
-                <p class="text-xs text-slate-600 mt-1 font-medium">Calculé en direct</p>
-            </div>
-
-            <div class="space-y-1">
-                <div class="flex justify-between text-xs font-semibold">
-                    <span class="text-slate-600">Taux de descriptions (qualité)</span>
-                    <span class="font-bold font-mono text-emerald-600">100%</span>
-                </div>
-                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <div style="width: 100%" class="h-full bg-crt-cyan rounded-full transition-all duration-500"></div>
-                </div>
-                <p class="text-xs text-slate-500 mt-1">Pourcentage d'heures travaillées ayant un descriptif.</p>
-            </div>
-
-            <hr class="border-slate-100" />
-
-            <div class="space-y-3">
-                <h4 class="text-xs font-extrabold text-crt-navy uppercase tracking-wider">Répartition de la charge</h4>
-                <div class="space-y-3">
-                    @foreach ($clients as $client)
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-xs font-semibold">
-                                <span class="text-slate-700 truncate max-w-[150px]">{{ $client->name }}</span>
-                                <span class="text-slate-600 font-mono">37.5h (100%)</span>
-                            </div>
-                            <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                                <div style="width: 100%" class="h-full bg-crt-cyan rounded-full transition-all duration-500"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <hr class="border-slate-100" />
-
-            <button 
-                type="button"
-                class="w-full bg-crt-navy hover:bg-crt-navy-dark text-white font-semibold text-xs py-2.5 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-                <svg class="w-4 h-4 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Exporter pour la direction
-            </button>
-        </div>
+        <!-- RIGHT AREA: Analytics Dashboard (Visible uniquement en Saisie / Consultation) -->
+        @if ($viewMode !== 'overview')
+            @include('livewire.timesheet.sidebar-indicateurs')
+        @endif
 
     </main>
 </div>

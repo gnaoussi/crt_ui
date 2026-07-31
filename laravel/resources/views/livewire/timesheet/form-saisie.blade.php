@@ -1,6 +1,44 @@
 <!-- Subview: Saisie / Formulaire d'Édition et Grille Active -->
 <div class="flex-1 flex flex-col gap-6">
     
+    <!-- Top Header Banner & Quick Submit Action Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div>
+            <div class="flex items-center gap-3">
+                <h2 class="text-lg font-extrabold text-crt-navy flex items-center gap-2">
+                    <svg class="w-5 h-5 text-crt-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Saisie de la Feuille de Temps Hebdomadaire
+                </h2>
+                <span class="text-xs font-extrabold px-3 py-1 bg-amber-100 text-amber-900 border border-amber-300 rounded-full flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    Brouillon
+                </span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium mt-1">Saisie et suivi des heures travaillées du Lundi au Vendredi.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+            <select class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-xl px-3.5 py-2 focus:ring-2 focus:ring-crt-cyan focus:outline-none shadow-2xs">
+                <option>Semaine 17 (20/07/2026 - 24/07/2026) — Active</option>
+                <option>Semaine 16 (13/07/2026 - 17/07/2026)</option>
+                <option>Semaine 15 (06/07/2026 - 10/07/2026)</option>
+            </select>
+
+            <button 
+                type="button"
+                wire:click="$set('viewMode', 'consultation')"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer"
+            >
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Soumettre la feuille
+            </button>
+        </div>
+    </div>
+
     <!-- Advanced Row Adder Form -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
         <div class="flex flex-col md:flex-row items-start justify-between gap-4 mb-4 pb-4 border-b border-slate-100">
