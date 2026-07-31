@@ -14,7 +14,7 @@ class TimesheetComponent extends Component
 
     public function render()
     {
-        $clients = Client::with('tasks')->get();
+        $clients = Client::with('tasks')->take(4)->get();
         return view('livewire.timesheet-component', compact('clients'));
     }
 }
